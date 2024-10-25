@@ -378,7 +378,7 @@ void Areas<NextT>::hourForEachArea(State& state, uint numSpace)
 
           state.initReserveParticipationIndexMaps();
 
-          for (auto cluster: area.thermal.list.all())
+          for (const auto& cluster : area.thermal.list.each_enabled())
           {
               // Intiializing the state for the current thermal cluster
               state.initFromThermalClusterIndex(cluster->areaWideIndex);

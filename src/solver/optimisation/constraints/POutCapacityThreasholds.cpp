@@ -24,9 +24,10 @@ void POutCapacityThreasholds::add(int pays, int cluster, int pdt)
             for (const auto& capacityReservation :
                  data.areaReserves[pays].areaCapacityReservationsDown)
             {
-                for (const auto& reserveParticipations :
+                for (const auto& [clusterId, reserveParticipations] :
                      capacityReservation.AllThermalReservesParticipation)
                 {
+                    if (cluster == clusterId)
                         builder.RunningThermalClusterReserveParticipation(
                           reserveParticipations.globalIndexClusterParticipation, 1);
                 }
@@ -58,12 +59,13 @@ void POutCapacityThreasholds::add(int pays, int cluster, int pdt)
             for (const auto& capacityReservation :
                  data.areaReserves[pays].areaCapacityReservationsUp)
             {
-                for (const auto& reserveParticipations :
+                for (const auto& [clusterId, reserveParticipations] :
                      capacityReservation.AllThermalReservesParticipation)
                 {
-                    builder.RunningThermalClusterReserveParticipation(
-                      reserveParticipations.globalIndexClusterParticipation,
-                      1);
+                    if (cluster == clusterId)
+                        builder.RunningThermalClusterReserveParticipation(
+                          reserveParticipations.globalIndexClusterParticipation,
+                          1);
                 }
             }
 
@@ -89,12 +91,12 @@ void POutCapacityThreasholds::add(int pays, int cluster, int pdt)
     {
         // Lambda that count the number of reserves that the cluster is participating to
         auto countReservesParticipations
-          = [](const std::vector<CAPACITY_RESERVATION>& reservations)
+          = [cluster](const std::vector<CAPACITY_RESERVATION>& reservations)
         {
             int counter = 0;
             for (const auto& capacityReservation : reservations)
             {
-                counter += capacityReservation.AllThermalReservesParticipation.size();
+                counter += capacityReservation.AllThermalReservesParticipation.count(cluster);
             }
             return counter;
         };

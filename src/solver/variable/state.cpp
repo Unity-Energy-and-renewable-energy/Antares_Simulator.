@@ -77,7 +77,7 @@ void State::initReserveParticipationIndexMaps()
     auto loadReserveParticipations = [area = this->area](CAPACITY_RESERVATION& reserve)
     {
         // Thermal clusters
-        for (auto& reserveParticipation: reserve.AllThermalReservesParticipation)
+        for (auto& [clusterId, reserveParticipation]: reserve.AllThermalReservesParticipation)
         {
             area->reserveParticipationThermalClustersIndexMap.insert(
               reserveParticipation.areaIndexClusterParticipation,
@@ -85,7 +85,7 @@ void State::initReserveParticipationIndexMaps()
         }
 
         // Short Term Storage
-        for (auto& reserveParticipation: reserve.AllSTStorageReservesParticipation)
+        for (auto& [clusterId, reserveParticipation] : reserve.AllSTStorageReservesParticipation)
         {
             area->reserveParticipationSTStorageClustersIndexMap.insert(
               reserveParticipation.areaIndexClusterParticipation,
@@ -237,6 +237,7 @@ void State::initFromHydroStorage()
 
     if (unitCommitmentMode != Antares::Data::UnitCommitmentMode::ucHeuristicFast)
     {
+        //reserveParticipationPerLTStorageClusterForYear[hourInTheYear].clear();
         for (const auto& [resName, resParticipation] : LTStorage.reservesParticipations)
         {
             double participation = hourlyResults->HydroUsage[hourInTheWeek]

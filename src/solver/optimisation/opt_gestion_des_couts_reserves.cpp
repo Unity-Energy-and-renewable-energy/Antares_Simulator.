@@ -47,7 +47,7 @@ void OPT_InitialiserLesCoutsLineaireReserves(PROBLEME_HEBDO* problemeHebdo,
             for (int index = 0; index < reservesDuPays.areaCapacityReservationsUp.size(); index++)
             {
                 // Thermal clusters
-                for (const auto& clusterReserveParticipation :
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      reservesDuPays.areaCapacityReservationsUp[index]
                        .AllThermalReservesParticipation)
                 {
@@ -62,7 +62,7 @@ void OPT_InitialiserLesCoutsLineaireReserves(PROBLEME_HEBDO* problemeHebdo,
                 }
 
                 // Short Term Storage clusters
-                for (const auto& clusterReserveParticipation :
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      reservesDuPays.areaCapacityReservationsUp[index]
                        .AllSTStorageReservesParticipation)
                 {
@@ -101,7 +101,7 @@ void OPT_InitialiserLesCoutsLineaireReserves(PROBLEME_HEBDO* problemeHebdo,
             for (int index = 0; index < reservesDuPays.areaCapacityReservationsDown.size(); index++)
             {
                 // Thermal clusters
-                for (const auto& clusterReserveParticipation :
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      reservesDuPays.areaCapacityReservationsDown[index]
                        .AllThermalReservesParticipation)
                 {
@@ -112,7 +112,7 @@ void OPT_InitialiserLesCoutsLineaireReserves(PROBLEME_HEBDO* problemeHebdo,
                 }
 
                 // Short Term Storage clusters
-                for (const auto& clusterReserveParticipation :
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      reservesDuPays.areaCapacityReservationsDown[index]
                        .AllSTStorageReservesParticipation)
                 {

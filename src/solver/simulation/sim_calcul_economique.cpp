@@ -150,7 +150,7 @@ static void importShortTermStorages(
                         = globalSTStorageClusterParticipationIndex;
                     reserveParticipation.areaIndexClusterParticipation = areaClusterParticipationIndex;
                     areaReserves.areaCapacityReservationsUp[areaReserveIdx]
-                        .AllSTStorageReservesParticipation.push_back(reserveParticipation);
+                        .AllSTStorageReservesParticipation.emplace(idx, reserveParticipation);
                     globalSTStorageClusterParticipationIndex++;
                     areaClusterParticipationIndex++;
                 }
@@ -175,7 +175,7 @@ static void importShortTermStorages(
                         = globalSTStorageClusterParticipationIndex;
                     reserveParticipation.areaIndexClusterParticipation = areaClusterParticipationIndex;
                     areaReserves.areaCapacityReservationsDown[areaReserveIdx]
-                        .AllSTStorageReservesParticipation.push_back(reserveParticipation);
+                        .AllSTStorageReservesParticipation.emplace(idx, reserveParticipation);
                     globalSTStorageClusterParticipationIndex++;
                     areaClusterParticipationIndex++;
                 }
@@ -521,7 +521,7 @@ void SIM_InitialisationProblemeHebdo(Data::Study& study,
                         reserveParticipation.areaIndexClusterParticipation
                           = areaClusterParticipationIndex;
                         areaReserves.areaCapacityReservationsUp[areaReserveIdx]
-                          .AllThermalReservesParticipation.push_back(reserveParticipation);
+                          .AllThermalReservesParticipation.emplace(cluster->index,reserveParticipation);
                         globalThermalClusterParticipationIndex++;
                         areaClusterParticipationIndex++;
                     }
@@ -545,7 +545,7 @@ void SIM_InitialisationProblemeHebdo(Data::Study& study,
                         reserveParticipation.areaIndexClusterParticipation
                             = areaClusterParticipationIndex;
                         areaReserves.areaCapacityReservationsDown[areaReserveIdx]
-                            .AllThermalReservesParticipation.push_back(reserveParticipation);
+                            .AllThermalReservesParticipation.emplace(cluster->index, reserveParticipation);
                         globalThermalClusterParticipationIndex++;
                         areaClusterParticipationIndex++;
                     }

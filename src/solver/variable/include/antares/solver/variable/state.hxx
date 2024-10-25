@@ -42,18 +42,15 @@ inline void State::startANewYear()
            0,
            sizeof(thermalClusterDispatchedUnitsCountForYear));
 
-    if (unitCommitmentMode != Antares::Data::UnitCommitmentMode::ucHeuristicFast)
-    {
-        memset(thermalClusterReserveParticipationCostForYear,
-               0,
-               sizeof(thermalClusterNonProportionalCostForYear));
-        memset(STStorageClusterReserveParticipationCostForYear,
-               0,
-               sizeof(STStorageClusterReserveParticipationCostForYear));
-        memset(LTStorageClusterReserveParticipationCostForYear,
-              0,
-               sizeof(LTStorageClusterReserveParticipationCostForYear));
-    }
+    memset(thermalClusterReserveParticipationCostForYear,
+            0,
+            sizeof(thermalClusterNonProportionalCostForYear));
+    memset(STStorageClusterReserveParticipationCostForYear,
+            0,
+            sizeof(STStorageClusterReserveParticipationCostForYear));
+    memset(LTStorageClusterReserveParticipationCostForYear,
+            0,
+            sizeof(LTStorageClusterReserveParticipationCostForYear));
 
     // Re-initializing annual costs (to be printed in output into separate files)
     annualSystemCost = 0.;
@@ -91,6 +88,16 @@ inline void State::initFromAreaIndex(const unsigned int areaIndex, uint numSpace
     scratchpad = &area->scratchpad[numSpace];
     thermalCluster = nullptr;
 
+    if (unitCommitmentMode != Data::UnitCommitmentMode::ucHeuristicFast)
+    {
+        memset(LTStorageClusterReserveParticipationCostForYear, 0, sizeof(LTStorageClusterReserveParticipationCostForYear));
+        memset(reserveParticipationCostForYear, 0, sizeof(reserveParticipationCostForYear));
+        for (int h=0 ; h< HOURS_PER_YEAR; h++)
+        {
+            reserveParticipationPerLTStorageClusterForYear[hourInTheYear].clear();
+            
+        }
+    }
     switch (simulationMode)
     {
     case Data::SimulationMode::Adequacy:

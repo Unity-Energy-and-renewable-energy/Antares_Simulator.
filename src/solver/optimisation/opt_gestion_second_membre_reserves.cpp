@@ -72,7 +72,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
 
-                    for (const auto& reserveParticipation:
+                    for (const auto& [clusterId, reserveParticipation]:
                          areaReserveUp.AllThermalReservesParticipation)
                     {
                         int cnt1
@@ -143,7 +143,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                   = areaReserves[pays].areaCapacityReservationsUp;
                 for (const auto& areaReserveUp : areaReservesUp)
                 {
-                    for (const auto& reserveParticipation :
+                    for (const auto& [clusterId, reserveParticipation] :
                          areaReserveUp.AllSTStorageReservesParticipation)
                     {
                         int cnt
@@ -170,7 +170,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                   = areaReserves[pays].areaCapacityReservationsDown;
                 for (const auto& areaReserveDown : areaReservesDown)
                 {
-                    for (const auto& reserveParticipation :
+                    for (const auto& [clusterId, reserveParticipation] :
                          areaReserveDown.AllSTStorageReservesParticipation)
                     {
                         int cnt

@@ -1,7 +1,16 @@
 #include "antares/solver/optimisation/constraints/ThermalReserveParticipation.h"
 
-void ThermalReserveParticipation::add(int pays, int reserve, int cluster_participation, int pdt, bool isUpReserve)
+void ThermalReserveParticipation::add(int pays, int reserve, int cluster, int pdt, bool isUpReserve)
 {
+    CAPACITY_RESERVATION capacityReservation = isUpReserve
+                                                 ? data.areaReserves[pays]
+                                                     .areaCapacityReservationsUp[reserve]
+                                                 : data.areaReserves[pays]
+                                                     .areaCapacityReservationsDown[reserve];
+
+    auto& reserveParticipation = capacityReservation
+                                   .AllThermalReservesParticipation[cluster];
+    bool offUnitParticipating = isUpReserve && reserveParticipation.maxPowerOff > 0;
     if (!data.Simulation)
     {
         // 17 quinquies / sexies
@@ -11,15 +20,9 @@ void ThermalReserveParticipation::add(int pays, int reserve, int cluster_partici
         // P^on : Participation of running units
         // P^off : Participation of off units
 
-        CAPACITY_RESERVATION capacityReservation
-          = isUpReserve ? data.areaReserves[pays].areaCapacityReservationsUp[reserve]
-                        : data.areaReserves[pays].areaCapacityReservationsDown[reserve];
-
-        auto& reserveParticipation = capacityReservation.AllThermalReservesParticipation[cluster_participation];
-
         int globalClusterIdx
           = data.thermalClusters[pays].NumeroDuPalierDansLEnsembleDesPaliersThermiques
-              [reserveParticipation.clusterIdInArea];
+              [cluster];
 
         builder.updateHourWithinWeek(pdt)
           .ThermalClusterReserveParticipation(reserveParticipation.globalIndexClusterParticipation,
@@ -27,10 +30,11 @@ void ThermalReserveParticipation::add(int pays, int reserve, int cluster_partici
           .RunningThermalClusterReserveParticipation(
             reserveParticipation.globalIndexClusterParticipation, -1.0);
 
-        if (isUpReserve && reserveParticipation.maxPowerOff > 0)
+        if (offUnitParticipating)
         {
             builder.OffThermalClusterReserveParticipation(
-              reserveParticipation.globalIndexClusterParticipation, -1.0);
+              reserveParticipation.globalIndexClusterParticipation,
+              -1.0);
         } 
 
         builder.equalTo();
@@ -46,7 +50,7 @@ void ThermalReserveParticipation::add(int pays, int reserve, int cluster_partici
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves += isUpReserve ? 3 : 2;
+        builder.data.NbTermesContraintesPourLesReserves += offUnitParticipating ? 3 : 2;
         builder.data.nombreDeContraintes++;
     }
 }

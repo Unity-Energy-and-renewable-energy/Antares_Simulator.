@@ -322,8 +322,8 @@ struct RESERVE_PARTICIPATION_LTSTORAGE : public RESERVE_PARTICIPATION_BASE
 
 struct CAPACITY_RESERVATION
 {
-    std::vector<RESERVE_PARTICIPATION_THERMAL> AllThermalReservesParticipation;
-    std::vector<RESERVE_PARTICIPATION_STSTORAGE> AllSTStorageReservesParticipation;
+    std::map</*area_clusterId*/ int, RESERVE_PARTICIPATION_THERMAL> AllThermalReservesParticipation;
+    std::map</*area_clusterId*/ int, RESERVE_PARTICIPATION_STSTORAGE> AllSTStorageReservesParticipation;
     std::vector<RESERVE_PARTICIPATION_LTSTORAGE> AllLTStorageReservesParticipation;
     std::vector<int> need;      //!< Vector size is number of hours in year
     float failureCost = 0;

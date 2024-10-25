@@ -75,7 +75,7 @@ void OPT_InitialiserLesBornesDesVariablesDuProblemeLineaireReservesThermiques(
                 AdresseOuPlacerLaValeurDesVariablesOptimisees[var] = adresseDuResultat2;
 
                 // Thermal Cluster
-                for (const auto& clusterReserveParticipation :
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      areaReserveUp.AllThermalReservesParticipation)
                 {
                     var = CorrespondanceVarNativesVarOptim
@@ -106,7 +106,7 @@ void OPT_InitialiserLesBornesDesVariablesDuProblemeLineaireReservesThermiques(
                             .nbOffGroupUnitsParticipatingToReservesInThermalClusterIndex
                               [clusterReserveParticipation.globalIndexClusterParticipation];
                     Xmin[var] = 0;
-                    Xmax[var] = LINFINI_ANTARES;
+                     Xmax[var] = problemeHebdo->PaliersThermiquesDuPays[pays].TailleUnitaireDUnGroupeDuPalierThermique[clusterId];
                     adresseDuResultat = &(
                       problemeHebdo->ResultatsHoraires[pays]
                         .ProductionThermique[pdtHebdo]
@@ -127,7 +127,7 @@ void OPT_InitialiserLesBornesDesVariablesDuProblemeLineaireReservesThermiques(
                 }
 
                 // Short Term Storage Cluster
-                for (const auto& clusterReserveParticipation:
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      areaReserveUp.AllSTStorageReservesParticipation)
                 {
                     var = CorrespondanceVarNativesVarOptim
@@ -231,7 +231,7 @@ void OPT_InitialiserLesBornesDesVariablesDuProblemeLineaireReservesThermiques(
                 AdresseOuPlacerLaValeurDesVariablesOptimisees[var] = adresseDuResultat2;
 
                 // Thermal Clusters
-                for (const auto& clusterReserveParticipation:
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      areaReserveDown.AllThermalReservesParticipation)
                 {
                     var = CorrespondanceVarNativesVarOptim
@@ -259,7 +259,7 @@ void OPT_InitialiserLesBornesDesVariablesDuProblemeLineaireReservesThermiques(
                 }
 
                 // Short Term Storage Cluster
-                for (const auto& clusterReserveParticipation:
+                for (const auto& [clusterId, clusterReserveParticipation] :
                      areaReserveDown.AllSTStorageReservesParticipation)
                 {
                     var = CorrespondanceVarNativesVarOptim
