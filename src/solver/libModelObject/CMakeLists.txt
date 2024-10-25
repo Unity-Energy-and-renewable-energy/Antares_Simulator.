@@ -28,6 +28,7 @@ target_include_directories(antares-solver-libObjectModel
 )
 target_link_libraries(antares-solver-libObjectModel
         PUBLIC
+        Antares::solver-expressions
 )
 install(DIRECTORY include/antares
         DESTINATION "include"

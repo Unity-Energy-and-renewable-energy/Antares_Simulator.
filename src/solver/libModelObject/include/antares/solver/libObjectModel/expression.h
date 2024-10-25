@@ -22,6 +22,8 @@
 
 #include <string>
 
+#include <antares/solver/expressions/nodes/Node.h>
+
 namespace Antares::Solver::ObjectModel
 {
 
@@ -40,8 +42,15 @@ public:
         return value_;
     }
 
+    const Nodes::Node* Node() const
+    {
+        return node_;
+    }
+
 private:
     std::string value_;
+
+    Nodes::Node* node_;
 };
 
 } // namespace Antares::Solver::ObjectModel
