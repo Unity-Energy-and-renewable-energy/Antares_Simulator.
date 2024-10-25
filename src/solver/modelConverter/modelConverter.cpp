@@ -138,10 +138,10 @@ std::vector<Antares::Solver::ObjectModel::Port> convertPorts(
   const Antares::Solver::ModelParser::Model& model)
 {
     std::vector<Antares::Solver::ObjectModel::Port> ports;
-    for (const auto& port: model.ports)
-    {
-        // ports.emplace_back(Antares::Solver::ObjectModel::Port{port.name, port.type});
-    }
+    /* for (const auto& port: model.ports) */
+    /* { */
+    /*     ports.emplace_back(Antares::Solver::ObjectModel::Port{port.name, port.type}); */
+    /* } */
     return ports;
 }
 
