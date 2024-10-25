@@ -24,6 +24,7 @@ void STPumpingCapacityThreasholds::add(int pays, int cluster, int pdt)
                 for (const auto& [clusterId, reserveParticipations] :
                      capacityReservation.AllSTStorageReservesParticipation)
                 {
+                    if (cluster == clusterId)
                         builder.STStoragePumpingClusterReserveParticipation(
                           reserveParticipations.globalIndexClusterParticipation, 1);
                 }
@@ -52,6 +53,7 @@ void STPumpingCapacityThreasholds::add(int pays, int cluster, int pdt)
                 for (const auto& [clusterId, reserveParticipations] :
                      capacityReservation.AllSTStorageReservesParticipation)
                 {
+                    if (cluster == clusterId)
                         builder.STStoragePumpingClusterReserveParticipation(
                           reserveParticipations.globalIndexClusterParticipation, 1);
                 }
@@ -77,12 +79,12 @@ void STPumpingCapacityThreasholds::add(int pays, int cluster, int pdt)
     else
     {
         // Lambda that count the number of reserves that the cluster is participating to
-        auto countReservesParticipations = [](const std::vector<CAPACITY_RESERVATION>& reservations)
+        auto countReservesParticipations = [cluster](const std::vector<CAPACITY_RESERVATION>& reservations)
         {
             int counter = 0;
             for (const auto& capacityReservation: reservations)
             {
-                counter += capacityReservation.AllSTStorageReservesParticipation.size();
+                counter += capacityReservation.AllSTStorageReservesParticipation.count(cluster);
             }
             return counter;
         };

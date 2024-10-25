@@ -150,7 +150,7 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
                           = NombreDeVariables;
                         ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
                           = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfUnitsToReserve(NombreDeVariables,
+                        variableNamer.ThermalClusterReserveParticipation(NombreDeVariables,
                                                                     clusterName,
                                                                     areaReserveUp.reserveName);
                         NombreDeVariables++;
@@ -350,7 +350,7 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
                           = NombreDeVariables;
                         ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
                           = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfUnitsToReserve(NombreDeVariables,
+                        variableNamer.ThermalClusterReserveParticipation(NombreDeVariables,
                                                                     clusterName,
                                                                     areaReserveDown.reserveName);
                         NombreDeVariables++;

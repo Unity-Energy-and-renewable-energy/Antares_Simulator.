@@ -106,7 +106,7 @@ void OPT_InitialiserLesBornesDesVariablesDuProblemeLineaireReservesThermiques(
                             .nbOffGroupUnitsParticipatingToReservesInThermalClusterIndex
                               [clusterReserveParticipation.globalIndexClusterParticipation];
                     Xmin[var] = 0;
-                    Xmax[var] = LINFINI_ANTARES;
+                     Xmax[var] = problemeHebdo->PaliersThermiquesDuPays[pays].TailleUnitaireDUnGroupeDuPalierThermique[clusterId];
                     adresseDuResultat = &(
                       problemeHebdo->ResultatsHoraires[pays]
                         .ProductionThermique[pdtHebdo]

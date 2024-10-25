@@ -104,7 +104,7 @@ class VariableNamer: public Namer
 public:
     using Namer::Namer;
     void DispatchableProduction(unsigned int variable, const std::string& clusterName);
-    void ParticipationOfUnitsToReserve(unsigned int variable,
+    void ThermalClusterReserveParticipation(unsigned int variable,
                                        const std::string& clusterName,
                                        const std::string& reserveName);
     void ParticipationOfSTStorageTurbiningToReserve(unsigned int variable,

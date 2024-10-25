@@ -171,12 +171,12 @@ void VariableNamer::DispatchableProduction(unsigned int variable, const std::str
     SetThermalClusterElementName(variable, "DispatchableProduction", clusterName);
 }
 
-void VariableNamer::ParticipationOfUnitsToReserve(unsigned int variable,
+void VariableNamer::ThermalClusterReserveParticipation(unsigned int variable,
                                                   const std::string& clusterName,
                                                   const std::string& reserveName)
 {
     SetThermalClusterAndReserveElementName(
-      variable, "ParticipationOfUnitsToReserve", clusterName, reserveName);
+      variable, "ThermalClusterReserveParticipation", clusterName, reserveName);
 }
 
 void VariableNamer::ParticipationOfSTStorageTurbiningToReserve(unsigned int variable,
