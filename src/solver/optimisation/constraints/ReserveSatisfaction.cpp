@@ -21,7 +21,7 @@ void ReserveSatisfaction::add(int pays, int reserve, int pdt, bool isUpReserve)
         builder.updateHourWithinWeek(pdt);
 
         // Thermal clusters reserve participation
-        for (auto& reserveParticipation: capacityReservation.AllThermalReservesParticipation)
+        for (auto& [clusterId, reserveParticipation] : capacityReservation.AllThermalReservesParticipation)
         {
             builder.ThermalClusterReserveParticipation(
               reserveParticipation.globalIndexClusterParticipation,
@@ -29,7 +29,7 @@ void ReserveSatisfaction::add(int pays, int reserve, int pdt, bool isUpReserve)
         }
 
         // Short Term Storage clusters reserve participation
-        for (auto& reserveParticipation: capacityReservation.AllSTStorageReservesParticipation)
+        for (auto& [clusterId, reserveParticipation] : capacityReservation.AllSTStorageReservesParticipation)
         {
             if (isUpReserve)
             {

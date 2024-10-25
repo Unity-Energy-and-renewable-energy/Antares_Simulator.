@@ -82,7 +82,7 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
                 }
 
                 // Thermal Clusters
-                for (auto& clusterReserveParticipation :
+                for (auto& [clusterId, clusterReserveParticipation] :
                      areaReserveUp.AllThermalReservesParticipation)
                 {
                     const auto& clusterName = clusterReserveParticipation.clusterName;
@@ -158,7 +158,7 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
                 }
 
                 // Short Term Storage Clusters
-                for (auto& clusterReserveParticipation :
+                for (auto& [clusterId, clusterReserveParticipation] :
                     areaReserveUp.AllSTStorageReservesParticipation)
                 {
                     const auto& clusterName = clusterReserveParticipation.clusterName;
@@ -319,7 +319,7 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
                 }
 
                 // Thermal Clusters
-                for (auto& clusterReserveParticipation :
+                for (auto& [clusterId, clusterReserveParticipation] :
                      areaReserveDown.AllThermalReservesParticipation)
                 {
                     const auto& clusterName = clusterReserveParticipation.clusterName;
@@ -358,7 +358,7 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
                 }
 
                 // Short Term Storage Clusters
-                for (auto& clusterReserveParticipation :
+                for (auto& [clusterId, clusterReserveParticipation] :
                      areaReserveDown.AllSTStorageReservesParticipation)
                 {
                     const auto& clusterName = clusterReserveParticipation.clusterName;
