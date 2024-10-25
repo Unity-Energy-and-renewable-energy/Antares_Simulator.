@@ -35,137 +35,28 @@ class ConvertorVisitor: public ExprVisitor
 {
 public:
     ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-                     const ObjectModel::Model& model):
-        registry_(registry),
-        model_(model)
-    {
-    }
+                     const ObjectModel::Model& model);
 
-    virtual antlrcpp::Any visitChildren(antlr4::tree::ParseTree* node) override
-    {
-        for (auto child: node->children)
-        {
-            child->accept(this);
-        }
-        return antlrcpp::Any();
-    }
+    virtual antlrcpp::Any visitChildren(antlr4::tree::ParseTree* node) override;
 
-    std::any visit(antlr4::tree::ParseTree* tree) override
-    {
-        return tree->accept(this);
-    }
-
-    std::any visitTerminal(antlr4::tree::TerminalNode* node) override
-    {
-        return std::any();
-    }
-
-    std::any visitErrorNode(antlr4::tree::ErrorNode* node) override
-    {
-        return std::any();
-    }
-
-    std::any visitIdentifier(ExprParser::IdentifierContext* context) override
-    {
-        bool is_parameter = false;
-        for (const auto& [name, parameter]: model_.Parameters())
-        {
-            if (name == context->getText())
-            {
-                is_parameter = true;
-                break;
-            }
-        }
-        if (is_parameter)
-        {
-            return static_cast<Antares::Solver::Nodes::Node*>(
-              registry_.create<Antares::Solver::Nodes::ParameterNode>(context->getText()));
-        }
-        else
-        {
-            return static_cast<Antares::Solver::Nodes::Node*>(
-              registry_.create<Antares::Solver::Nodes::VariableNode>(context->getText()));
-        }
-    }
-
-    std::any visitMuldiv(ExprParser::MuldivContext* context) override
-    {
-        // Meh
-        // Having to know the underlying type of the node is not great. We can eitgher return
-        // expression node containing the concrete node to be able to always anycast<Expression> Or
-        // we can return a pair Node/type (difficult to return a type in c++)
-        auto toNodePtr = [](const auto& x)
-        { return std::any_cast<Antares::Solver::Nodes::Node*>(x); };
-        auto* left = toNodePtr(visit(context->expr(0)));
-        auto* right = toNodePtr(visit(context->expr(1)));
-        auto mult_node = registry_.create<Antares::Solver::Nodes::MultiplicationNode>(left, right);
-        return dynamic_cast<Antares::Solver::Nodes::Node*>(mult_node);
-    }
-
-    std::any visitFullexpr(ExprParser::FullexprContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitShift(ExprParser::ShiftContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitNegation(ExprParser::NegationContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitExpression(ExprParser::ExpressionContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitComparison(ExprParser::ComparisonContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitAddsub(ExprParser::AddsubContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitPortField(ExprParser::PortFieldContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitNumber(ExprParser::NumberContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitTimeIndex(ExprParser::TimeIndexContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitTimeShift(ExprParser::TimeShiftContext* context) override
-    {
-        return std::any();
-    }
-
-    std::any visitFunction(ExprParser::FunctionContext* context) override
-    {
-        return std::any();
-    }
-
-    /* std::any visitTimeShiftRange(ExprParser::TimeShiftRangeContext* context) override */
-    /* { */
-    /*     return std::any(); */
-    /* } */
-
-    /* std::any visitTimeRange(ExprParser::TimeRangeContext* context) override */
-    /* { */
-    /*     return std::any(); */
-    /* } */
+    std::any visit(antlr4::tree::ParseTree* tree) override;
+    std::any visitTerminal(antlr4::tree::TerminalNode* node) override;
+    std::any visitErrorNode(antlr4::tree::ErrorNode* node) override;
+    std::any visitIdentifier(ExprParser::IdentifierContext* context) override;
+    std::any visitMuldiv(ExprParser::MuldivContext* context) override;
+    std::any visitFullexpr(ExprParser::FullexprContext* context) override;
+    std::any visitShift(ExprParser::ShiftContext* context) override;
+    std::any visitNegation(ExprParser::NegationContext* context) override;
+    std::any visitExpression(ExprParser::ExpressionContext* context) override;
+    std::any visitComparison(ExprParser::ComparisonContext* context) override;
+    std::any visitAddsub(ExprParser::AddsubContext* context) override;
+    std::any visitPortField(ExprParser::PortFieldContext* context) override;
+    std::any visitNumber(ExprParser::NumberContext* context) override;
+    std::any visitTimeIndex(ExprParser::TimeIndexContext* context) override;
+    std::any visitTimeShift(ExprParser::TimeShiftContext* context) override;
+    std::any visitFunction(ExprParser::FunctionContext* context) override;
+    /* std::any visitTimeShiftRange(ExprParser::TimeShiftRangeContext* context) override; */
+    /* std::any visitTimeRange(ExprParser::TimeRangeContext* context) override; */
 
     Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry_;
     const ObjectModel::Model& model_;

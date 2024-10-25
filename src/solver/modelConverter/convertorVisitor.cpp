@@ -23,5 +23,137 @@
 
 namespace Antares::Solver::ModelConverter
 {
+ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
+                 const ObjectModel::Model& model):
+    registry_(registry),
+    model_(model)
+{
+}
+
+antlrcpp::Any ConvertorVisitor::visitChildren(antlr4::tree::ParseTree* node)
+{
+    for (auto child: node->children)
+    {
+        child->accept(this);
+    }
+    return antlrcpp::Any();
+}
+
+std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
+{
+    return tree->accept(this);
+}
+
+std::any ConvertorVisitor::visitTerminal(antlr4::tree::TerminalNode* node)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitErrorNode(antlr4::tree::ErrorNode* node)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* context)
+{
+    bool is_parameter = false;
+    for (const auto& [name, parameter]: model_.Parameters())
+    {
+        if (name == context->getText())
+        {
+            is_parameter = true;
+            break;
+        }
+    }
+    if (is_parameter)
+    {
+        return static_cast<Antares::Solver::Nodes::Node*>(
+          registry_.create<Antares::Solver::Nodes::ParameterNode>(context->getText()));
+    }
+    else
+    {
+        return static_cast<Antares::Solver::Nodes::Node*>(
+          registry_.create<Antares::Solver::Nodes::VariableNode>(context->getText()));
+    }
+}
+
+std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
+{
+    // Meh
+    // Having to know the underlying type of the node is not great. We can eitgher return
+    // expression node containing the concrete node to be able to always anycast<Expression> Or
+    // we can return a pair Node/type (difficult to return a type in c++)
+    auto toNodePtr = [](const auto& x)
+    { return std::any_cast<Antares::Solver::Nodes::Node*>(x); };
+    auto* left = toNodePtr(visit(context->expr(0)));
+    auto* right = toNodePtr(visit(context->expr(1)));
+    auto mult_node = registry_.create<Antares::Solver::Nodes::MultiplicationNode>(left, right);
+    return dynamic_cast<Antares::Solver::Nodes::Node*>(mult_node);
+}
+
+std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitShift(ExprParser::ShiftContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitNegation(ExprParser::NegationContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitExpression(ExprParser::ExpressionContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitComparison(ExprParser::ComparisonContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitAddsub(ExprParser::AddsubContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitPortField(ExprParser::PortFieldContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitNumber(ExprParser::NumberContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitTimeIndex(ExprParser::TimeIndexContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitTimeShift(ExprParser::TimeShiftContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitFunction(ExprParser::FunctionContext* context)
+{
+    return std::any();
+}
+
+/* std::any ConvertorVisitor::visitTimeShiftRange(ExprParser::TimeShiftRangeContext* context) */
+/* { */
+/*     return std::any(); */
+/* } */
+
+/* std::any ConvertorVisitor::visitTimeRange(ExprParser::TimeRangeContext* context) */
+/* { */
+/*     return std::any(); */
+/* } */
 
 } // namespace Antares::Solver::ModelConverter
