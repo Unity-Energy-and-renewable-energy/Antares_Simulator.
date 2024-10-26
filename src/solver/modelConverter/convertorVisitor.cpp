@@ -21,8 +21,25 @@
 
 #include <antares/solver/modelConverter/convertorVisitor.h>
 
+#include "ExprLexer.h"
+#include "ExprParser.h"
+#include "antlr4-runtime.h"
+
 namespace Antares::Solver::ModelConverter
 {
+
+Nodes::Node* convertExpressionToNode(const std::string& exprStr)
+{
+    Nodes::Node* n;
+    antlr4::ANTLRInputStream input(exprStr);
+    ExprLexer lexer(&input);
+    antlr4::CommonTokenStream tokens(&lexer);
+    ExprParser parser(&tokens);
+    tokens.fill();
+
+    return n;
+}
+
 ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
                  const ObjectModel::Model& model):
     registry_(registry),

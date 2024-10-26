@@ -151,9 +151,10 @@ std::vector<Antares::Solver::ObjectModel::Constraint> convertConstraints(
     std::vector<Antares::Solver::ObjectModel::Constraint> constraints;
     for (const auto& constraint: model.constraints)
     {
+        /* Node* expr = convertExpressionToNode(constraint.expression); */
         constraints.emplace_back(Antares::Solver::ObjectModel::Constraint{
           constraint.id,
-          Antares::Solver::ObjectModel::Expression{constraint.expression}});
+          Antares::Solver::ObjectModel::Expression{constraint.expression /*, expr */}});
     }
     return constraints;
 }
