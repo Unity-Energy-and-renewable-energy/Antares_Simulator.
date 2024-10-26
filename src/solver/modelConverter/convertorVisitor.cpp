@@ -35,8 +35,11 @@ Nodes::Node* convertExpressionToNode(const std::string& exprStr)
     ExprLexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
     ExprParser parser(&tokens);
-    tokens.fill();
 
+    ExprParser::ExprContext* tree = parser.expr();
+
+    /* ConvertorVisitor visitor; */
+    /* n = std::any_cast<Nodes::Node>(visitor.visitChildren(tree)); */
     return n;
 }
 
