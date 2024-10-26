@@ -28,7 +28,9 @@
 namespace Antares::Solver::ModelConverter
 {
 
-Nodes::Node* convertExpressionToNode(const std::string& exprStr)
+Nodes::Node* convertExpressionToNode(const std::string& exprStr,
+                                     Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
+                                     const ObjectModel::Model& model)
 {
     Nodes::Node* n;
     antlr4::ANTLRInputStream input(exprStr);
@@ -38,8 +40,8 @@ Nodes::Node* convertExpressionToNode(const std::string& exprStr)
 
     ExprParser::ExprContext* tree = parser.expr();
 
-    /* ConvertorVisitor visitor; */
-    /* n = std::any_cast<Nodes::Node>(visitor.visitChildren(tree)); */
+    ConvertorVisitor visitor(registry, model);
+    n = std::any_cast<Nodes::Node>(visitor.visitChildren(tree));
     return n;
 }
 
