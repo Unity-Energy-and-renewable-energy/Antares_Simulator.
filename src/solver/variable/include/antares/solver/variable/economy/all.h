@@ -258,14 +258,12 @@ typedef // Prices
 
                                                                       // Number Of Dispatched Units
                                                                       Common::SpatialAggregate<
-                                                                        NbOfDispatchedUnits, // MBO
+                                                                        NbOfDispatchedUnits // MBO
                                                                                             // 25/02/2016
                                                                                             // -
                                                                                             // refs:
                                                                                             // #55
-                                                                        Common::
-                                                                          SpatialAggregate<ReserveParticipationCost
-                                                                        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                                                      >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     VariablesPerSetOfAreas;
 
 typedef BindingConstMarginCost< // Marginal cost for a binding constraint
