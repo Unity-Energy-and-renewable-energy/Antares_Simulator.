@@ -43,7 +43,7 @@ Nodes::Node* convertExpressionToNode(
     ExprParser::ExprContext* tree = parser.expr();
 
     ConvertorVisitor visitor(registry, model);
-    auto a = visitor.visitChildren(tree);
+    auto a = visitor.visit(tree);
     Nodes::Node* n;
     return n;
 }
@@ -58,11 +58,11 @@ ConvertorVisitor::ConvertorVisitor(
 
 std::any ConvertorVisitor::visitChildren(antlr4::tree::ParseTree* node)
 {
-    /* for (auto child: node->children) */
-    /* { */
-    /*     child->accept(this); */
-    /* } */
-    return node->accept(this);
+    for (auto child: node->children)
+    {
+        child->accept(this);
+    }
+    return std::any();
 }
 
 std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
