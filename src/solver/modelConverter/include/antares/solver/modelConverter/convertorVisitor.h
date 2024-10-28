@@ -29,6 +29,12 @@
 
 namespace Antares::Solver::ModelConverter
 {
+
+Nodes::Node* convertExpressionToNode(
+  const std::string& exprStr,
+  Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
+  const ObjectModel::Model& model);
+
 // Visitor to convert nodes to Antares::Solver::Nodes
 // TODO add reference to model to be able to resolve names as either parameters or variables
 class ConvertorVisitor: public ExprVisitor
