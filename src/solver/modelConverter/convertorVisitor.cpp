@@ -118,7 +118,7 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
 
 std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
 {
-    return visitChildren(context);
+    return std::any();
 }
 
 std::any ConvertorVisitor::visitShift(ExprParser::ShiftContext* context)
