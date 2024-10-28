@@ -42,6 +42,7 @@ public:
     std::any visit(antlr4::tree::ParseTree* tree) override;
     std::any visitTerminal(antlr4::tree::TerminalNode* node) override;
     std::any visitErrorNode(antlr4::tree::ErrorNode* node) override;
+
     std::any visitIdentifier(ExprParser::IdentifierContext* context) override;
     std::any visitMuldiv(ExprParser::MuldivContext* context) override;
     std::any visitFullexpr(ExprParser::FullexprContext* context) override;
@@ -55,8 +56,8 @@ public:
     std::any visitTimeIndex(ExprParser::TimeIndexContext* context) override;
     std::any visitTimeShift(ExprParser::TimeShiftContext* context) override;
     std::any visitFunction(ExprParser::FunctionContext* context) override;
-    /* std::any visitTimeShiftRange(ExprParser::TimeShiftRangeContext* context) override; */
-    /* std::any visitTimeRange(ExprParser::TimeRangeContext* context) override; */
+
+    std::any visitTimeSum(ExprParser::TimeSumContext *context) override;
 
     Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry_;
     const ObjectModel::Model& model_;

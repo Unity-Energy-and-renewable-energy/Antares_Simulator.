@@ -169,14 +169,4 @@ std::any ConvertorVisitor::visitFunction(ExprParser::FunctionContext* context)
     return std::any();
 }
 
-/* std::any ConvertorVisitor::visitTimeShiftRange(ExprParser::TimeShiftRangeContext* context) */
-/* { */
-/*     return std::any(); */
-/* } */
-
-/* std::any ConvertorVisitor::visitTimeRange(ExprParser::TimeRangeContext* context) */
-/* { */
-/*     return std::any(); */
-/* } */
-
 } // namespace Antares::Solver::ModelConverter
