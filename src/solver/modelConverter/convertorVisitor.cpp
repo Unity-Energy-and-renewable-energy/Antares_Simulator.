@@ -21,6 +21,8 @@
 
 #include <antares/solver/modelConverter/convertorVisitor.h>
 
+#include <iostream>
+
 #include "ExprLexer.h"
 #include "ExprParser.h"
 #include "antlr4-runtime.h"
@@ -59,7 +61,7 @@ std::any ConvertorVisitor::visitChildren(antlr4::tree::ParseTree* node)
     {
         child->accept(this);
     }
-    return antlrcpp::Any();
+    return this;
 }
 
 std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
@@ -115,7 +117,7 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
 
 std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
 {
-    return std::any();
+    return visitChildren(context);
 }
 
 std::any ConvertorVisitor::visitShift(ExprParser::ShiftContext* context)

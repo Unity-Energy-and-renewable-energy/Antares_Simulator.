@@ -29,6 +29,16 @@
 
 using namespace Antares::Solver;
 
+BOOST_AUTO_TEST_CASE(simple_expression)
+{
+    ObjectModel::Model model;
+    Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
+
+    std::string expression = "a * b";
+
+    auto* node = ModelConverter::convertExpressionToNode(expression, registry, model);
+}
+
 BOOST_AUTO_TEST_CASE(empty_expression)
 {
     ObjectModel::Model model;
