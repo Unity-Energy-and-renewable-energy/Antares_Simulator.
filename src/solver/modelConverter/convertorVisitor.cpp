@@ -109,11 +109,11 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
     // Having to know the underlying type of the node is not great. We can eitgher return
     // expression node containing the concrete node to be able to always anycast<Expression> Or
     // we can return a pair Node/type (difficult to return a type in c++)
-    auto toNodePtr = [](const auto& x) { return std::any_cast<Antares::Solver::Nodes::Node*>(x); };
+    auto toNodePtr = [](const auto& x) { return std::any_cast<Nodes::Node*>(x); };
     auto* left = toNodePtr(visit(context->expr(0)));
     auto* right = toNodePtr(visit(context->expr(1)));
-    auto mult_node = registry_.create<Antares::Solver::Nodes::MultiplicationNode>(left, right);
-    return dynamic_cast<Antares::Solver::Nodes::Node*>(mult_node);
+    auto mult_node = registry_.create<Nodes::MultiplicationNode>(left, right);
+    return dynamic_cast<Nodes::Node*>(mult_node);
 }
 
 std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
@@ -153,7 +153,10 @@ std::any ConvertorVisitor::visitPortField(ExprParser::PortFieldContext* context)
 
 std::any ConvertorVisitor::visitNumber(ExprParser::NumberContext* context)
 {
-    return std::any();
+    double d = stod(context->NUMBER()->getText());
+    auto n = registry_.create<Nodes::LiteralNode>(d);
+
+    return static_cast<Nodes::Node*>(n);
 }
 
 std::any ConvertorVisitor::visitTimeIndex(ExprParser::TimeIndexContext* context)
@@ -188,7 +191,7 @@ std::any ConvertorVisitor::visitSignedAtom(ExprParser::SignedAtomContext* contex
 
 std::any ConvertorVisitor::visitUnsignedAtom(ExprParser::UnsignedAtomContext* context)
 {
-    return std::any();
+    return visit(context->atom());
 }
 
 std::any ConvertorVisitor::visitRightAtom(ExprParser::RightAtomContext* context)

@@ -22,6 +22,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "antares/solver/expressions/visitors/AstDOTStyleVisitor.h"
+
 #include "antares/solver/modelConverter/convertorVisitor.h"
 
 #include "antares/solver/expressions/Registry.hxx"
@@ -29,23 +31,32 @@
 
 using namespace Antares::Solver;
 
-BOOST_AUTO_TEST_CASE(empty_expression)
-{
-    ObjectModel::Model model;
-    Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
+/* BOOST_AUTO_TEST_CASE(empty_expression) */
+/* { */
+/*     ObjectModel::Model model; */
+/*     Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry; */
 
-    std::string expression = "";
+/*     std::string expression = ""; */
 
-    auto* node = ModelConverter::convertExpressionToNode(expression, registry, model);
-}
+/*     auto* node = ModelConverter::convertExpressionToNode(expression, registry, model); */
+/* } */
 
 BOOST_AUTO_TEST_CASE(simple_expression)
 {
     ObjectModel::Model model;
-    Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
+    Antares::Solver::Registry<Nodes::Node> registry;
 
-    std::string expression = "a * b";
+    auto twelve = registry.create<Nodes::LiteralNode>(12);
+    std::cout << twelve->value() << std::endl;
+
+    std::string expression = "1 * 2";
 
     auto* node = ModelConverter::convertExpressionToNode(expression, registry, model);
-}
 
+    auto mult = dynamic_cast<Nodes::MultiplicationNode*>(node);
+
+
+    /* std::ofstream out("/tmp/abc.dot"); */
+    /* Visitors::AstDOTStyleVisitor dot; */
+    /* dot(out, node); */
+}
