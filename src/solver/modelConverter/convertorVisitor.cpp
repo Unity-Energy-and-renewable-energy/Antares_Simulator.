@@ -169,4 +169,54 @@ std::any ConvertorVisitor::visitFunction(ExprParser::FunctionContext* context)
     return std::any();
 }
 
+std::any ConvertorVisitor::visitTimeSum(ExprParser::TimeSumContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitAllTimeSum(ExprParser::AllTimeSumContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitSignedAtom(ExprParser::SignedAtomContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitUnsignedAtom(ExprParser::UnsignedAtomContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitRightAtom(ExprParser::RightAtomContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitSignedExpression(ExprParser::SignedExpressionContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitShiftAddsub(ExprParser::ShiftAddsubContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitShiftMuldiv(ExprParser::ShiftMuldivContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitRightMuldiv(ExprParser::RightMuldivContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitRightExpression(ExprParser::RightExpressionContext* context)
+{
+    return std::any();
+}
+
 } // namespace Antares::Solver::ModelConverter
