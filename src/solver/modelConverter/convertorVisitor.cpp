@@ -44,8 +44,7 @@ Nodes::Node* convertExpressionToNode(
 
     ConvertorVisitor visitor(registry, model);
     auto a = visitor.visit(tree);
-    Nodes::Node* n;
-    return n;
+    return std::any_cast<Nodes::Node*>(a);
 }
 
 ConvertorVisitor::ConvertorVisitor(
@@ -153,7 +152,7 @@ std::any ConvertorVisitor::visitPortField(ExprParser::PortFieldContext* context)
 
 std::any ConvertorVisitor::visitNumber(ExprParser::NumberContext* context)
 {
-    double d = stod(context->NUMBER()->getText());
+    double d = stod(context->getText());
     auto n = registry_.create<Nodes::LiteralNode>(d);
 
     return static_cast<Nodes::Node*>(n);
@@ -191,7 +190,7 @@ std::any ConvertorVisitor::visitSignedAtom(ExprParser::SignedAtomContext* contex
 
 std::any ConvertorVisitor::visitUnsignedAtom(ExprParser::UnsignedAtomContext* context)
 {
-    return visit(context->atom());
+    return context->atom()->accept(this);
 }
 
 std::any ConvertorVisitor::visitRightAtom(ExprParser::RightAtomContext* context)

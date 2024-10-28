@@ -53,10 +53,7 @@ BOOST_AUTO_TEST_CASE(simple_expression)
 
     auto* node = ModelConverter::convertExpressionToNode(expression, registry, model);
 
-    auto mult = dynamic_cast<Nodes::MultiplicationNode*>(node);
-
-
-    /* std::ofstream out("/tmp/abc.dot"); */
-    /* Visitors::AstDOTStyleVisitor dot; */
-    /* dot(out, node); */
+    std::ofstream out("/tmp/abc.dot");
+    Visitors::AstDOTStyleVisitor dot;
+    dot(out, node);
 }
