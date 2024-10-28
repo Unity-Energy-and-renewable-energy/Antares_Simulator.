@@ -72,7 +72,7 @@ public:
         {
             return it->second; // Return the associated value if the key exists
         }
-        throw std::out_of_range::exception("This index is not in the BiMap");
+        throw std::out_of_range("This index is not in the BiMap");
     }
 
     // Function to get the key from the value
