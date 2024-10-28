@@ -28,9 +28,10 @@
 namespace Antares::Solver::ModelConverter
 {
 
-Nodes::Node* convertExpressionToNode(const std::string& exprStr,
-                                     Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-                                     const ObjectModel::Model& model)
+Nodes::Node* convertExpressionToNode(
+  const std::string& exprStr,
+  Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
+  const ObjectModel::Model& model)
 {
     Nodes::Node* n;
     antlr4::ANTLRInputStream input(exprStr);
@@ -45,8 +46,9 @@ Nodes::Node* convertExpressionToNode(const std::string& exprStr,
     return n;
 }
 
-ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-                 const ObjectModel::Model& model):
+ConvertorVisitor::ConvertorVisitor(
+  Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
+  const ObjectModel::Model& model):
     registry_(registry),
     model_(model)
 {
@@ -105,8 +107,7 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
     // Having to know the underlying type of the node is not great. We can eitgher return
     // expression node containing the concrete node to be able to always anycast<Expression> Or
     // we can return a pair Node/type (difficult to return a type in c++)
-    auto toNodePtr = [](const auto& x)
-    { return std::any_cast<Antares::Solver::Nodes::Node*>(x); };
+    auto toNodePtr = [](const auto& x) { return std::any_cast<Antares::Solver::Nodes::Node*>(x); };
     auto* left = toNodePtr(visit(context->expr(0)));
     auto* right = toNodePtr(visit(context->expr(1)));
     auto mult_node = registry_.create<Antares::Solver::Nodes::MultiplicationNode>(left, right);
