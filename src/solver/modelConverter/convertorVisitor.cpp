@@ -42,7 +42,7 @@ Nodes::Node* convertExpressionToNode(
     ExprParser::ExprContext* tree = parser.expr();
 
     ConvertorVisitor visitor(registry, model);
-    n = std::any_cast<Nodes::Node>(visitor.visitChildren(tree));
+    n = std::any_cast<Nodes::Node*>(visitor.visitChildren(tree));
     return n;
 }
 
