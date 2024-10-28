@@ -17,6 +17,7 @@ target_link_libraries(TestModelParser
         Antares::modelConverter
         Antares::modelParser
         Antares::antares-solver-libObjectModel
+        Antares::antlr-interface
 )
 
 # Storing test-toybox under the folder Unit-tests in the IDE

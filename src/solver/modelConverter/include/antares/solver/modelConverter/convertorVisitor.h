@@ -57,16 +57,16 @@ public:
     std::any visitTimeShift(ExprParser::TimeShiftContext* context) override;
     std::any visitFunction(ExprParser::FunctionContext* context) override;
 
-    std::any visitTimeSum(ExprParser::TimeSumContext *context) override;
-    std::any visitAllTimeSum(ExprParser::AllTimeSumContext *context) override;
-    std::any visitSignedAtom(ExprParser::SignedAtomContext *context) override;
-    std::any visitUnsignedAtom(ExprParser::UnsignedAtomContext *context) override;
-    std::any visitRightAtom(ExprParser::RightAtomContext *context) override;
-    std::any visitSignedExpression(ExprParser::SignedExpressionContext *context) override;
-    std::any visitShiftAddsub(ExprParser::ShiftAddsubContext *context) override;
-    std::any visitShiftMuldiv(ExprParser::ShiftMuldivContext *context) override;
-    std::any visitRightMuldiv(ExprParser::RightMuldivContext *context) override;
-    std::any visitRightExpression(ExprParser::RightExpressionContext *context) override;
+    std::any visitTimeSum(ExprParser::TimeSumContext* context) override;
+    std::any visitAllTimeSum(ExprParser::AllTimeSumContext* context) override;
+    std::any visitSignedAtom(ExprParser::SignedAtomContext* context) override;
+    std::any visitUnsignedAtom(ExprParser::UnsignedAtomContext* context) override;
+    std::any visitRightAtom(ExprParser::RightAtomContext* context) override;
+    std::any visitSignedExpression(ExprParser::SignedExpressionContext* context) override;
+    std::any visitShiftAddsub(ExprParser::ShiftAddsubContext* context) override;
+    std::any visitShiftMuldiv(ExprParser::ShiftMuldivContext* context) override;
+    std::any visitRightMuldiv(ExprParser::RightMuldivContext* context) override;
+    std::any visitRightExpression(ExprParser::RightExpressionContext* context) override;
 
     Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry_;
     const ObjectModel::Model& model_;

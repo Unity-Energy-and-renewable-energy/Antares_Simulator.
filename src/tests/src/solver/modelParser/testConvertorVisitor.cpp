@@ -22,4 +22,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-/* #include "antares/solver/modelConverter/convertorVisitor.h" */
+#include "antares/solver/modelConverter/convertorVisitor.h"
+
+BOOST_AUTO_TEST_CASE(empty_expression)
+{
+    std::string expression = "";
+}
