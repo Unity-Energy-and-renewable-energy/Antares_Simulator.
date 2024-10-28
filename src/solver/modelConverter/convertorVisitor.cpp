@@ -33,7 +33,6 @@ Nodes::Node* convertExpressionToNode(
   Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
   const ObjectModel::Model& model)
 {
-    Nodes::Node* n;
     antlr4::ANTLRInputStream input(exprStr);
     ExprLexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
@@ -42,7 +41,7 @@ Nodes::Node* convertExpressionToNode(
     ExprParser::ExprContext* tree = parser.expr();
 
     ConvertorVisitor visitor(registry, model);
-    n = std::any_cast<Nodes::Node*>(visitor.visitChildren(tree));
+    Nodes::Node* n = std::any_cast<Nodes::Node*>(visitor.visitChildren(tree));
     return n;
 }
 
@@ -54,7 +53,7 @@ ConvertorVisitor::ConvertorVisitor(
 {
 }
 
-antlrcpp::Any ConvertorVisitor::visitChildren(antlr4::tree::ParseTree* node)
+std::any ConvertorVisitor::visitChildren(antlr4::tree::ParseTree* node)
 {
     for (auto child: node->children)
     {

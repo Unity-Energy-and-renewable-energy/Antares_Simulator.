@@ -24,7 +24,17 @@
 
 #include "antares/solver/modelConverter/convertorVisitor.h"
 
+#include "antares/solver/expressions/Registry.hxx"
+#include "antares/solver/libObjectModel/model.h"
+
+using namespace Antares::Solver;
+
 BOOST_AUTO_TEST_CASE(empty_expression)
 {
+    ObjectModel::Model model;
+    Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
+
     std::string expression = "";
+
+    auto* node = ModelConverter::convertExpressionToNode(expression, registry, model);
 }
