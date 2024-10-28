@@ -43,7 +43,6 @@ public:
     ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
                      const ObjectModel::Model& model);
 
-
     std::any visitChildren(antlr4::tree::ParseTree* node) override;
 
     std::any visit(antlr4::tree::ParseTree* tree) override;
