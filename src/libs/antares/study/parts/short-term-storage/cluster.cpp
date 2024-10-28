@@ -31,28 +31,28 @@ namespace Antares::Data::ShortTermStorage
 
 const char* STStorageCluster::GroupName(enum Group grp)
 {
-    using enum Data::ShortTermStorage::Group;
+    using Group = Data::ShortTermStorage::Group;  // Replace "using enum"
     switch (grp)
     {
-    case PSP_open:
+    case Group::PSP_open:
         return "PSP_open";
-    case PSP_closed:
+    case Group::PSP_closed:
         return "PSP_closed";
-    case Pondage:
+    case Group::Pondage:
         return "Pondage";
-    case Battery:
+    case Group::Battery:
         return "Battery";
-    case Other1:
+    case Group::Other1:
         return "Other1";
-    case Other2:
+    case Group::Other2:
         return "Other2";
-    case Other3:
+    case Group::Other3:
         return "Other 3";
-    case Other4:
+    case Group::Other4:
         return "Other 4";
-    case Other5:
+    case Group::Other5:
         return "Other 5";
-    case groupMax:
+    case Group::groupMax:
         return "";
     }
     return "";
