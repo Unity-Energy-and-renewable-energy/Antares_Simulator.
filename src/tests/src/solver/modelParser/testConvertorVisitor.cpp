@@ -29,28 +29,49 @@
 
 using namespace Antares::Solver;
 
-/* BOOST_AUTO_TEST_CASE(empty_expression) */
-/* { */
-/*     ObjectModel::Model model; */
-/*     Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry; */
+struct Fixture
+{
+    ObjectModel::Model model;
+    Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
+};
 
-/*     std::string expression = ""; */
+// TODO remove, used for debug
+static void printTree(Nodes::Node* n)
+{
+    std::ofstream out("/tmp/tree.dot");
+    Visitors::AstDOTStyleVisitor dot;
+    dot(out, n);
+}
 
-/*     auto* node = ModelConverter::convertExpressionToNode(expression, registry, model); */
-/* } */
+static Nodes::LiteralNode* toLiteral(Nodes::Node* n)
+{
+    return dynamic_cast<Nodes::LiteralNode*>(n);
+}
 
-BOOST_AUTO_TEST_CASE(simple_expression)
+BOOST_FIXTURE_TEST_CASE(empty_expression, Fixture)
+{
+    auto* node = ModelConverter::convertExpressionToNode("", registry, model);
+    BOOST_CHECK_EQUAL(node, nullptr);
+}
+
+BOOST_FIXTURE_TEST_CASE(mulDiv, Fixture)
 {
     ObjectModel::Model model;
     Antares::Solver::Registry<Nodes::Node> registry;
 
     std::string expression = "1 * 2";
-    auto* nodeMult = ModelConverter::convertExpressionToNode(expression, registry, model);
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "MultiplicationNode");
+
+    auto* nodeMult = dynamic_cast<Nodes::MultiplicationNode*>(n);
+    BOOST_CHECK_EQUAL(toLiteral(nodeMult->left())->value(), 1);
+    BOOST_CHECK_EQUAL(toLiteral(nodeMult->right())->value(), 2);
 
     expression = "6 / 3";
-    auto* nodeDiv = ModelConverter::convertExpressionToNode(expression, registry, model);
+    n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "DivisionNode");
 
-    std::ofstream out("/tmp/abc.dot");
-    Visitors::AstDOTStyleVisitor dot;
-    dot(out, nodeDiv);
+    auto* nodeDiv = dynamic_cast<Nodes::DivisionNode*>(n);
+    BOOST_CHECK_EQUAL(toLiteral(nodeDiv->left())->value(), 6);
+    BOOST_CHECK_EQUAL(toLiteral(nodeDiv->right())->value(), 3);
 }
