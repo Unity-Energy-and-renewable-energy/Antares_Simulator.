@@ -108,7 +108,7 @@ public:
     virtual void reset();
 
     bool saveDataSeriesToFolder(const AnyString& folder) const;
-    bool loadDataSeriesFromFolder(Study& s, const AnyString& folder);
+    bool loadDataSeriesFromFolder(Study& s, const std::filesystem::path& folder);
 
     //! @brief Add the reserve participation to the current clusterReservesParticipations map
     //! @param name the name of the reserve to add

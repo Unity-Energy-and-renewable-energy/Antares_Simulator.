@@ -73,7 +73,6 @@ void XCast::exportTimeSeriesToTheOutput(Progression::Task& progression, Predicat
 
         String output;
         String filename;
-        output.reserve(study.folderOutput.size() + 80);
 
         output << "ts-generator" << SEP << predicate.timeSeriesName() << SEP << "mc-" << year;
         filename.reserve(output.size() + 80);
@@ -325,7 +324,7 @@ bool XCast::runWithPredicate(PredicateT& predicate, Progression::Task& progressi
 
             pNewMonth = true;
 
-            pCorrMonth = pData.correlation[realmonth];
+            pCorrMonth = &pData.correlation[realmonth];
 
             for (uint s = 0; s != processCount; ++s)
             {

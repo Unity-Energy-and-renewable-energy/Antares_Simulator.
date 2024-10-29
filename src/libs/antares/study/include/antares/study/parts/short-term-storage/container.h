@@ -35,9 +35,9 @@ public:
     /// 1. Read list.ini
     bool createSTStorageClustersFromIniFile(const std::filesystem::path& path);
     /// 2. Read ALL series
-    bool loadSeriesFromFolder(const std::string& folder) const;
+    bool loadSeriesFromFolder(const std::filesystem::path& folder) const;
 
-    bool loadReserveParticipations(Area& area, const AnyString& file);
+    bool loadReserveParticipations(Area& area, const std::filesystem::path& file);
 
     /// Number of enabled ST storages, ignoring disabled ST storages
     std::size_t count() const;

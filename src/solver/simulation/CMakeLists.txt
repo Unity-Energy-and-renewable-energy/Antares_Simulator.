@@ -4,15 +4,10 @@
 set(SRC_SIMULATION
         sim_alloc_probleme_hebdo.cpp
         include/antares/solver/simulation/sim_alloc_probleme_hebdo.h
-        sim_allocation_tableaux.cpp
         sim_calcul_economique.cpp
-        include/antares/solver/simulation/sim_extern_variables_globales.h
         include/antares/solver/simulation/sim_structure_donnees.h
         include/antares/solver/simulation/sim_structure_probleme_economique.h
-        sim_variables_globales.cpp
         include/antares/solver/simulation/sim_constants.h
-        include/antares/solver/simulation/sim_spread_generator.h
-        sim_spread_generator.cpp
         include/antares/solver/simulation/simulation.h
         include/antares/solver/simulation/solver.h
         include/antares/solver/simulation/solver.hxx
@@ -29,6 +24,8 @@ set(SRC_SIMULATION
         include/antares/solver/simulation/solver.hxx
         include/antares/solver/simulation/solver.data.h
         solver.data.cpp
+        include/antares/solver/simulation/simulation-run.h
+        simulation-run.cpp
         include/antares/solver/simulation/common-eco-adq.h
         common-eco-adq.cpp
         common-hydro-remix.cpp
@@ -45,12 +42,8 @@ set(SRC_SIMULATION
         adequacy_patch_runtime_data.cpp
         include/antares/solver/simulation/ITimeSeriesNumbersWriter.h
         TimeSeriesNumbersWriter.cpp
-		include/antares/solver/simulation/BindingConstraintsTimeSeriesNumbersWriter.h
-		include/antares/solver/simulation/ISimulationObserver.h
-        economy_mode.cpp
-        adequacy_mode.cpp
-        include/antares/solver/simulation/economy_mode.h
-        include/antares/solver/simulation/adequacy_mode.h
+        include/antares/solver/simulation/BindingConstraintsTimeSeriesNumbersWriter.h
+        include/antares/solver/simulation/ISimulationObserver.h
 )
 source_group("simulation" FILES ${SRC_SIMULATION})
 
@@ -58,6 +51,7 @@ source_group("simulation" FILES ${SRC_SIMULATION})
 # --- Library VARIABLES ---
 #
 add_library(antares-solver-simulation)
+add_library(Antares::antares-solver-simulation ALIAS antares-solver-simulation)
 target_sources(antares-solver-simulation
         PRIVATE
         ${SRC_SIMULATION})

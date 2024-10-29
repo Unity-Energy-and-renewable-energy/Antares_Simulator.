@@ -20,8 +20,6 @@
  */
 #include "antares/application/application.h"
 
-#include <yuni/datetime/timestamp.h>
-
 #include <antares/antares/fatal-error.h>
 #include <antares/application/ScenarioBuilderOwner.h>
 #include <antares/benchmarking/timer.h>
@@ -30,7 +28,6 @@
 #include <antares/infoCollection/StudyInfoCollector.h>
 #include <antares/logs/hostinfo.h>
 #include <antares/resources/resources.h>
-#include <antares/study/version.h>
 #include <antares/sys/policy.h>
 #include <antares/writer/writer_factory.h>
 #include "antares/antares/version.h"
@@ -38,11 +35,10 @@
 #include "antares/signal-handling/public.h"
 #include "antares/solver/misc/system-memory.h"
 #include "antares/solver/misc/write-command-line.h"
-#include "antares/solver/simulation/adequacy_mode.h"
-#include "antares/solver/simulation/economy_mode.h"
+#include "antares/solver/simulation/simulation-run.h"
 #include "antares/solver/simulation/simulation.h"
+#include "antares/solver/simulation/solver.h"
 #include "antares/solver/utils/ortools_utils.h"
-#include "antares/study/simulation.h"
 
 using namespace Antares::Check;
 
@@ -233,9 +229,6 @@ void Application::readDataForTheStudy(Data::StudyLoadOptions& options)
     study.performTransformationsBeforeLaunchingSimulation();
 
     ScenarioBuilderOwner(study).callScenarioBuilder();
-
-    // alloc global vectors
-    SIM_AllocationTableaux(study);
 }
 
 void Application::startSimulation(Data::StudyLoadOptions& options)
@@ -313,7 +306,7 @@ void Application::postParametersChecks() const
     checkCO2CostColumnNumber(pStudy->areas);
 }
 
-void Application::prepare(int argc, char* argv[])
+void Application::prepare(int argc, const char* argv[])
 {
     pArgc = argc;
     pArgv = argv;
@@ -387,51 +380,18 @@ void Application::execute()
     memoryReport.interval(1000 * 60 * 5); // 5 minutes
     memoryReport.start();
 
-    pStudy->computePThetaInfForThermalClusters();
-
-    // Run the simulation
-    switch (pStudy->runtime.mode)
-    {
-    case Data::SimulationMode::Economy:
-    case Data::SimulationMode::Expansion:
-        runSimulationInEconomicMode();
-        break;
-    case Data::SimulationMode::Adequacy:
-        runSimulationInAdequacyMode();
-        break;
-    default:
-        break;
-    }
-    // TODO : make an interface class for ISimulation, check writer & queue before
-    // runSimulationIn<XXX>Mode()
+    Simulation::NullSimulationObserver observer;
+    pOptimizationInfo = simulationRun(*pStudy,
+                                      pSettings,
+                                      pDurationCollector,
+                                      *resultWriter,
+                                      observer);
 
     // Importing Time-Series if asked
     pStudy->importTimeseriesIntoInput();
 
     // Stop the display of the progression
     pStudy->progression.stop();
-}
-
-void Application::runSimulationInEconomicMode()
-{
-    Simulation::NullSimulationObserver observer;
-    Solver::runSimulationInEconomicMode(*pStudy,
-                                        pSettings,
-                                        pDurationCollector,
-                                        *resultWriter,
-                                        pOptimizationInfo,
-                                        observer);
-}
-
-void Application::runSimulationInAdequacyMode()
-{
-    Simulation::NullSimulationObserver observer;
-    Solver::runSimulationInAdequacyMode(*pStudy,
-                                        pSettings,
-                                        pDurationCollector,
-                                        *resultWriter,
-                                        pOptimizationInfo,
-                                        observer);
 }
 
 void Application::resetLogFilename() const
@@ -445,7 +405,7 @@ void Application::resetLogFilename() const
     }
 
     logfile /= "solver-"; // append the filename
-    logfile += FormattedTime("%Y%m%d-%H%M%S")
+    logfile += formatTime(getCurrentTime(), "%Y%m%d-%H%M%S")
                + ".log"; // complete filename with timestamp and extension
 
     // Assigning the log filename

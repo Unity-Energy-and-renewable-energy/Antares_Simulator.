@@ -250,7 +250,7 @@ set(SRC_STUDY
 
         # Sets
         include/antares/study/sets.h
-        include/antares/study/sets.hxx
+        area/sets.cpp
 
         # variable selection
         include/antares/study/variable-print-info.h
@@ -294,6 +294,7 @@ target_link_libraries(study
         Antares::mersenne
         Antares::result_writer #study.h
         Antares::series
+        Antares::array
         antares-core
         antares-solver-simulation
         Antares::hydro

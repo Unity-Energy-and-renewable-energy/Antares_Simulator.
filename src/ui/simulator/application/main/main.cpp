@@ -702,7 +702,7 @@ void ApplWnd::onSectionNotebookPageChanging(Component::Notebook::Page& page)
             auto* job = new JobLoadScenarioBuilder(*study);
             wxTheApp->Yield();
             job->run();
-            study->scenarioRules = job->scenarioBuilder();
+            study->scenarioRules.reset(job->scenarioBuilder());
             job->Destroy();
         }
 
@@ -876,7 +876,7 @@ void ApplWnd::evtOnUpdateInterfaceAfterLoadedStudy(wxCommandEvent&)
     {
         Menu::AddRecentFile(menuRecentFiles(),
                             wxStringFromUTF8(study.header.caption),
-                            wxStringFromUTF8(study.folder));
+                            wxStringFromUTF8(study.folder.string()));
     }
 
     // User notes
