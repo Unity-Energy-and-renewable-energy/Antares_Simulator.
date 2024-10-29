@@ -75,3 +75,12 @@ BOOST_FIXTURE_TEST_CASE(mulDiv, Fixture)
     BOOST_CHECK_EQUAL(toLiteral(nodeDiv->left())->value(), 6);
     BOOST_CHECK_EQUAL(toLiteral(nodeDiv->right())->value(), 3);
 }
+
+BOOST_FIXTURE_TEST_CASE(negation, Fixture)
+{
+    std::string expression = "-7";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "NegationNode");
+    auto* nodeNeg = dynamic_cast<Nodes::NegationNode*>(n);
+    BOOST_CHECK_EQUAL(toLiteral(nodeNeg->child())->value(), 7);
+}

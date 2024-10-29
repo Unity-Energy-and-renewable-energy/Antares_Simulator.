@@ -60,6 +60,11 @@ ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Node>& registry,
 {
 }
 
+static Node* toNodePtr(const std::any& a)
+{
+    return std::any_cast<Node*>(a);
+}
+
 std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
 {
     return tree->accept(this);
@@ -83,11 +88,7 @@ std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* contex
 
 std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
 {
-    // Meh
-    // Having to know the underlying type of the node is not great. We can eitgher return
-    // expression node containing the concrete node to be able to always anycast<Expression> Or
-    // we can return a pair Node/type (difficult to return a type in c++)
-    auto toNodePtr = [](const auto& x) { return std::any_cast<Node*>(x); };
+    /* auto toNodePtr = [](const auto& x) {  }; */
     auto* left = toNodePtr(visit(context->expr(0)));
     auto* right = toNodePtr(visit(context->expr(1)));
 
@@ -108,7 +109,8 @@ std::any ConvertorVisitor::visitShift(ExprParser::ShiftContext* context)
 
 std::any ConvertorVisitor::visitNegation(ExprParser::NegationContext* context)
 {
-    return std::any();
+    auto n = toNodePtr(context->expr()->accept(this));
+    return static_cast<Node*>(registry_.create<NegationNode>(n));
 }
 
 std::any ConvertorVisitor::visitExpression(ExprParser::ExpressionContext* context)
