@@ -88,7 +88,6 @@ std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* contex
 
 std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
 {
-    /* auto toNodePtr = [](const auto& x) {  }; */
     auto* left = toNodePtr(visit(context->expr(0)));
     auto* right = toNodePtr(visit(context->expr(1)));
 
@@ -125,7 +124,12 @@ std::any ConvertorVisitor::visitComparison(ExprParser::ComparisonContext* contex
 
 std::any ConvertorVisitor::visitAddsub(ExprParser::AddsubContext* context)
 {
-    return std::any();
+    auto* left = toNodePtr(visit(context->expr(0)));
+    auto* right = toNodePtr(visit(context->expr(1)));
+
+    std::string op = context->op->getText();
+    return (op == "+") ? static_cast<Node*>(registry_.create<SumNode>(left, right))
+                       : static_cast<Node*>(registry_.create<SubtractionNode>(left, right));
 }
 
 std::any ConvertorVisitor::visitPortField(ExprParser::PortFieldContext* context)

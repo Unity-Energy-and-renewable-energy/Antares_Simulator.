@@ -54,6 +54,38 @@ BOOST_FIXTURE_TEST_CASE(empty_expression, Fixture)
     BOOST_CHECK_EQUAL(node, nullptr);
 }
 
+BOOST_FIXTURE_TEST_CASE(negation, Fixture)
+{
+    std::string expression = "-7";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "NegationNode");
+    auto* nodeNeg = dynamic_cast<Nodes::NegationNode*>(n);
+    BOOST_CHECK_EQUAL(toLiteral(nodeNeg->child())->value(), 7);
+}
+
+BOOST_FIXTURE_TEST_CASE(AddSub, Fixture)
+{
+    ObjectModel::Model model;
+    Antares::Solver::Registry<Nodes::Node> registry;
+
+    std::string expression = "1 + 2";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "SumNode");
+
+    auto* nodeSum = dynamic_cast<Nodes::SumNode*>(n);
+    auto operands = nodeSum->getOperands();
+    BOOST_CHECK_EQUAL(toLiteral(operands[0])->value(), 1);
+    BOOST_CHECK_EQUAL(toLiteral(operands[1])->value(), 2);
+
+    expression = "6 - 3";
+    n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "SubtractionNode");
+
+    auto* nodeSub = dynamic_cast<Nodes::SubtractionNode*>(n);
+    BOOST_CHECK_EQUAL(toLiteral(nodeSub->left())->value(), 6);
+    BOOST_CHECK_EQUAL(toLiteral(nodeSub->right())->value(), 3);
+}
+
 BOOST_FIXTURE_TEST_CASE(mulDiv, Fixture)
 {
     ObjectModel::Model model;
@@ -74,13 +106,4 @@ BOOST_FIXTURE_TEST_CASE(mulDiv, Fixture)
     auto* nodeDiv = dynamic_cast<Nodes::DivisionNode*>(n);
     BOOST_CHECK_EQUAL(toLiteral(nodeDiv->left())->value(), 6);
     BOOST_CHECK_EQUAL(toLiteral(nodeDiv->right())->value(), 3);
-}
-
-BOOST_FIXTURE_TEST_CASE(negation, Fixture)
-{
-    std::string expression = "-7";
-    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
-    BOOST_CHECK_EQUAL(n->name(), "NegationNode");
-    auto* nodeNeg = dynamic_cast<Nodes::NegationNode*>(n);
-    BOOST_CHECK_EQUAL(toLiteral(nodeNeg->child())->value(), 7);
 }
