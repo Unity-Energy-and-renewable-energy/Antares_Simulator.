@@ -114,7 +114,7 @@ std::any ConvertorVisitor::visitNegation(ExprParser::NegationContext* context)
 
 std::any ConvertorVisitor::visitExpression(ExprParser::ExpressionContext* context)
 {
-    return std::any();
+    return context->expr()->accept(this);
 }
 
 std::any ConvertorVisitor::visitComparison(ExprParser::ComparisonContext* context)
@@ -205,7 +205,7 @@ std::any ConvertorVisitor::visitRightMuldiv(ExprParser::RightMuldivContext* cont
 
 std::any ConvertorVisitor::visitRightExpression(ExprParser::RightExpressionContext* context)
 {
-    return std::any();
+    return context->expr()->accept(this);
 }
 
 } // namespace Antares::Solver::ModelConverter
