@@ -30,10 +30,11 @@
 namespace Antares::Solver::ModelConverter
 {
 
-Nodes::Node* convertExpressionToNode(
-  const std::string& exprStr,
-  Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-  const ObjectModel::Model& model)
+using namespace Antares::Solver::Nodes;
+
+Node* convertExpressionToNode(const std::string& exprStr,
+                              Antares::Solver::Registry<Node>& registry,
+                              const ObjectModel::Model& model)
 {
     if (exprStr.empty())
     {
@@ -49,12 +50,11 @@ Nodes::Node* convertExpressionToNode(
 
     ConvertorVisitor visitor(registry, model);
     auto node = visitor.visit(tree);
-    return std::any_cast<Nodes::Node*>(node);
+    return std::any_cast<Node*>(node);
 }
 
-ConvertorVisitor::ConvertorVisitor(
-  Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-  const ObjectModel::Model& model):
+ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Node>& registry,
+                                   const ObjectModel::Model& model):
     registry_(registry),
     model_(model)
 {
@@ -76,15 +76,9 @@ std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* contex
             break;
         }
     }
-    if (is_parameter)
-    {
-        return static_cast<Nodes::Node*>(
-          registry_.create<Nodes::ParameterNode>(context->getText()));
-    }
-    else
-    {
-        return static_cast<Nodes::Node*>(registry_.create<Nodes::VariableNode>(context->getText()));
-    }
+
+    return (is_parameter) ? static_cast<Node*>(registry_.create<ParameterNode>(context->getText()))
+                          : static_cast<Node*>(registry_.create<VariableNode>(context->getText()));
 }
 
 std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
@@ -93,21 +87,13 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
     // Having to know the underlying type of the node is not great. We can eitgher return
     // expression node containing the concrete node to be able to always anycast<Expression> Or
     // we can return a pair Node/type (difficult to return a type in c++)
-    auto toNodePtr = [](const auto& x) { return std::any_cast<Nodes::Node*>(x); };
+    auto toNodePtr = [](const auto& x) { return std::any_cast<Node*>(x); };
     auto* left = toNodePtr(visit(context->expr(0)));
     auto* right = toNodePtr(visit(context->expr(1)));
 
     std::string op = context->op->getText();
-    if (op == "*")
-    {
-        return static_cast<Nodes::Node*>(registry_.create<Nodes::MultiplicationNode>(left, right));
-    }
-    else if (op == "/")
-    {
-        return static_cast<Nodes::Node*>(registry_.create<Nodes::DivisionNode>(left, right));
-    }
-
-    return std::any();
+    return (op == "*") ? static_cast<Node*>(registry_.create<MultiplicationNode>(left, right))
+                       : static_cast<Node*>(registry_.create<DivisionNode>(left, right));
 }
 
 std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
@@ -148,7 +134,7 @@ std::any ConvertorVisitor::visitPortField(ExprParser::PortFieldContext* context)
 std::any ConvertorVisitor::visitNumber(ExprParser::NumberContext* context)
 {
     double d = stod(context->getText());
-    return static_cast<Nodes::Node*>(registry_.create<Nodes::LiteralNode>(d));
+    return static_cast<Node*>(registry_.create<LiteralNode>(d));
 }
 
 std::any ConvertorVisitor::visitTimeIndex(ExprParser::TimeIndexContext* context)
