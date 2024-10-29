@@ -35,6 +35,11 @@ Nodes::Node* convertExpressionToNode(
   Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
   const ObjectModel::Model& model)
 {
+    if (exprStr.empty())
+    {
+        return nullptr;
+    }
+
     antlr4::ANTLRInputStream input(exprStr);
     ExprLexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
@@ -95,7 +100,7 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
     std::string op = context->op->getText();
     if (op == "*")
     {
-        return dynamic_cast<Nodes::Node*>(registry_.create<Nodes::MultiplicationNode>(left, right));
+        return static_cast<Nodes::Node*>(registry_.create<Nodes::MultiplicationNode>(left, right));
     }
     else if (op == "/")
     {
