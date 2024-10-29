@@ -28,7 +28,7 @@
 #include <optional>
 #include <antares/series/series.h>
 #include <antares/array/matrix.h>
-#include "antares/study/fwd.h">
+#include <antares/study/fwd.h>
 
 /// @brief Represents an area capacity reservation using it's name, it's failure cost and it's spillage cost
 struct CapacityReservation
