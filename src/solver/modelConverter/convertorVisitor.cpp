@@ -94,12 +94,12 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
                        : static_cast<Node*>(registry_.create<DivisionNode>(left, right));
 }
 
-std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
+std::any ConvertorVisitor::visitFullexpr([[maybe_unused]] ExprParser::FullexprContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitShift(ExprParser::ShiftContext* context)
+std::any ConvertorVisitor::visitShift([[maybe_unused]] ExprParser::ShiftContext* context)
 {
     return std::any();
 }
@@ -115,7 +115,7 @@ std::any ConvertorVisitor::visitExpression(ExprParser::ExpressionContext* contex
     return context->expr()->accept(this);
 }
 
-std::any ConvertorVisitor::visitComparison(ExprParser::ComparisonContext* context)
+std::any ConvertorVisitor::visitComparison([[maybe_unused]] ExprParser::ComparisonContext* context)
 {
     return std::any();
 }
@@ -130,7 +130,7 @@ std::any ConvertorVisitor::visitAddsub(ExprParser::AddsubContext* context)
                        : static_cast<Node*>(registry_.create<SubtractionNode>(left, right));
 }
 
-std::any ConvertorVisitor::visitPortField(ExprParser::PortFieldContext* context)
+std::any ConvertorVisitor::visitPortField([[maybe_unused]] ExprParser::PortFieldContext* context)
 {
     return std::any();
 }
@@ -141,27 +141,27 @@ std::any ConvertorVisitor::visitNumber(ExprParser::NumberContext* context)
     return static_cast<Node*>(registry_.create<LiteralNode>(d));
 }
 
-std::any ConvertorVisitor::visitTimeIndex(ExprParser::TimeIndexContext* context)
+std::any ConvertorVisitor::visitTimeIndex([[maybe_unused]] ExprParser::TimeIndexContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitTimeShift(ExprParser::TimeShiftContext* context)
+std::any ConvertorVisitor::visitTimeShift([[maybe_unused]] ExprParser::TimeShiftContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitFunction(ExprParser::FunctionContext* context)
+std::any ConvertorVisitor::visitFunction([[maybe_unused]] ExprParser::FunctionContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitTimeSum(ExprParser::TimeSumContext* context)
+std::any ConvertorVisitor::visitTimeSum([[maybe_unused]] ExprParser::TimeSumContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitAllTimeSum(ExprParser::AllTimeSumContext* context)
+std::any ConvertorVisitor::visitAllTimeSum([[maybe_unused]] ExprParser::AllTimeSumContext* context)
 {
     return std::any();
 }
@@ -182,27 +182,27 @@ std::any ConvertorVisitor::visitUnsignedAtom(ExprParser::UnsignedAtomContext* co
     return context->atom()->accept(this);
 }
 
-std::any ConvertorVisitor::visitRightAtom(ExprParser::RightAtomContext* context)
+std::any ConvertorVisitor::visitRightAtom([[maybe_unused]] ExprParser::RightAtomContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitSignedExpression(ExprParser::SignedExpressionContext* context)
+std::any ConvertorVisitor::visitSignedExpression([[maybe_unused]] ExprParser::SignedExpressionContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitShiftAddsub(ExprParser::ShiftAddsubContext* context)
+std::any ConvertorVisitor::visitShiftAddsub([[maybe_unused]] ExprParser::ShiftAddsubContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitShiftMuldiv(ExprParser::ShiftMuldivContext* context)
+std::any ConvertorVisitor::visitShiftMuldiv([[maybe_unused]] ExprParser::ShiftMuldivContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitRightMuldiv(ExprParser::RightMuldivContext* context)
+std::any ConvertorVisitor::visitRightMuldiv([[maybe_unused]] ExprParser::RightMuldivContext* context)
 {
     return std::any();
 }
