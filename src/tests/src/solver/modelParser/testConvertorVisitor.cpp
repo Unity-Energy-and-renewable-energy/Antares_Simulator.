@@ -24,8 +24,10 @@
 
 #include "antares/solver/expressions/Registry.hxx"
 #include "antares/solver/expressions/visitors/AstDOTStyleVisitor.h"
-#include "antares/solver/libObjectModel/model.h"
+#include "antares/solver/libObjectModel/library.h"
 #include "antares/solver/modelConverter/convertorVisitor.h"
+#include "antares/solver/modelConverter/modelConverter.h"
+#include "antares/solver/modelParser/Library.h"
 
 using namespace Antares::Solver;
 
@@ -61,6 +63,29 @@ BOOST_FIXTURE_TEST_CASE(negation, Fixture)
     BOOST_CHECK_EQUAL(n->name(), "NegationNode");
     auto* nodeNeg = dynamic_cast<Nodes::NegationNode*>(n);
     BOOST_CHECK_EQUAL(toLiteral(nodeNeg->child())->value(), 7);
+}
+
+BOOST_FIXTURE_TEST_CASE(identifier, Fixture)
+{
+    ModelParser::Library library;
+    ModelParser::Model model0{
+      .id = "model0",
+      .description = "description",
+      .parameters = {{"param1", true, false}, {"param2", false, false}},
+      .variables = {{"varP", "7", "pmin", ModelParser::ValueType::CONTINUOUS}},
+      .ports = {},
+      .port_field_definitions = {},
+      .constraints = {},
+      .objective = "objectives"};
+
+    library.models = {model0};
+    ObjectModel::Library lib = ModelConverter::convert(library);
+
+    auto& model = lib.Models().at("model0");
+
+    std::string expression = "param1";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "ParameterNode");
 }
 
 BOOST_FIXTURE_TEST_CASE(AddSub, Fixture)
@@ -121,9 +146,8 @@ BOOST_FIXTURE_TEST_CASE(comparison, Fixture)
     BOOST_CHECK_EQUAL(toLiteral(nodeGreater->right())->value(), 27);
 }
 
-
 BOOST_FIXTURE_TEST_CASE(medium_expression, Fixture)
 {
     std::string expression = "(12 * (3 - 1) + abc) / -(42 + 3 + 4)";
-    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    ModelConverter::convertExpressionToNode(expression, registry, model);
 }
