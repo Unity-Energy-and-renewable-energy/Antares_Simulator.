@@ -911,85 +911,11 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
         }
     }
 
-    // Reserves
-    {
-        buffer.clear() << study.folderInput << SEP << "reserves" << SEP << area.id << SEP
-                       << "reserves.ini";
-        if (ini.open(buffer, false))
-        {
-            ini.each(
-              [&](const IniFile::Section& section)
-              {
-                  if (area.allCapacityReservations.contains(section.name))
-                  {
-                      logs.warning() << area.name << ": reserve name already exists for reserve "
-                                     << section.name;
-                  }
-                  else
-                  {
-                      CapacityReservation tmpCapacityReservation;
-                      std::string file_name = AllCapacityReservations::toFilename(section.name);
-                      int type = -1;
-                      for (auto* p = section.firstProperty; p; p = p->next)
-                      {
-                          CString<30, false> tmp;
-                          tmp = p->key;
-                          tmp.toLower();
-
-                          if (tmp == "failure-cost")
-                          {
-                              if (!p->value.to<float>(tmpCapacityReservation.failureCost))
-                              {
-                                  logs.warning()
-                                    << area.name << ": invalid failure cost for reserve "
-                                    << section.name;
-                              }
-                          }
-                          else if (tmp == "spillage-cost")
-                          {
-                              if (!p->value.to<float>(tmpCapacityReservation.spillageCost))
-                              {
-                                  logs.warning()
-                                    << area.name << ": invalid spillage cost for reserve "
-                                    << section.name;
-                              }
-                          }
-                          else if (tmp == "type")
-                          {
-                              if (p->value == "up")
-                                  type = 0;
-                              else if (p->value == "down")
-                                  type = 1;
-                              else
-                                  logs.warning()
-                                    << area.name << ": invalid type for reserve " << section.name;
-                          }
-                          else
-                              logs.warning()
-                                << area.name << ": invalid key " << tmp << " in file " << buffer;
-                      }
-                      fs::path filePath = study.folderInput / "reserves" / area.id.to<std::string>()
-                          / (file_name + ".txt");
-                      ret = tmpCapacityReservation.need.loadFromFile(filePath, false) && ret;
-                      if (type == 0)
-                          area.allCapacityReservations.areaCapacityReservationsUp.emplace(
-                            section.name, tmpCapacityReservation);
-                      else if (type == 1)
-                          area.allCapacityReservations.areaCapacityReservationsDown.emplace(
-                            section.name, tmpCapacityReservation);
-                      else
-                          logs.warning()
-                            << area.name << ": invalid type for reserve " << section.name;
-                  }
-              });
-        }
-    }
 
     // Reserves
     {
-        buffer.clear() << study.folderInput << SEP << "reserves" << SEP << area.id << SEP
-                       << "reserves.ini";
-        if (ini.open(buffer, false))
+        fs::path reserves = study.folderInput / "reserves" / area.id.to<std::string>() / "reserves.ini";
+        if (ini.open(reserves, false))
         {
             ini.each(
               [&](const IniFile::Section& section)
@@ -1114,9 +1040,8 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                                  studyVersion,
                                                  study.usedByTheSolver);
 
-        buffer.clear() << study.folderInput << SEP << "hydro" << SEP << "common" << SEP << area.id
-                       << SEP << "reserves.ini";
-        ret = area.hydro.loadReserveParticipations(area, buffer) && ret;
+        fs::path reservesHydro = study.folderInput / "hydro" / "common" / area.id.to<std::string>() / "reserves.ini";
+        area.hydro.loadReserveParticipations(area, reservesHydro);
     }
 
     // Wind
@@ -1148,10 +1073,9 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
         if (study.usedByTheSolver && study.parameters.mode == SimulationMode::Adequacy)
         {
             area.thermal.list.enableMustrunForEveryone();
-	}
-        buffer.clear() << study.folderInput << SEP << "thermal" << SEP << "clusters" << SEP
-                       << area.id << SEP << "reserves.ini";
-        ret = area.thermal.list.loadReserveParticipations(area, buffer) && ret;
+	    }
+        fs::path reservesThermal = study.folderInput / "thermal" / "clusters" / area.id.to<std::string>() / "reserves.ini";
+        area.thermal.list.loadReserveParticipations(area, reservesThermal);
     }
 
     // Short term storage
@@ -1165,7 +1089,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
 
         fs::path reservesPath = study.folderInput / "st-storage" / "clusters"
             / area.id.to<std::string>() / "reserves.ini";
-        ret = area.shortTermStorage.loadReserveParticipations(area, reservesPath) && ret;
+        area.shortTermStorage.loadReserveParticipations(area, reservesPath);
     }
 
     // Renewable cluster list

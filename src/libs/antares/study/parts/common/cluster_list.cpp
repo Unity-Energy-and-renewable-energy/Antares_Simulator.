@@ -377,7 +377,7 @@ bool ClusterList<ClusterT>::loadDataSeriesFromFolder(Study& s, const std::filesy
 }
 
 template<class ClusterT>
-bool ClusterList<ClusterT>::loadReserveParticipations(Area& area, const AnyString& file)
+bool ClusterList<ClusterT>::loadReserveParticipations(Area& area, const std::filesystem::path& file)
 {
     IniFile ini;
     if (!ini.open(file, false))

@@ -165,7 +165,7 @@ public:
 
     uint count() const;
 
-    bool loadReserveParticipations(Area& area, const AnyString& file);
+    bool loadReserveParticipations(Area& area, const std::filesystem::path& file);
 
     void addReserveParticipation(const std::string& reserveName,
                                  const LTStorageClusterReserveParticipation& participation);

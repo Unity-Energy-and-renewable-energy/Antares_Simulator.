@@ -175,7 +175,7 @@ public:
     /// @param area Reference to area
     /// @param file File to read the reserve participations entries
     /// @return false if the file opening failed, true otherwise
-    bool loadReserveParticipations(Area& area, const AnyString& folder);
+    bool loadReserveParticipations(Area& area, const std::filesystem::path& file);
 
     bool saveDataSeriesToFolder(const AnyString& folder) const;
 
