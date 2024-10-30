@@ -94,14 +94,9 @@ std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
                        : static_cast<Node*>(registry_.create<DivisionNode>(left, right));
 }
 
-std::any ConvertorVisitor::visitFullexpr([[maybe_unused]] ExprParser::FullexprContext* context)
+std::any ConvertorVisitor::visitFullexpr(ExprParser::FullexprContext* context)
 {
-    return std::any();
-}
-
-std::any ConvertorVisitor::visitShift([[maybe_unused]] ExprParser::ShiftContext* context)
-{
-    return std::any();
+    return context->expr()->accept(this);
 }
 
 std::any ConvertorVisitor::visitNegation(ExprParser::NegationContext* context)
@@ -202,7 +197,7 @@ std::any ConvertorVisitor::visitRightAtom([[maybe_unused]] ExprParser::RightAtom
     return std::any();
 }
 
-std::any ConvertorVisitor::visitSignedExpression([[maybe_unused]] ExprParser::SignedExpressionContext* context)
+std::any ConvertorVisitor::visitShift([[maybe_unused]] ExprParser::ShiftContext* context)
 {
     return std::any();
 }
@@ -218,6 +213,11 @@ std::any ConvertorVisitor::visitShiftMuldiv([[maybe_unused]] ExprParser::ShiftMu
 }
 
 std::any ConvertorVisitor::visitRightMuldiv([[maybe_unused]] ExprParser::RightMuldivContext* context)
+{
+    return std::any();
+}
+
+std::any ConvertorVisitor::visitSignedExpression([[maybe_unused]] ExprParser::SignedExpressionContext* context)
 {
     return std::any();
 }
