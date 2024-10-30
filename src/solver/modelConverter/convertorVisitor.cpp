@@ -63,6 +63,7 @@ ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Node>& registry,
     model_(model)
 {
 }
+
 std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
 {
     return tree->accept(this);
@@ -202,22 +203,26 @@ std::any ConvertorVisitor::visitShift([[maybe_unused]] ExprParser::ShiftContext*
     return std::any();
 }
 
-std::any ConvertorVisitor::visitShiftAddsub([[maybe_unused]] ExprParser::ShiftAddsubContext* context)
+std::any ConvertorVisitor::visitShiftAddsub(
+  [[maybe_unused]] ExprParser::ShiftAddsubContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitShiftMuldiv([[maybe_unused]] ExprParser::ShiftMuldivContext* context)
+std::any ConvertorVisitor::visitShiftMuldiv(
+  [[maybe_unused]] ExprParser::ShiftMuldivContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitRightMuldiv([[maybe_unused]] ExprParser::RightMuldivContext* context)
+std::any ConvertorVisitor::visitRightMuldiv(
+  [[maybe_unused]] ExprParser::RightMuldivContext* context)
 {
     return std::any();
 }
 
-std::any ConvertorVisitor::visitSignedExpression([[maybe_unused]] ExprParser::SignedExpressionContext* context)
+std::any ConvertorVisitor::visitSignedExpression(
+  [[maybe_unused]] ExprParser::SignedExpressionContext* context)
 {
     return std::any();
 }
