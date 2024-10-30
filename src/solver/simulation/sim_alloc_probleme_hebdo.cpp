@@ -248,10 +248,10 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
             study.runtime.thermalPlantTotalCount * study.runtime.capacityReservationCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesDePuissanceMinDuPalier.assign(
-            study.runtime.thermalPlantTotalCount, 0);
+            study.runtime.thermalPlantTotalCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesDePuissanceMaxDuPalier.assign(
-            study.runtime.thermalPlantTotalCount, 0);
+            study.runtime.thermalPlantTotalCount, -1);
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesSTStorageClusterMaxWithdrawParticipation.assign(
