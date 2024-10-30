@@ -65,9 +65,6 @@ BOOST_FIXTURE_TEST_CASE(negation, Fixture)
 
 BOOST_FIXTURE_TEST_CASE(AddSub, Fixture)
 {
-    ObjectModel::Model model;
-    Antares::Solver::Registry<Nodes::Node> registry;
-
     std::string expression = "1 + 2";
     auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
     BOOST_CHECK_EQUAL(n->name(), "SumNode");
@@ -88,9 +85,6 @@ BOOST_FIXTURE_TEST_CASE(AddSub, Fixture)
 
 BOOST_FIXTURE_TEST_CASE(mulDiv, Fixture)
 {
-    ObjectModel::Model model;
-    Antares::Solver::Registry<Nodes::Node> registry;
-
     std::string expression = "1 * 2";
     auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
     BOOST_CHECK_EQUAL(n->name(), "MultiplicationNode");
@@ -106,4 +100,23 @@ BOOST_FIXTURE_TEST_CASE(mulDiv, Fixture)
     auto* nodeDiv = dynamic_cast<Nodes::DivisionNode*>(n);
     BOOST_CHECK_EQUAL(toLiteral(nodeDiv->left())->value(), 6);
     BOOST_CHECK_EQUAL(toLiteral(nodeDiv->right())->value(), 3);
+}
+
+BOOST_FIXTURE_TEST_CASE(comparison, Fixture)
+{
+    std::string expression = "1 = 2";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "EqualNode");
+
+    expression = "1 <= 5";
+    n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "LessThanOrEqualNode");
+
+    expression = "8364 >= 27";
+    n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    BOOST_CHECK_EQUAL(n->name(), "GreaterThanOrEqualNode");
+
+    auto* nodeGreater = dynamic_cast<Nodes::GreaterThanOrEqualNode*>(n);
+    BOOST_CHECK_EQUAL(toLiteral(nodeGreater->left())->value(), 8364);
+    BOOST_CHECK_EQUAL(toLiteral(nodeGreater->right())->value(), 27);
 }

@@ -120,7 +120,7 @@ std::any ConvertorVisitor::visitComparison(ExprParser::ComparisonContext* contex
     auto* left = toNodePtr(visit(context->expr(0)));
     auto* right = toNodePtr(visit(context->expr(1)));
 
-    std::string op = context->getText();
+    std::string op = context->COMPARISON()->getText();
     if (op == "=")
     {
         return static_cast<Node*>(registry_.create<EqualNode>(left, right));
