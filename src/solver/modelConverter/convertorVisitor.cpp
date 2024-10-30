@@ -170,7 +170,12 @@ std::any ConvertorVisitor::visitAllTimeSum(ExprParser::AllTimeSumContext* contex
 
 std::any ConvertorVisitor::visitSignedAtom(ExprParser::SignedAtomContext* context)
 {
-    return std::any();
+    auto a = context->atom()->accept(this);
+    if (context->op->getText() == "-")
+    {
+        return static_cast<Node*>(registry_.create<NegationNode>(toNodePtr(a)));
+    }
+    return a;
 }
 
 std::any ConvertorVisitor::visitUnsignedAtom(ExprParser::UnsignedAtomContext* context)
