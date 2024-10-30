@@ -32,6 +32,11 @@ namespace Antares::Solver::ModelConverter
 
 using namespace Antares::Solver::Nodes;
 
+static Node* toNodePtr(const std::any& a)
+{
+    return std::any_cast<Node*>(a);
+}
+
 Node* convertExpressionToNode(const std::string& exprStr,
                               Antares::Solver::Registry<Node>& registry,
                               const ObjectModel::Model& model)
@@ -49,8 +54,7 @@ Node* convertExpressionToNode(const std::string& exprStr,
     ExprParser::ExprContext* tree = parser.expr();
 
     ConvertorVisitor visitor(registry, model);
-    auto node = visitor.visit(tree);
-    return std::any_cast<Node*>(node);
+    return toNodePtr(visitor.visit(tree));
 }
 
 ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Node>& registry,
@@ -59,12 +63,6 @@ ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Node>& registry,
     model_(model)
 {
 }
-
-static Node* toNodePtr(const std::any& a)
-{
-    return std::any_cast<Node*>(a);
-}
-
 std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
 {
     return tree->accept(this);
