@@ -224,6 +224,32 @@ bool OPT_OptimisationLineaire(const OptimizationOptions& options,
                                      writer,
                                      PREMIERE_OPTIMISATION,
                                      simulationObserver);
+    if (problemeHebdo->exportDeltaClusters)
+    {
+        int NombreDePasDeTempsProblemeHebdo = problemeHebdo->NombreDePasDeTemps;
+        for (int pays = 0; pays < problemeHebdo->NombreDePays; pays++)
+        {
+            RESULTATS_HORAIRES& ResultatsHoraires = problemeHebdo->ResultatsHoraires[pays];
+            std::vector<PRODUCTION_THERMIQUE_OPTIMALE>& ProductionThermique = ResultatsHoraires.ProductionThermique;
+            PALIERS_THERMIQUES& PaliersThermiquesDuPays
+                = problemeHebdo->PaliersThermiquesDuPays[pays];
+            const std::string fileName = problemeHebdo->NomsDesPays[pays] + std::string("_week") + std::to_string(problemeHebdo->weekInTheYear) + "_beforeHeuristic.txt";
+            std::string content;
+            content += "clusterName_PdtHebdo   NombreDeGroupesEnMarcheDuPalier   NombreDeGroupesQuiDemarrentDuPalier   NombreDeGroupesQuiSArretentDuPalier \r\n";
+            for (int index = 0; index < PaliersThermiquesDuPays.NombreDePaliersThermiques; index++)
+            {
+                for (int pdtHebdo = 0; pdtHebdo < NombreDePasDeTempsProblemeHebdo; pdtHebdo++)
+                {
+                    content += PaliersThermiquesDuPays.NomsDesPaliersThermiques[index] + "_Pdt" + std::to_string(pdtHebdo) + "   ";
+                    
+                    content += std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesEnMarcheDuPalier[index]) + "   ";
+                    content += std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiDemarrentDuPalier[index]) + "   ";
+                    content += std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiSArretentDuPalier[index]) + "\r\n";
+                }
+            }
+            writer.addEntryFromBuffer(fileName, content);
+        } 
+    }
 
     // We only need the 2nd optimization when NOT solving with integer variables
     // We also skip the 2nd optimization in the hidden 'Expansion' mode
@@ -232,11 +258,36 @@ bool OPT_OptimisationLineaire(const OptimizationOptions& options,
     {
         // We need to adjust some stuff before running the 2nd optimisation
         runThermalHeuristic(problemeHebdo);
-        return runWeeklyOptimization(options,
+        ret = runWeeklyOptimization(options,
                                      problemeHebdo,
                                      writer,
                                      DEUXIEME_OPTIMISATION,
                                      simulationObserver);
+        if (problemeHebdo->exportDeltaClusters)
+        {
+            int NombreDePasDeTempsProblemeHebdo = problemeHebdo->NombreDePasDeTemps;
+            for (int pays = 0; pays < problemeHebdo->NombreDePays; pays++)
+            {
+                RESULTATS_HORAIRES& ResultatsHoraires = problemeHebdo->ResultatsHoraires[pays];
+                std::vector<PRODUCTION_THERMIQUE_OPTIMALE>& ProductionThermique = ResultatsHoraires.ProductionThermique;
+                PALIERS_THERMIQUES& PaliersThermiquesDuPays
+                    = problemeHebdo->PaliersThermiquesDuPays[pays];
+                const std::string fileName = problemeHebdo->NomsDesPays[pays] + std::string("_week") + std::to_string(problemeHebdo->weekInTheYear) + "_afterHeuristic.txt";
+                std::string content;
+                content += "clusterName_PdtHebdo   NombreDeGroupesEnMarcheDuPalier   NombreDeGroupesQuiDemarrentDuPalier   NombreDeGroupesQuiSArretentDuPalier \r\n";
+                for (int index = 0; index < PaliersThermiquesDuPays.NombreDePaliersThermiques; index++)
+                {
+                    for (int pdtHebdo = 0; pdtHebdo < NombreDePasDeTempsProblemeHebdo; pdtHebdo++)
+                    {
+                        content += PaliersThermiquesDuPays.NomsDesPaliersThermiques[index] + "_Pdt" + std::to_string(pdtHebdo) + "   ";
+                        content += std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesEnMarcheDuPalier[index]) + "   ";
+                        content += std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiDemarrentDuPalier[index]) + "   ";
+                        content += std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiSArretentDuPalier[index]) + "\r\n";
+                    }
+                }
+                writer.addEntryFromBuffer(fileName, content);
+            }
+        }
     }
     return ret;
 }

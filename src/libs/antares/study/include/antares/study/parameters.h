@@ -332,6 +332,12 @@ public:
     //! Store the sampled timeseries numbers
     bool storeTimeseriesNumbers;
     //@}
+    
+    //! \name Delta Cluster
+    //@{
+    //! Output the delta of groups inside clusters for each hour of each mode
+    bool deltaClusterOutput;
+    //@}
 
     /*!
     ** \brief Read-only mode
