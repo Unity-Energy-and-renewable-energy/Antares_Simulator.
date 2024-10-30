@@ -168,6 +168,7 @@ std::any ConvertorVisitor::visitAllTimeSum(ExprParser::AllTimeSumContext* contex
     return std::any();
 }
 
+// shift related, not tested
 std::any ConvertorVisitor::visitSignedAtom(ExprParser::SignedAtomContext* context)
 {
     auto a = context->atom()->accept(this);
