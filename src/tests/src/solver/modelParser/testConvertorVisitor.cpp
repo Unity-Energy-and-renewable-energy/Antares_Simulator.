@@ -120,3 +120,10 @@ BOOST_FIXTURE_TEST_CASE(comparison, Fixture)
     BOOST_CHECK_EQUAL(toLiteral(nodeGreater->left())->value(), 8364);
     BOOST_CHECK_EQUAL(toLiteral(nodeGreater->right())->value(), 27);
 }
+
+
+BOOST_FIXTURE_TEST_CASE(medium_expression, Fixture)
+{
+    std::string expression = "(12 * (3 - 1) + abc) / -(42 + 3 + 4)";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+}
