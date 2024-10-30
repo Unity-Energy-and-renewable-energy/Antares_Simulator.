@@ -115,9 +115,24 @@ std::any ConvertorVisitor::visitExpression(ExprParser::ExpressionContext* contex
     return context->expr()->accept(this);
 }
 
-std::any ConvertorVisitor::visitComparison([[maybe_unused]] ExprParser::ComparisonContext* context)
+std::any ConvertorVisitor::visitComparison(ExprParser::ComparisonContext* context)
 {
-    return std::any();
+    auto* left = toNodePtr(visit(context->expr(0)));
+    auto* right = toNodePtr(visit(context->expr(1)));
+
+    std::string op = context->getText();
+    if (op == "=")
+    {
+        return static_cast<Node*>(registry_.create<EqualNode>(left, right));
+    }
+    else if (op == "<=")
+    {
+        return static_cast<Node*>(registry_.create<LessThanOrEqualNode>(left, right));
+    }
+    else
+    {
+        return static_cast<Node*>(registry_.create<GreaterThanOrEqualNode>(left, right));
+    }
 }
 
 std::any ConvertorVisitor::visitAddsub(ExprParser::AddsubContext* context)
