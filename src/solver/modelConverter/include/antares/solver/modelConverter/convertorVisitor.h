@@ -25,7 +25,8 @@
 
 #include <antares/solver/expressions/Registry.hxx>
 #include <antares/solver/expressions/nodes/ExpressionsNodes.h>
-#include <antares/solver/libObjectModel/model.h>
+
+#include "antares/solver/modelParser/Library.h"
 
 namespace Antares::Solver::ModelConverter
 {
@@ -33,7 +34,7 @@ namespace Antares::Solver::ModelConverter
 Nodes::Node* convertExpressionToNode(
   const std::string& exprStr,
   Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-  const ObjectModel::Model& model);
+  const ModelParser::Model& model);
 
 // Visitor to convert nodes to Antares::Solver::Nodes
 // TODO add reference to model to be able to resolve names as either parameters or variables
@@ -41,7 +42,7 @@ class ConvertorVisitor: public ExprVisitor
 {
 public:
     ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-                     const ObjectModel::Model& model);
+                     const ModelParser::Model& model);
 
     std::any visit(antlr4::tree::ParseTree* tree) override;
 
@@ -71,7 +72,7 @@ public:
     std::any visitRightExpression(ExprParser::RightExpressionContext* context) override;
 
     Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry_;
-    const ObjectModel::Model& model_;
+    const ModelParser::Model& model_;
 };
 
 } // namespace Antares::Solver::ModelConverter

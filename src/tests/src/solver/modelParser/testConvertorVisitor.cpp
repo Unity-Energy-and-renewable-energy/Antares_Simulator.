@@ -33,7 +33,7 @@ using namespace Antares::Solver;
 
 struct Fixture
 {
-    ObjectModel::Model model;
+    ModelParser::Model model;
     Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
 };
 
@@ -78,13 +78,8 @@ BOOST_FIXTURE_TEST_CASE(identifier, Fixture)
       .constraints = {},
       .objective = "objectives"};
 
-    library.models = {model0};
-    ObjectModel::Library lib = ModelConverter::convert(library);
-
-    auto& model = lib.Models().at("model0");
-
     std::string expression = "param1";
-    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model);
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model0);
     BOOST_CHECK_EQUAL(n->name(), "ParameterNode");
 }
 

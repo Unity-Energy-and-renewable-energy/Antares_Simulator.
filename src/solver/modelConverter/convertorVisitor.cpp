@@ -39,7 +39,7 @@ static Node* toNodePtr(const std::any& a)
 
 Node* convertExpressionToNode(const std::string& exprStr,
                               Antares::Solver::Registry<Node>& registry,
-                              const ObjectModel::Model& model)
+                              const ModelParser::Model& model)
 {
     if (exprStr.empty())
     {
@@ -58,7 +58,7 @@ Node* convertExpressionToNode(const std::string& exprStr,
 }
 
 ConvertorVisitor::ConvertorVisitor(Antares::Solver::Registry<Node>& registry,
-                                   const ObjectModel::Model& model):
+                                   const ModelParser::Model& model):
     registry_(registry),
     model_(model)
 {
@@ -72,9 +72,9 @@ std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
 std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* context)
 {
     bool is_parameter = false;
-    for (const auto& [name, parameter]: model_.Parameters())
+    for (const auto& param: model_.parameters)
     {
-        if (name == context->getText())
+        if (param.id == context->getText())
         {
             is_parameter = true;
             break;
