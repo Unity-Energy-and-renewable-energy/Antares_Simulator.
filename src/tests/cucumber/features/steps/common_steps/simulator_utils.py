@@ -18,12 +18,11 @@ def run_simulation(context):
 
 
 def init_simu(context):
-    sih = study_input_handler(Path(context.study_path))
     # read metadata
-    context.nbyears = int(sih.get_value(variable="nbyears", file_nick_name="general"))
+    context.nbyears = int(context.sih.get_value(variable="nbyears", file_nick_name="general"))
     # activate year-by-year results  # TODO : remove this and update studies instead
-    sih.set_value(variable="synthesis", value="true", file_nick_name="general")
-    sih.set_value(variable="year-by-year", value="true", file_nick_name="general")
+    context.sih.set_value(variable="synthesis", value="true", file_nick_name="general")
+    context.sih.set_value(variable="year-by-year", value="true", file_nick_name="general")
 
 
 def build_antares_solver_command(context):

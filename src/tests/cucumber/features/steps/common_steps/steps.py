@@ -7,11 +7,14 @@ from behave import *
 
 from common_steps.assertions import *
 from common_steps.simulator_utils import *
+from common_steps.tsgenerator_utils import *
+from common_steps.study_input_handler import study_input_handler
 
 
 @given('the study path is "{string}"')
 def study_path_is(context, string):
     context.study_path = os.path.join(context.config.userdata["resources-path"], string.replace("/", os.sep))
+    context.sih = study_input_handler(Path(context.study_path))
 
 
 @when('I run antares simulator')
@@ -21,19 +24,26 @@ def run_antares(context):
     run_simulation(context)
 
 
+@when("I run timeseries generation on all thermal clusters")
+def run_tsgenerator_step(context):
+    run_tsgenerator(context, True, False)
+
+
 def after_feature(context, feature):
     # post-processing a test: clean up output files to avoid taking up all the disk space
     if (context.output_path != None):
         pathlib.Path.rmdir(context.output_path)
+    if (context.tsgenerator_thermal_output_path != None):
+        pathlib.Path.rmdir(context.tsgenerator_thermal_output_path)
 
 
-@then('the simulation succeeds')
+@then('the execution succeeds')
 def simu_success(context):
     assert context.return_code == 0
 
 
-@then('the simulation fails')
-def simu_success(context):
+@then('the execution fails')
+def exec_success(context):
     assert context.return_code != 0
 
 
@@ -121,3 +131,23 @@ def check_pmin_pmax(context, area, prod_name, min_p, max_p):
             lambda n: n * max_p)).all(), f"max_p constraint not respected during year {year}"
         assert (actual_hourly_prod >= actual_n_dispatched_units.apply(
             lambda n: n * min_p)).all(), f"min_p constraint not respected during year {year}"
+
+
+@step('in area "{area}", {n_ts:d} TS are generated for thermal cluster "{cluster}"')
+def check_ts_shape(context, area, n_ts, cluster):
+    n_lines, n_cols = context.tgoh.get_generate_ts(area, cluster).shape
+    assert n_lines == 8760, f"Number of generated timesteps is {n_lines} (expected 8760)"
+    assert n_cols == n_ts, f"Number of generated TS is {n_cols} (expected {n_ts})"
+
+
+@step(
+    'in area "{area}", the generated TS for thermal cluster "{cluster}" respects a forced outage of {fo:g}% and a planned outage of {po:g}%')
+def check_ts_stats(context, area, cluster, fo, po):
+    n_units = int(context.sih.get_input(f"thermal/clusters/{area}/list.ini", cluster, "unitcount"))
+    max_p_per_unit = float(context.sih.get_input(f"thermal/clusters/{area}/list.ini", cluster, "nominalcapacity"))
+    expected_av_power = n_units * max_p_per_unit * (1 - fo / 100) * (1 - po / 100) / (1 - fo / 100 * po / 100)
+    ts = context.tgoh.get_generate_ts(area, cluster)
+    for column in ts:
+        ts_average = ts[column].mean()
+        assert_double_close(expected_av_power, ts_average, 0.15)
+    # TODO : finetune confidence interval (15% for now)
