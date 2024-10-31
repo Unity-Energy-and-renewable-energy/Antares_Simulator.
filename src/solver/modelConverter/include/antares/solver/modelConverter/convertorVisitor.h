@@ -25,7 +25,6 @@
 
 #include <antares/solver/expressions/Registry.hxx>
 #include <antares/solver/expressions/nodes/ExpressionsNodes.h>
-
 #include "antares/solver/modelParser/Library.h"
 
 namespace Antares::Solver::ModelConverter
