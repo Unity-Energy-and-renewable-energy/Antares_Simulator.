@@ -119,12 +119,17 @@ struct CORRESPONDANCES_DES_CONTRAINTES
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMax;
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMin;
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterPumpingCapacityThreasholds;
+    std::vector<int> NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown;
 
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterMaxWithdrawParticipation;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterMaxInjectionParticipation;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMax;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMin;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds;
+    std::vector<int> NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown;
+
 
     std::vector<int> NumeroDeContrainteDesNiveauxPays;
 
@@ -327,6 +332,8 @@ struct CAPACITY_RESERVATION
     std::vector<int> need;      //!< Vector size is number of hours in year
     float failureCost = 0;
     float spillageCost = 0;
+    float maxActivationRatio = 0;
+    int maxActivationDuration = 0;
     std::string reserveName;
     int globalReserveIndex;
     int areaReserveIndex;
@@ -513,6 +520,7 @@ struct RESERVES
 {
     std::vector<double> ValeursHorairesInternalUnsatisfied;
     std::vector<double> ValeursHorairesInternalExcessReserve;
+    std::vector<double> CoutsMarginauxHoraires;
 };
 
 struct RESULTATS_HORAIRES
@@ -524,8 +532,6 @@ struct RESULTATS_HORAIRES
     std::vector<double> ValeursHorairesDtgMrgCsr;  // adq patch DTG MRG after CSR
 
     std::vector<double> ValeursHorairesDeDefaillanceNegative;
-
-
 
     std::vector<double> CoutsMarginauxHoraires;
     std::vector<PRODUCTION_THERMIQUE_OPTIMALE> ProductionThermique; // index is pdtHebdo

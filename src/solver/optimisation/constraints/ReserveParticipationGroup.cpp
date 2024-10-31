@@ -40,6 +40,9 @@
 #include "antares/solver/optimisation/constraints/LTReserveDownParticipation.h"
 #include "antares/solver/optimisation/constraints/LTTurbiningCapacityThreasholds.h"
 #include "antares/solver/optimisation/constraints/LTPumpingCapacityThreasholds.h"
+#include "antares/solver/optimisation/constraints/LTStockLevelReserveParticipation.h"
+#include "antares/solver/optimisation/constraints/STStockLevelReserveParticipation.h"
+
                                
 
 ReserveParticipationGroup::ReserveParticipationGroup(PROBLEME_HEBDO* problemeHebdo,
@@ -281,6 +284,8 @@ void ReserveParticipationGroup::BuildConstraints()
         STPumpingCapacityThreasholds STPumpingCapacityThreasholds(builder_, data);
         LTTurbiningCapacityThreasholds LTTurbiningCapacityThreasholds(builder_, data);
         LTPumpingCapacityThreasholds LTPumpingCapacityThreasholds(builder_, data);
+        LTStockLevelReserveParticipation LTStockLevelReserveParticipation(builder_, data);
+        STStockLevelReserveParticipation STStockLevelReserveParticipation(builder_, data);
 
         for (int pdt = 0; pdt < problemeHebdo_->NombreDePasDeTempsPourUneOptimisation; pdt++)
         {
@@ -307,6 +312,8 @@ void ReserveParticipationGroup::BuildConstraints()
                     STTurbiningCapacityThreasholds.add(pays, cluster, pdt);
                     // 15 (n)
                     STPumpingCapacityThreasholds.add(pays, cluster, pdt);
+                    // 15 (r)
+                    STStockLevelReserveParticipation.add(pays, cluster, pdt);
                 }
 
                 // Long Term Storage Clusters
@@ -328,6 +335,9 @@ void ReserveParticipationGroup::BuildConstraints()
                     LTTurbiningCapacityThreasholds.add(pays, 0, pdt);
                     // 15 (d)
                     LTPumpingCapacityThreasholds.add(pays, 0, pdt);
+                    // 15 (r)
+                    LTStockLevelReserveParticipation.add(pays, 0, pdt);
+
                 }
             }
         }

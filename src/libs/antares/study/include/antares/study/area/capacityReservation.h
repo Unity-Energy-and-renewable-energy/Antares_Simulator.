@@ -33,9 +33,11 @@
 /// @brief Represents an area capacity reservation using it's name, it's failure cost and it's spillage cost
 struct CapacityReservation
 {
-    CapacityReservation() : failureCost(0), spillageCost(0), need(timeseriesNumbers) {}
+    CapacityReservation() : failureCost(0), spillageCost(0), need(timeseriesNumbers), maxActivationRatio(1.), maxActivationHours(0) {}
     float failureCost;
     float spillageCost;
+    float maxActivationRatio;
+    int maxActivationHours;
     Antares::Data::TimeSeries need;
 
 private:

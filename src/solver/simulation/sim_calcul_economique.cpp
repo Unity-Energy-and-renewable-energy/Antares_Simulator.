@@ -49,6 +49,8 @@ static void importCapacityReservations(AreaList& areas, PROBLEME_HEBDO& problem)
             CAPACITY_RESERVATION areaCapacityReservationsUp;
             areaCapacityReservationsUp.failureCost = reserveCapacity.failureCost;
             areaCapacityReservationsUp.spillageCost = reserveCapacity.spillageCost;
+            areaCapacityReservationsUp.maxActivationRatio = reserveCapacity.maxActivationRatio;
+            areaCapacityReservationsUp.maxActivationDuration = reserveCapacity.maxActivationHours;
             areaCapacityReservationsUp.reserveName = reserveName;
             areaCapacityReservationsUp.globalReserveIndex = globalReserveIndex;
             areaCapacityReservationsUp.areaReserveIndex = areaReserveIndex;
@@ -72,6 +74,8 @@ static void importCapacityReservations(AreaList& areas, PROBLEME_HEBDO& problem)
             CAPACITY_RESERVATION areaCapacityReservationsDown;
             areaCapacityReservationsDown.failureCost = reserveCapacity.failureCost;
             areaCapacityReservationsDown.spillageCost = reserveCapacity.spillageCost;
+            areaCapacityReservationsDown.maxActivationRatio = reserveCapacity.maxActivationRatio;
+            areaCapacityReservationsDown.maxActivationDuration = reserveCapacity.maxActivationHours;
             areaCapacityReservationsDown.reserveName = reserveName;
             areaCapacityReservationsDown.globalReserveIndex = globalReserveIndex;
             areaCapacityReservationsDown.areaReserveIndex = areaReserveIndex;

@@ -268,6 +268,10 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesSTStorageClusterPumpingCapacityThreasholds.assign(
             study.runtime.shortTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown.assign(study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationUp.assign(study.runtime.longTermStorageCount, -1);
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesLTStorageClusterMaxWithdrawParticipation.assign(
@@ -284,6 +288,11 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds.assign(
             study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown.assign(study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp.assign(study.runtime.longTermStorageCount, -1);
+
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeLaDeuxiemeContrainteDesContraintesDesGroupesQuiTombentEnPanne.assign(
@@ -518,6 +527,7 @@ void SIM_AllocateAreas(PROBLEME_HEBDO& problem,
               nbReserves, 0.);
             problem.ResultatsHoraires[k].Reserves[j].ValeursHorairesInternalExcessReserve.assign(
               nbReserves, 0.);
+            problem.ResultatsHoraires[k].Reserves[j].CoutsMarginauxHoraires.assign(nbReserves, 0.);
             problem.ResultatsHoraires[k].HydroUsage[j].reserveParticipationOfCluster.assign(
               1, // For the moment only one hydro cluster per area
               0.);

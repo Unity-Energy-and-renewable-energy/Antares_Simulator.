@@ -954,77 +954,21 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                     << section.name;
                               }
                           }
-                          else if (tmp == "type")
+                          else if (tmp == "max-activation-ratio")
                           {
-                              if (p->value == "up")
-                                  type = 0;
-                              else if (p->value == "down")
-                                  type = 1;
-                              else
-                                  logs.warning()
-                                    << area.name << ": invalid type for reserve " << section.name;
-                          }
-                          else
-                              logs.warning()
-                                << area.name << ": invalid key " << tmp << " in file " << buffer;
-                      }
-                      fs::path filePath = study.folderInput / "reserves" / area.id.to<std::string>()
-                          / (file_name + ".txt");
-                      ret = tmpCapacityReservation.need.loadFromFile(filePath, false) && ret;
-                      if (type == 0)
-                          area.allCapacityReservations.areaCapacityReservationsUp.emplace(
-                            section.name, tmpCapacityReservation);
-                      else if (type == 1)
-                          area.allCapacityReservations.areaCapacityReservationsDown.emplace(
-                            section.name, tmpCapacityReservation);
-                      else
-                          logs.warning()
-                            << area.name << ": invalid type for reserve " << section.name;
-                  }
-              });
-        }
-    }
-
-    // Reserves
-    {
-        buffer.clear() << study.folderInput << SEP << "reserves" << SEP << area.id << SEP
-                       << "reserves.ini";
-        if (ini.open(buffer, false))
-        {
-            ini.each(
-              [&](const IniFile::Section& section)
-              {
-                  if (area.allCapacityReservations.contains(section.name))
-                  {
-                      logs.warning() << area.name << ": reserve name already exists for reserve "
-                                     << section.name;
-                  }
-                  else
-                  {
-                      CapacityReservation tmpCapacityReservation;
-                      std::string file_name = AllCapacityReservations::toFilename(section.name);
-                      int type = -1;
-                      for (auto* p = section.firstProperty; p; p = p->next)
-                      {
-                          CString<30, false> tmp;
-                          tmp = p->key;
-                          tmp.toLower();
-
-                          if (tmp == "failure-cost")
-                          {
-                              if (!p->value.to<float>(tmpCapacityReservation.failureCost))
+                              if (!p->value.to<float>(tmpCapacityReservation.maxActivationRatio))
                               {
                                   logs.warning()
-                                    << area.name << ": invalid failure cost for reserve "
+                                    << area.name << ": invalid maximum activation ratio for reserve "
                                     << section.name;
                               }
                           }
-                          else if (tmp == "spillage-cost")
+                          else if (tmp == "max-activation-duration")
                           {
-                              if (!p->value.to<float>(tmpCapacityReservation.spillageCost))
+                              if (!p->value.to<int>(tmpCapacityReservation.maxActivationHours))
                               {
                                   logs.warning()
-                                    << area.name << ": invalid spillage cost for reserve "
+                                    << area.name << ": invalid maximum activation duration for reserve "
                                     << section.name;
                               }
                           }

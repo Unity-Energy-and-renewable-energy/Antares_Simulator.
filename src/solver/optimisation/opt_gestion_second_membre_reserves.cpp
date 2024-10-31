@@ -68,7 +68,8 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                     if (cnt >= 0)
                     {
                         SecondMembre[cnt] = areaReserveUp.need.at(pdtGlobal);
-                        AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                        double* adresseDuResultat = &(problemeHebdo->ResultatsHoraires[pays].Reserves[pdtHebdo].CoutsMarginauxHoraires[areaReserveUp.areaReserveIndex]);
+                        AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = adresseDuResultat;
                     }
 
                     for (const auto& [clusterId, reserveParticipation]:
@@ -100,7 +101,8 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                     if (cnt >= 0)
                     {
                         SecondMembre[cnt] = areaReserveDown.need.at(pdtGlobal);
-                        AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                        double* adresseDuResultat = &(problemeHebdo->ResultatsHoraires[pays].Reserves[pdtHebdo].CoutsMarginauxHoraires[areaReserveDown.areaReserveIndex]);
+                        AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = adresseDuResultat;
                     }
                 }
 
@@ -227,6 +229,26 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                             * cluster.injectionNominalCapacity;
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
+
+                    cnt = CorrespondanceCntNativesCntOptim
+                             .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown
+                               [globalClusterIdx];
+                       if (cnt >= 0)
+                       {
+                           SecondMembre[cnt] = cluster.reservoirCapacity
+                                     * cluster.series->upperRuleCurve[pdtJour];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                       }
+
+                      cnt = CorrespondanceCntNativesCntOptim
+                             .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationUp
+                               [globalClusterIdx];
+                       if (cnt >= 0)
+                       {
+                           SecondMembre[cnt] = cluster.reservoirCapacity
+                                     * cluster.series->lowerRuleCurve[pdtJour];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                       }
                 }
             }
 
@@ -337,6 +359,26 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                            SecondMembre[cnt3] = hydroCluster
                                                   .ContrainteDePmaxPompageHoraire[pdtJour];
                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt3] = nullptr;
+                       }
+
+                       int cnt4 
+                           = CorrespondanceCntNativesCntOptim
+                             .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown
+                               [globalClusterIdx];
+                       if (cnt4 >= 0)
+                       {
+                           SecondMembre[cnt4] = hydroCluster.NiveauHoraireSup[pdtHebdo];;
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt4] = nullptr;
+                       }
+
+                      int cnt5
+                           = CorrespondanceCntNativesCntOptim
+                             .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp
+                               [globalClusterIdx];
+                       if (cnt5 >= 0)
+                       {
+                           SecondMembre[cnt5] = hydroCluster.NiveauHoraireInf[pdtHebdo];;
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt5] = nullptr;
                        }
                    }
                 }

@@ -639,6 +639,16 @@ void ConstraintNamer::STPumpingCapacityThreasholdsDown(unsigned int constraint,
     SetSTStorageClusterElementName(constraint, "STPumpingCapacityThreasholdsDown", clusterName);
 }
 
+void ConstraintNamer::STStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName)
+{
+    SetLTStorageClusterElementName(constraint, "STStockLevelReserveParticipationUp", clusterName);
+}
+
+void ConstraintNamer::STStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName)
+{
+    SetLTStorageClusterElementName(constraint, "STStockLevelReserveParticipationDown", clusterName);
+}
+
 void ConstraintNamer::LTReserveUpParticipation(unsigned int constraint,
                                                const std::string& clusterName,
                                                const std::string& reserveName)
@@ -693,6 +703,16 @@ void ConstraintNamer::LTPumpingCapacityThreasholdsDown(unsigned int constraint,
                                                    const std::string& clusterName)
 {
     SetLTStorageClusterElementName(constraint, "LTPumpingCapacityThreasholdsDown", clusterName);
+}
+
+void ConstraintNamer::LTStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName)
+{
+    SetLTStorageClusterElementName(constraint, "LTStockLevelReserveParticipationUp", clusterName);
+}
+
+void ConstraintNamer::LTStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName)
+{
+    SetLTStorageClusterElementName(constraint, "LTStockLevelReserveParticipationDown", clusterName);
 }
 
 void ConstraintNamer::ReserveSatisfaction(unsigned int constraint, const std::string& reserveName)
