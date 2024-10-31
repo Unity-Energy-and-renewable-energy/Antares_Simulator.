@@ -40,8 +40,7 @@ Nodes::Node* convertExpressionToNode(
 class ConvertorVisitor: public ExprVisitor
 {
 public:
-    ConvertorVisitor(Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-                     const ModelParser::Model& model);
+    ConvertorVisitor(Registry<Nodes::Node>& registry, const ModelParser::Model& model);
 
     std::any visit(antlr4::tree::ParseTree* tree) override;
 
