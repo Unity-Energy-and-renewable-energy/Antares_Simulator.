@@ -30,10 +30,9 @@
 namespace Antares::Solver::ModelConverter
 {
 
-Nodes::Node* convertExpressionToNode(
-  const std::string& exprStr,
-  Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry,
-  const ModelParser::Model& model);
+Nodes::Node* convertExpressionToNode(const std::string& exprStr,
+                                     Registry<Nodes::Node>& registry,
+                                     const ModelParser::Model& model);
 
 // Visitor to convert nodes to Antares::Solver::Nodes
 // TODO add reference to model to be able to resolve names as either parameters or variables
@@ -69,7 +68,7 @@ public:
     std::any visitRightMuldiv(ExprParser::RightMuldivContext* context) override;
     std::any visitRightExpression(ExprParser::RightExpressionContext* context) override;
 
-    Antares::Solver::Registry<Antares::Solver::Nodes::Node>& registry_;
+    Registry<Nodes::Node>& registry_;
     const ModelParser::Model& model_;
 };
 

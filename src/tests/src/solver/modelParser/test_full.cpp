@@ -260,9 +260,10 @@ library:
 
     try
     {
+        Registry<Nodes::Node> registry;
         ModelParser::Parser parser;
         ModelParser::Library libraryObj = parser.parse(library);
-        ObjectModel::Library lib = ModelConverter::convert(libraryObj);
+        ObjectModel::Library lib = ModelConverter::convert(libraryObj, registry);
         BOOST_CHECK_EQUAL(lib.Id(), "basic");
         BOOST_CHECK_EQUAL(lib.Description(), "Basic library");
 
