@@ -21,6 +21,7 @@
 
 #include <iostream>
 
+#include <antares/logs/logs.h>
 #include <antares/solver/modelConverter/convertorVisitor.h>
 
 #include "ExprLexer.h"
@@ -86,6 +87,8 @@ std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* contex
             return static_cast<Node*>(registry_.create<VariableNode>(var.id));
         }
     }
+
+    logs.error() << "No parameter or variable found with this name: " << context->getText();
 
     return std::any();
 }
