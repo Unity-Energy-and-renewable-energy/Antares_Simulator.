@@ -143,6 +143,16 @@ BOOST_FIXTURE_TEST_CASE(comparison, Fixture)
 
 BOOST_FIXTURE_TEST_CASE(medium_expression, Fixture)
 {
-    std::string expression = "(12 * (3 - 1) + abc) / -(42 + 3 + 4)";
-    ModelConverter::convertExpressionToNode(expression, registry, model);
+    ModelParser::Model model0{
+      .id = "model0",
+      .description = "description",
+      .parameters = {{"param1", true, false}, {"param2", false, false}},
+      .variables = {{"varP", "7", "param1", ModelParser::ValueType::CONTINUOUS}},
+      .ports = {},
+      .port_field_definitions = {},
+      .constraints = {},
+      .objective = "objectives"};
+
+    std::string expression = "(12 * (3 - 1) + param1) / -(42 + 3 + varP)";
+    ModelConverter::convertExpressionToNode(expression, registry, model0);
 }

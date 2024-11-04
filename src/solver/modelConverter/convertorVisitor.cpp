@@ -71,18 +71,23 @@ std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
 
 std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* context)
 {
-    bool is_parameter = false;
     for (const auto& param: model_.parameters)
     {
-        if (param.id == context->getText())
+        if (param.id == context->IDENTIFIER()->getText())
         {
-            is_parameter = true;
-            break;
+            return static_cast<Node*>(registry_.create<ParameterNode>(param.id));
         }
     }
 
-    return (is_parameter) ? static_cast<Node*>(registry_.create<ParameterNode>(context->getText()))
-                          : static_cast<Node*>(registry_.create<VariableNode>(context->getText()));
+    for (const auto& var: model_.variables)
+    {
+        if (var.id == context->getText())
+        {
+            return static_cast<Node*>(registry_.create<VariableNode>(var.id));
+        }
+    }
+
+    return std::any();
 }
 
 std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
