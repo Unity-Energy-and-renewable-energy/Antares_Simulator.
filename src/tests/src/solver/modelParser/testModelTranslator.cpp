@@ -201,7 +201,7 @@ BOOST_FIXTURE_TEST_CASE(model_constraints_properly_translated, Fixture)
     ModelParser::Model model1{.id = "model1",
                               .description = "description",
                               .parameters = {{"expression1", true, false},
-                                            {"expression2", true, false}},
+                                             {"expression2", true, false}},
                               .variables = {},
                               .ports = {},
                               .port_field_definitions = {},
