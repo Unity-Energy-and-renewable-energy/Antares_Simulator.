@@ -496,10 +496,9 @@ library:
         checkConstraint(model6.getConstraints().at("Min up time"),
                         "Min up time",
                         "t-d_min_up + 1 <= nb_on");
-        checkConstraint(
-          model6.getConstraints().at("Min down time"),
-          "Min down time",
-          "t-d_min_down + 1 <= nb_units_max - nb_on");
+        checkConstraint(model6.getConstraints().at("Min down time"),
+                        "Min down time",
+                        "t-d_min_down + 1 <= nb_units_max - nb_on");
         BOOST_CHECK_EQUAL(model6.Objective().Value(), "cost * generation");
     }
     catch (const YAML::Exception& e)
