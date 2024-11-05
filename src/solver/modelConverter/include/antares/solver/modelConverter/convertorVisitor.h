@@ -34,8 +34,7 @@ Nodes::Node* convertExpressionToNode(const std::string& exprStr,
                                      Registry<Nodes::Node>& registry,
                                      const ModelParser::Model& model);
 
-// Visitor to convert nodes to Antares::Solver::Nodes
-// TODO add reference to model to be able to resolve names as either parameters or variables
+/// Visitor to convert ANTLR expressions to Antares::Solver::Nodes
 class ConvertorVisitor: public ExprVisitor
 {
 public:
