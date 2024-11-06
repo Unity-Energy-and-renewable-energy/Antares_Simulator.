@@ -73,10 +73,18 @@ std::any ConvertorVisitor::visit(antlr4::tree::ParseTree* tree)
 class NoParameterOrVariableWithThisName: public std::exception
 {
 public:
+    NoParameterOrVariableWithThisName(std::string id):
+        id_(id)
+    {
+    }
+
     const char* what() const noexcept override
     {
-        return "No parameter or variable found for this identifier";
+        return ("No parameter or variable found for this identifier: " + id_).c_str();
     }
+
+private:
+    std::string id_ = "";
 };
 
 std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* context)
@@ -98,7 +106,7 @@ std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* contex
     }
 
     logs.error() << "No parameter or variable found with this name: " << context->getText();
-    throw NoParameterOrVariableWithThisName();
+    throw NoParameterOrVariableWithThisName(context->getText());
 }
 
 std::any ConvertorVisitor::visitMuldiv(ExprParser::MuldivContext* context)
