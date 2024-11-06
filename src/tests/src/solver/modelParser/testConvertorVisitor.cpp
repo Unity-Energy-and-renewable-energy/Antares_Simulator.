@@ -81,6 +81,37 @@ BOOST_FIXTURE_TEST_CASE(identifier, Fixture)
     std::string expression = "param1";
     auto* n = ModelConverter::convertExpressionToNode(expression, registry, model0);
     BOOST_CHECK_EQUAL(n->name(), "ParameterNode");
+
+    expression = "varP";
+    n = ModelConverter::convertExpressionToNode(expression, registry, model0);
+    BOOST_CHECK_EQUAL(n->name(), "VariableNode");
+}
+
+bool expectedMessage(const std::exception& ex)
+{
+    BOOST_CHECK_EQUAL(ex.what(),
+                      std::string("No parameter or variable found for this identifier: abc"));
+    return true;
+}
+
+BOOST_FIXTURE_TEST_CASE(identifierNotFound, Fixture)
+{
+    ModelParser::Library library;
+    ModelParser::Model model0{
+      .id = "model0",
+      .description = "description",
+      .parameters = {{"param1", true, false}, {"param2", false, false}},
+      .variables = {{"varP", "7", "pmin", ModelParser::ValueType::CONTINUOUS},
+                    {"var2", "0", "param2", ModelParser::ValueType::CONTINUOUS}},
+      .ports = {},
+      .port_field_definitions = {},
+      .constraints = {},
+      .objective = "objectives"};
+
+    std::string expression = "abc"; // not a param or var
+    BOOST_CHECK_EXCEPTION(ModelConverter::convertExpressionToNode(expression, registry, model0),
+                          std::exception,
+                          expectedMessage);
 }
 
 BOOST_FIXTURE_TEST_CASE(AddSub, Fixture)
