@@ -21,7 +21,7 @@
 
 #include <iostream>
 
-#include <antares/logs/logs.h>
+/* #include <antares/logs/logs.h> */
 #include <antares/solver/modelConverter/convertorVisitor.h>
 
 #include "ExprLexer.h"
@@ -105,7 +105,7 @@ std::any ConvertorVisitor::visitIdentifier(ExprParser::IdentifierContext* contex
         }
     }
 
-    logs.error() << "No parameter or variable found with this name: " << context->getText();
+    /* logs.error() << "No parameter or variable found with this name: " << context->getText(); */
     throw NoParameterOrVariableWithThisName(context->getText());
 }
 
