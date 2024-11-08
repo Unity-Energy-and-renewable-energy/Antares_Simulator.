@@ -182,10 +182,10 @@ BOOST_FIXTURE_TEST_CASE(medium_expression, Fixture)
 
     auto* param = registry.create<Nodes::ParameterNode>("param1");
     auto* var = registry.create<Nodes::VariableNode>("varP");
-    auto *l3 = registry.create<Nodes::LiteralNode>(3);
+    auto* l3 = registry.create<Nodes::LiteralNode>(3);
     auto* l42 = registry.create<Nodes::LiteralNode>(42);
     auto* l1 = registry.create<Nodes::LiteralNode>(1);
-    auto* l4  = registry.create<Nodes::LiteralNode>(4);
+    auto* l4 = registry.create<Nodes::LiteralNode>(4);
     auto* l12 = registry.create<Nodes::LiteralNode>(12);
     auto* sub = registry.create<Nodes::SubtractionNode>(l4, l1);
     auto* mult = registry.create<Nodes::MultiplicationNode>(l12, sub);
