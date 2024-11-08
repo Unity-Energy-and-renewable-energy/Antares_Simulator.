@@ -24,11 +24,15 @@
 **
 ** SPDX-License-Identifier: licenceRef-GPL3_WITH_RTE-Exceptions
 */
+#include "antares/optimization-options/options.h"
+
 namespace Antares::Check
 {
+
 void checkOrtoolsUsage(Antares::Data::UnitCommitmentMode ucMode,
                        bool ortoolsUsed,
                        const std::string& solverName);
+
 
 void checkStudyVersion(const AnyString& optStudyFolder);
 
