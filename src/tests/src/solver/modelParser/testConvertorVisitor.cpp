@@ -24,6 +24,7 @@
 
 #include "antares/solver/expressions/Registry.hxx"
 #include "antares/solver/expressions/visitors/AstDOTStyleVisitor.h"
+#include "antares/solver/expressions/visitors/CompareVisitor.h"
 #include "antares/solver/libObjectModel/library.h"
 #include "antares/solver/modelConverter/convertorVisitor.h"
 #include "antares/solver/modelConverter/modelConverter.h"
@@ -36,14 +37,6 @@ struct Fixture
     ModelParser::Model model;
     Antares::Solver::Registry<Antares::Solver::Nodes::Node> registry;
 };
-
-// TODO remove, used for debug
-static void printTree(Nodes::Node* n)
-{
-    std::ofstream out("/tmp/tree.dot");
-    Visitors::AstDOTStyleVisitor dot;
-    dot(out, n);
-}
 
 static Nodes::LiteralNode* toLiteral(Nodes::Node* n)
 {
@@ -184,6 +177,24 @@ BOOST_FIXTURE_TEST_CASE(medium_expression, Fixture)
       .constraints = {},
       .objective = "objectives"};
 
-    std::string expression = "(12 * (3 - 1) + param1) / -(42 + 3 + varP)";
-    ModelConverter::convertExpressionToNode(expression, registry, model0);
+    std::string expression = "(12 * (4 - 1) + param1) / -(42 + 3 + varP)";
+    auto* n = ModelConverter::convertExpressionToNode(expression, registry, model0);
+
+    auto* param = registry.create<Nodes::ParameterNode>("param1");
+    auto* var = registry.create<Nodes::VariableNode>("varP");
+    auto *l3 = registry.create<Nodes::LiteralNode>(3);
+    auto* l42 = registry.create<Nodes::LiteralNode>(42);
+    auto* l1 = registry.create<Nodes::LiteralNode>(1);
+    auto* l4  = registry.create<Nodes::LiteralNode>(4);
+    auto* l12 = registry.create<Nodes::LiteralNode>(12);
+    auto* sub = registry.create<Nodes::SubtractionNode>(l4, l1);
+    auto* mult = registry.create<Nodes::MultiplicationNode>(l12, sub);
+    auto* sum1 = registry.create<Nodes::SumNode>(mult, param);
+    auto* sum2 = registry.create<Nodes::SumNode>(l42, l3);
+    auto* sum3 = registry.create<Nodes::SumNode>(sum2, var);
+    auto* neg = registry.create<Nodes::NegationNode>(sum3);
+    auto* div = registry.create<Nodes::DivisionNode>(sum1, neg);
+
+    Visitors::CompareVisitor cmp;
+    BOOST_CHECK(cmp.dispatch(n, div));
 }
