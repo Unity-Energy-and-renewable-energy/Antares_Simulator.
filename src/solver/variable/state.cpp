@@ -23,7 +23,6 @@
 
 #include <cmath>
 
-#include <antares/logs/logs.h>
 #include <antares/study/study.h>
 
 namespace Antares::Solver::Variable
@@ -316,13 +315,17 @@ void State::yearEndBuildFromThermalClusterIndex(const uint clusterAreaWideIndex)
                            static_cast<uint>(
                              std::ceil(thermalClusterAvailableProduction
                                        / currentCluster->nominalCapacityWithSpinning))),
-                  static_cast<uint>(std::ceil(thermalClusterProduction
-                                              / currentCluster->nominalCapacityWithSpinning)));
+                  static_cast<uint>(
+                    std::ceil(std::round(thermalClusterProduction
+                                         / currentCluster->nominalCapacityWithSpinning * 1000000)
+                              / 1000000)));
             }
             else
             {
-                ON_min[h] = static_cast<uint>(std::ceil(
-                  thermalClusterProduction / currentCluster->nominalCapacityWithSpinning));
+                ON_min[h] = static_cast<uint>(
+                  std::ceil(std::round(thermalClusterProduction
+                                       / currentCluster->nominalCapacityWithSpinning * 1000000)
+                            / 1000000));
             }
             break;
         }
@@ -331,10 +334,12 @@ void State::yearEndBuildFromThermalClusterIndex(const uint clusterAreaWideIndex)
         {
             ON_min[h] = std::max(
               static_cast<uint>(
-                std::ceil(thermalClusterProduction / currentCluster->nominalCapacityWithSpinning)),
+                std::ceil(std::round(thermalClusterProduction
+                                     / currentCluster->nominalCapacityWithSpinning * 1000000)
+                          / 1000000)),
               thermalClusterDispatchedUnitsCountForYear[h]); // eq. to thermalClusterON for
             // that hour
-
+            ;
             break;
         }
         case Antares::Data::UnitCommitmentMode::ucUnknown:
@@ -349,8 +354,9 @@ void State::yearEndBuildFromThermalClusterIndex(const uint clusterAreaWideIndex)
 
         if (currentCluster->minStablePower > 0.)
         {
-            maxUnitNeeded = static_cast<uint>(
-              std::floor(thermalClusterProduction / currentCluster->minStablePower));
+            maxUnitNeeded = static_cast<uint>(std::floor(
+              std::round(thermalClusterProduction / currentCluster->minStablePower * 1000000)
+              / 1000000));
             if (ON_max[h] > maxUnitNeeded)
             {
                 ON_max[h] = maxUnitNeeded;
@@ -361,9 +367,6 @@ void State::yearEndBuildFromThermalClusterIndex(const uint clusterAreaWideIndex)
         {
             ON_max[h] = ON_min[h];
         }
-
-        Antares::logs.notice() << "ON_min for hour " << h << "  : " << ON_min[h];
-        Antares::logs.notice() << "ON_max for hour " << h << "  : " << ON_max[h];
     }
 
     if (maxDurationON > 0)
@@ -385,7 +388,6 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
     uint endHourForCurrentYear = startHourForCurrentYear
                                  + study.runtime.rangeLimits.hour[Data::rangeCount];
 
-    Antares::logs.notice() << "Max duration on : " << maxDurationON;
     for (uint hour = startHourForCurrentYear; hour < endHourForCurrentYear; ++hour)
     {
         double thermalClusterStartupCostForYear = 0;
@@ -395,15 +397,11 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
         // the optimal number.
         uint optimalCount = (maxDurationON == 0) ? ON_min[hour] : ON_opt[hour];
 
-        Antares::logs.notice() << "Optimal count for hour " << hour << "  : " << optimalCount;
-
         // NODU cannot be > unit count
         if (optimalCount > currentCluster->unitCount)
         {
             optimalCount = currentCluster->unitCount;
         }
-
-        Antares::logs.notice() << "Optimal count tronc for hour " << hour << "  : " << optimalCount;
 
         thermalClusterFixedCostForYear = currentCluster->fixedCost * optimalCount;
 
@@ -412,8 +410,6 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
             // nombre de groupes démarrés à l'heure h
             int delta = (maxDurationON == 0) ? ON_min[hour] - ON_min[hour - 1]
                                              : ON_opt[hour] - ON_opt[hour - 1];
-
-            Antares::logs.notice() << "M+ for hour " << hour << "  : " << delta;
 
             (delta > 0) ? (thermalClusterStartupCostForYear = currentCluster->startupCost * delta)
                         : (thermalClusterStartupCostForYear = 0.);
