@@ -179,7 +179,6 @@ source_group("study\\constraint" FILES ${SRC_STUDY_BINDING_CONSTRAINT})
 set(SRC_XCAST
         include/antares/study/xcast.h
         include/antares/study/xcast/xcast.h
-        include/antares/study/xcast/xcast.hxx
         xcast/xcast.cpp
 )
 source_group("study\\xcast" FILES ${SRC_XCAST})
@@ -249,7 +248,7 @@ set(SRC_STUDY
 
         # Sets
         include/antares/study/sets.h
-        include/antares/study/sets.hxx
+        area/sets.cpp
 
         # variable selection
         include/antares/study/variable-print-info.h
@@ -293,6 +292,7 @@ target_link_libraries(study
         Antares::mersenne
         Antares::result_writer #study.h
         Antares::series
+        Antares::array
         antares-core
         antares-solver-simulation
         Antares::hydro

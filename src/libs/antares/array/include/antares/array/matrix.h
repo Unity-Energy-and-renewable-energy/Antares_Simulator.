@@ -28,9 +28,7 @@
 #include <yuni/io/file.h>
 
 #include <antares/memory/memory.h>
-#include "antares/antares/antares.h"
 #include "antares/jit/jit.h"
-#include "antares/study/fwd.h"
 
 namespace Antares
 {
@@ -416,13 +414,6 @@ public:
     ** \endcode
     */
     bool empty() const;
-
-    //! Get the amount of memory used by the matrix
-    uint64_t memoryUsage() const;
-
-    //! Get the amount of memory used by the matrix
-    uint64_t valuesMemoryUsage() const;
-    //@}
 
     /*!
     ** \brief Print the matrix to std::cout (debug)

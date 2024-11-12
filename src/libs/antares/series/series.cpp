@@ -29,9 +29,7 @@
 #include <yuni/io/directory.h>
 #include <yuni/io/file.h>
 
-using namespace Yuni;
-
-#define SEP IO::Separator
+#include <antares/antares/constants.h>
 
 namespace Antares::Data
 {
@@ -113,11 +111,11 @@ TimeSeries::TimeSeries(TimeSeriesNumbers& tsNumbers):
 {
 }
 
-bool TimeSeries::loadFromFile(const std::string& path, const bool average)
+bool TimeSeries::loadFromFile(const std::filesystem::path& path, const bool average)
 {
     bool ret = true;
     Matrix<>::BufferType dataBuffer;
-    ret = timeSeries.loadFromCSVFile(path, 1, HOURS_PER_YEAR, &dataBuffer) && ret;
+    ret = timeSeries.loadFromCSVFile(path.string(), 1, HOURS_PER_YEAR, &dataBuffer) && ret;
 
     if (average)
     {
@@ -129,12 +127,12 @@ bool TimeSeries::loadFromFile(const std::string& path, const bool average)
     return ret;
 }
 
-int TimeSeries::saveToFolder(const AreaName& areaID,
+int TimeSeries::saveToFolder(const std::string& areaID,
                              const std::string& folder,
                              const std::string& prefix) const
 {
-    Clob buffer;
-    buffer.clear() << folder << SEP << prefix << areaID << ".txt";
+    Yuni::Clob buffer;
+    buffer.clear() << folder << Yuni::IO::Separator << prefix << areaID << ".txt";
     return timeSeries.saveToCSVFile(buffer, 0);
 }
 
@@ -223,8 +221,4 @@ void TimeSeries::markAsModified() const
     timeSeries.markAsModified();
 }
 
-uint64_t TimeSeries::memoryUsage() const
-{
-    return timeSeries.memoryUsage();
-}
 } // namespace Antares::Data

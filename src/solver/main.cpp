@@ -28,9 +28,6 @@
 #include "antares/application/application.h"
 
 using namespace Antares;
-using namespace Yuni;
-
-#define SEP Yuni::IO::Separator
 
 namespace
 {
@@ -105,7 +102,7 @@ void logAbortion()
 /*!
 ** \brief main
 */
-int main(int argc, char** argv)
+int main(int argc, const char** argv)
 {
     try
     {

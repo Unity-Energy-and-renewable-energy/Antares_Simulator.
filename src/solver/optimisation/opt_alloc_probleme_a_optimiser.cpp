@@ -20,17 +20,10 @@
 */
 
 #include <antares/logs/logs.h>
-#include "antares/solver/optimisation/opt_fonctions.h"
 #include "antares/solver/optimisation/opt_structure_probleme_a_resoudre.h"
 #include "antares/solver/simulation/sim_structure_probleme_economique.h"
 
-using namespace Antares;
-
-#ifdef _MSC_VER
-#define SNPRINTF sprintf_s
-#else
-#define SNPRINTF snprintf
-#endif
+int OPT_DecompteDesVariablesEtDesContraintesDuProblemeAOptimiser(PROBLEME_HEBDO*);
 
 void OPT_AllocateFromNumberOfVariableConstraints(PROBLEME_ANTARES_A_RESOUDRE* ProblemeAResoudre,
                                                  int NbTermes)
@@ -150,21 +143,4 @@ void OPT_AllocDuProblemeAOptimiser(PROBLEME_HEBDO* problemeHebdo)
     int mxPaliers = OPT_DecompteDesVariablesEtDesContraintesDuProblemeAOptimiser(problemeHebdo);
 
     optimisationAllocateProblem(problemeHebdo, mxPaliers);
-}
-
-void OPT_AugmenterLaTailleDeLaMatriceDesContraintes(PROBLEME_ANTARES_A_RESOUDRE* ProblemeAResoudre)
-{
-    int NbTermes = ProblemeAResoudre->NombreDeTermesAllouesDansLaMatriceDesContraintes;
-    NbTermes += ProblemeAResoudre->IncrementDAllocationMatriceDesContraintes;
-
-    logs.info();
-    logs.info() << " Expected Number of Non-zero terms in Problem Matrix : increased to : "
-                << NbTermes;
-    logs.info();
-
-    ProblemeAResoudre->CoefficientsDeLaMatriceDesContraintes.resize(NbTermes);
-
-    ProblemeAResoudre->IndicesColonnes.resize(NbTermes);
-
-    ProblemeAResoudre->NombreDeTermesAllouesDansLaMatriceDesContraintes = NbTermes;
 }

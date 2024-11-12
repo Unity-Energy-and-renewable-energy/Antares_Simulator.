@@ -22,7 +22,6 @@
 // Created by marechaljas on 17/03/23.
 //
 
-#include <cstdint>
 #include <filesystem>
 #include <utility>
 
@@ -49,7 +48,7 @@ static void genericStoreTimeseriesNumbers(Solver::IResultWriter& writer,
 
     std::string buffer;
     timeseriesNumbers.saveToBuffer(buffer);
-    writer.addEntryFromBuffer(path.string(), buffer);
+    writer.addEntryFromBuffer(path, buffer);
 }
 
 void BindingConstraintsTimeSeriesNumbersWriter::write(

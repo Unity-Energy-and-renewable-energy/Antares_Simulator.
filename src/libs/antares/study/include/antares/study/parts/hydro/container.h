@@ -114,7 +114,7 @@ public:
     ** \param folder The targer folder
     ** \return A non-zero value if the operation succeeded, 0 otherwise
     */
-    static bool LoadFromFolder(Study& study, const AnyString& folder);
+    static bool LoadFromFolder(Study& study, const std::filesystem::path& folder);
 
     /*!
     ** \brief Check and validate the loaded datas
@@ -138,7 +138,7 @@ public:
     */
     PartHydro();
     //! Destructor
-    ~PartHydro();
+    ~PartHydro() = default;
 
     /*!
     ** \brief Reset internal data
@@ -157,7 +157,7 @@ public:
     /*!
     ** \brief Load daily max energy
     */
-    bool LoadDailyMaxEnergy(const AnyString& folder, const AnyString& areaid);
+    bool LoadDailyMaxEnergy(const std::filesystem::path& folder, const std::string& areaid);
 
     bool CheckDailyMaxEnergy(const AnyString& areaName);
 
@@ -211,10 +211,10 @@ public:
     HydroAllocation allocation;
 
     //! Data for the pre-processor
-    PreproHydro* prepro;
+    std::unique_ptr<PreproHydro> prepro;
 
     //! Data for time-series
-    DataSeriesHydro* series;
+    std::unique_ptr<DataSeriesHydro> series;
     // TODO : following time series could be hosted by the series data member above (of type
     // DataSeriesHydro),
     //        which contains other time.

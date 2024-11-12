@@ -44,7 +44,7 @@ public:
     */
     Container();
     //! Destructor
-    ~Container();
+    ~Container() = default;
     //@}
 
     /*!
@@ -62,14 +62,8 @@ public:
     */
     void markAsModified() const;
 
-    /*!
-    ** \brief Get the amount of memory currently used by the class
-    */
-    uint64_t memoryUsage() const;
-
-public:
     //! Data for the pre-processor
-    Data::Load::Prepro* prepro;
+    std::unique_ptr<Data::Load::Prepro> prepro;
 
     TimeSeriesNumbers tsNumbers;
 

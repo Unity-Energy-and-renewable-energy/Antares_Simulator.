@@ -66,25 +66,8 @@ public:
     //! List of studies
     using List = std::list<Ptr>;
 
-    //! A single set of areas
-    // CompareAreaName : to control the order of areas in a set of areas. This order can have an
-    // effect, even if tiny, on the results of aggregations.
-    using SingleSetOfAreas = std::set<Area*, CompareAreaName>;
-
     //! Multiple sets of areas
-    using SetsOfAreas = Antares::Data::Sets<SingleSetOfAreas>;
-
-    //! A single set of links
-    using SingleSetOfLinks = std::set<AreaLink*>;
-    //! Multiple sets of links
-    using SetsOfLinks = Antares::Data::Sets<SingleSetOfLinks>;
-
-    //! List of disabled areas
-    using DisabledAreaList = std::set<AreaName>;
-    //! List of disabled links
-    using DisabledAreaLinkList = std::set<AreaLinkName>;
-    //! List of disabled thermal clusters
-    using DisabledThermalClusterList = std::set<ClusterName>;
+    using SetsOfAreas = Antares::Data::Sets;
 
     //! Extension filename
     using FileExtension = std::string;
@@ -158,7 +141,7 @@ public:
     ** This method does not have any effect except modifying
     ** internal variables (`folder`, `folderInput`, ...).
     */
-    void relocate(const std::string& newFolder);
+    void relocate(const std::filesystem::path& newFolder);
 
     /*!
     ** \brief Load a study from a folder
@@ -445,11 +428,6 @@ public:
     */
     void ensureDataAreLoadedForAllBindingConstraints();
 
-    /*!
-    ** \brief Get the amound of memory consummed by the study (in bytes)
-    */
-    uint64_t memoryUsage() const;
-
     //! \name Logs
     //@{
     /*!
@@ -472,18 +450,19 @@ public:
     //! \name Paths
     //@{
     //! The source folder of the study
-    YString folder;
+    std::filesystem::path folder;
     //! The input folder
-    YString folderInput;
+    std::filesystem::path folderInput;
     //! The output folder
-    YString folderOutput;
+    std::filesystem::path folderOutput;
     //! The settings folder
-    YString folderSettings;
+    std::filesystem::path folderSettings;
     //@}
 
     //! \name Simulation
     //@{
     //! The current Simulation
+    // TODO VP: remove with GUI
     SimulationComments simulationComments;
 
     int64_t pStartTime;
@@ -573,8 +552,6 @@ public:
     //@{
     //! Sets of areas
     SetsOfAreas setsOfAreas;
-    //! Sets of links
-    SetsOfLinks setsOfLinks;
     //@}
 
     //! \name Scenario Builder
@@ -652,7 +629,7 @@ protected:
     //! Load a study from a folder
     bool internalLoadFromFolder(const std::filesystem::path& path, const StudyLoadOptions& options);
     //! Load the study header
-    bool internalLoadHeader(const YString& folder);
+    bool internalLoadHeader(const std::filesystem::path& folder);
     //! Load all correlation matrices
     bool internalLoadCorrelationMatrices(const StudyLoadOptions& options);
     //! Load all binding constraints
@@ -661,7 +638,7 @@ protected:
     bool internalLoadSets();
     //@}
 
-    bool internalLoadIni(const YString& path, const StudyLoadOptions& options);
+    bool internalLoadIni(const std::filesystem::path& path, const StudyLoadOptions& options);
 
     void parameterFiller(const StudyLoadOptions& options);
 
@@ -678,11 +655,11 @@ protected:
 */
 extern YString StudyIconFile;
 
-YString StudyCreateOutputPath(SimulationMode mode,
-                              ResultFormat fmt,
-                              const YString& folder,
-                              const YString& label,
-                              int64_t startTime);
+std::filesystem::path StudyCreateOutputPath(SimulationMode mode,
+                                            ResultFormat fmt,
+                                            const std::filesystem::path& folder,
+                                            const std::string& label,
+                                            const std::tm& startTime);
 } // namespace Antares::Data
 
 #include "study.hxx"

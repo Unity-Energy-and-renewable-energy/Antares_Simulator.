@@ -23,7 +23,6 @@
 #define __SOLVER_SIMULATION_ECO_STRUCTS_H__
 
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include "antares/solver/optimisation/opt_structure_probleme_a_resoudre.h"
@@ -334,18 +333,18 @@ private:
     double capacity;
     std::vector<double>& inflows;
     std::vector<double>& ovf;
-    std::vector<double>& turb;
+    const std::vector<double>& turb;
     double pumpRatio;
-    std::vector<double>& pump;
+    const std::vector<double>& pump;
     double excessDown;
 
 public:
     computeTimeStepLevel(const double& startLvl,
                          std::vector<double>& infl,
                          std::vector<double>& overfl,
-                         std::vector<double>& H,
+                         const std::vector<double>& H,
                          double pumpEff,
-                         std::vector<double>& Pump,
+                         const std::vector<double>& Pump,
                          double rc):
         step(0),
         level(startLvl),
@@ -412,10 +411,10 @@ struct PRODUCTION_THERMIQUE_OPTIMALE
 struct RESULTATS_HORAIRES
 {
     std::vector<double> ValeursHorairesDeDefaillancePositive;
+    std::vector<double> ValeursHorairesDeDefaillancePositiveCSR;
     std::vector<double> ValeursHorairesDENS;       // adq patch domestic unsupplied energy
     std::vector<int> ValeursHorairesLmrViolations; // adq patch lmr violations
-    std::vector<double> ValeursHorairesSpilledEnergyAfterCSR; // adq patch spillage after CSR
-    std::vector<double> ValeursHorairesDtgMrgCsr;             // adq patch DTG MRG after CSR
+    std::vector<double> ValeursHorairesDtgMrgCsr;  // adq patch DTG MRG after CSR
 
     std::vector<double> ValeursHorairesDeDefaillanceNegative;
 
@@ -494,7 +493,6 @@ struct PROBLEME_HEBDO
 
     std::vector<double> CoutDeDefaillancePositive;
     std::vector<double> CoutDeDefaillanceNegative;
-    std::vector<double> CoutDeDefaillanceEnReserve;
 
     std::vector<PALIERS_THERMIQUES> PaliersThermiquesDuPays;
     std::vector<ENERGIES_ET_PUISSANCES_HYDRAULIQUES> CaracteristiquesHydrauliques;

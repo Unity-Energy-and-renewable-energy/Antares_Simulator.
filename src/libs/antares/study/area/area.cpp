@@ -167,52 +167,6 @@ const AreaLink* Area::findExistingLinkWith(const Area& with) const
     return nullptr;
 }
 
-uint64_t Area::memoryUsage() const
-{
-    uint64_t ret = 0;
-
-    // Misc gen. (previously called Fatal hors hydro)
-    ret += miscGen.valuesMemoryUsage();
-    // Reserves
-    ret += reserves.valuesMemoryUsage();
-
-    ret += sizeof(Area);
-    // Load
-    ret += load.memoryUsage();
-    // Solar
-    ret += solar.memoryUsage();
-    // Wind
-    ret += wind.memoryUsage();
-
-    // Hydro
-    ret += PreproHydroMemoryUsage(hydro.prepro);
-    if (hydro.series)
-    {
-        ret += hydro.series->memoryUsage();
-    }
-
-    // Thermal
-    ret += thermal.list.memoryUsage();
-
-    // Renewable
-    ret += renewable.list.memoryUsage();
-
-    // UI
-    if (ui)
-    {
-        ret += ui->memoryUsage();
-    }
-
-    // links
-    auto end = links.end();
-    for (auto i = links.begin(); i != end; ++i)
-    {
-        ret += (i->second)->memoryUsage();
-    }
-
-    return ret;
-}
-
 void Area::createMissingData()
 {
     createMissingTimeSeries();
@@ -223,7 +177,7 @@ void Area::createMissingTimeSeries()
 {
     if (!hydro.series)
     {
-        hydro.series = new DataSeriesHydro();
+        hydro.series = std::make_unique<DataSeriesHydro>();
     }
 }
 
@@ -231,19 +185,19 @@ void Area::createMissingPrepros()
 {
     if (!load.prepro)
     {
-        load.prepro = new Data::Load::Prepro();
+        load.prepro = std::make_unique<Data::Load::Prepro>();
     }
     if (!solar.prepro)
     {
-        solar.prepro = new Data::Solar::Prepro();
+        solar.prepro = std::make_unique<Data::Solar::Prepro>();
     }
     if (!wind.prepro)
     {
-        wind.prepro = new Data::Wind::Prepro();
+        wind.prepro = std::make_unique<Data::Wind::Prepro>();
     }
     if (!hydro.prepro)
     {
-        hydro.prepro = new PreproHydro();
+        hydro.prepro = std::make_unique<PreproHydro>();
     }
     thermal.list.ensureDataPrepro();
 }
