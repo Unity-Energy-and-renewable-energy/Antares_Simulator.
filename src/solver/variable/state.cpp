@@ -23,6 +23,7 @@
 
 #include <cmath>
 
+#include <antares/logs/logs.h>
 #include <antares/study/study.h>
 
 namespace Antares::Solver::Variable
@@ -381,6 +382,7 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
     uint endHourForCurrentYear = startHourForCurrentYear
                                  + study.runtime.rangeLimits.hour[Data::rangeCount];
 
+    Antares::logs.notice() << "Max duration on : " << maxDurationON;
     for (uint hour = startHourForCurrentYear; hour < endHourForCurrentYear; ++hour)
     {
         double thermalClusterStartupCostForYear = 0;
@@ -389,6 +391,8 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
         // based on duration, if maxDurationON==0 we choose the mininum of ON clusters, otherwise,
         // the optimal number.
         uint optimalCount = (maxDurationON == 0) ? ON_min[hour] : ON_opt[hour];
+
+        Antares::logs.notice() << "Optimal count for hour " << hour << "  : " << optimalCount;
 
         // NODU cannot be > unit count
         if (optimalCount > currentCluster->unitCount)
@@ -403,6 +407,8 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
             // nombre de groupes démarrés à l'heure h
             int delta = (maxDurationON == 0) ? ON_min[hour] - ON_min[hour - 1]
                                              : ON_opt[hour] - ON_opt[hour - 1];
+
+            Antares::logs.notice() << "M+ for hour " << hour << "  : " << delta;
 
             (delta > 0) ? (thermalClusterStartupCostForYear = currentCluster->startupCost * delta)
                         : (thermalClusterStartupCostForYear = 0.);
