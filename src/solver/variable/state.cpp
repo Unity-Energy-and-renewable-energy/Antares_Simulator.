@@ -361,6 +361,9 @@ void State::yearEndBuildFromThermalClusterIndex(const uint clusterAreaWideIndex)
         {
             ON_max[h] = ON_min[h];
         }
+
+        Antares::logs.notice() << "ON_min for hour " << h << "  : " << ON_min[h];
+        Antares::logs.notice() << "ON_max for hour " << h << "  : " << ON_max[h];
     }
 
     if (maxDurationON > 0)
@@ -399,6 +402,8 @@ void State::yearEndBuildThermalClusterCalculateStartupCosts(
         {
             optimalCount = currentCluster->unitCount;
         }
+
+        Antares::logs.notice() << "Optimal count tronc for hour " << hour << "  : " << optimalCount;
 
         thermalClusterFixedCostForYear = currentCluster->fixedCost * optimalCount;
 
