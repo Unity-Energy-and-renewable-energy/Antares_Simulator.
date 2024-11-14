@@ -9,20 +9,21 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
+#include <mutex>
+
 #include "../../yuni.h"
-#include "../../thread/policy.h"
 #include "null.h"
 #include "verbosity.h"
 
 // Default Handler
-#include "handler/stdcout.h"
 #include "handler/file.h"
+#include "handler/stdcout.h"
 // Default decorators
-#include "decorators/verbositylevel.h"
-#include "decorators/time.h"
-#include "decorators/message.h"
 #include "../noncopyable.h"
 #include "buffer.h"
+#include "decorators/message.h"
+#include "decorators/time.h"
+#include "decorators/verbositylevel.h"
 
 // The default verbosity level according the target mode (debug/release)
 #ifdef NDEBUG
@@ -74,15 +75,18 @@ namespace Logs
 ** \tparam Handlers A static list of all message handlers
 ** \tparam Decorators A static list of all decorators
 */
-template<class Handlers = StdCout<>,                         // List of all static handles
-         class Decorators = Time<VerbosityLevel<Message<>>>, // List of all static decorators
-         template<class> class TP = Policy::ObjectLevelLockableNotRecursive // The Threading Policy
+template<class Unused>
+using MutexWithTemplateParameter = std::mutex;
+
+template<class Handlers = StdCout<>,                           // List of all static handles
+         class Decorators = Time<VerbosityLevel<Message<>>>,   // List of all static decorators
+         template<class> class TP = MutexWithTemplateParameter // The Threading Policy
          >
 class YUNI_DECL Logger final
- : public TP<Logger<Handlers, Decorators, TP>>,          // inherits from the Threading Policy
-   public Decorators,                                    // inherits from all decorators
-   public Handlers,                                      // inherits from all handlers
-   private NonCopyable<Logger<Handlers, Decorators, TP>> // noncopyable
+    : public TP<Logger<Handlers, Decorators, TP>>,          // inherits from the Threading Policy
+      public Decorators,                                    // inherits from all decorators
+      public Handlers,                                      // inherits from all handlers
+      private NonCopyable<Logger<Handlers, Decorators, TP>> // noncopyable
 {
 public:
     //! The full prototype of the logger
