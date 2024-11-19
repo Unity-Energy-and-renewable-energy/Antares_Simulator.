@@ -1,5 +1,7 @@
 var NAVTREEINDEX22 =
 {
+"functions_vars_d.html":[9,3,2,3],
+"functions_vars_e.html":[9,3,2,4],
 "functions_vars_f.html":[9,3,2,5],
 "functions_vars_g.html":[9,3,2,6],
 "functions_vars_h.html":[9,3,2,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX22 =
 "mps__utils_8h_source.html":[10,0,0,4,15,0,0,0,0,2],
 "name__translator_8h_source.html":[10,0,0,4,15,0,0,0,0,3],
 "named__problem_8h_source.html":[10,0,0,4,15,0,0,0,0,4],
-"namespaceLocalPolicy.html":[7,0,0],
-"namespaceLocalPolicy.html#a1333fdac82eb04f896ccba5d66b48ad3":[7,0,0,7],
-"namespaceLocalPolicy.html#a3edae9b28d73d8a57ea4104248b95b99":[7,0,0,6]
+"namespaceLocalPolicy.html":[7,0,0]
 };

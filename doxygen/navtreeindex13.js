@@ -1,5 +1,6 @@
 var NAVTREEINDEX13 =
 {
+"classAntares_1_1Solver_1_1Modeler_1_1Api_1_1LinearProblemData.html":[9,0,0,13,1,0,8],
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1LinearProblemFiller.html":[9,0,0,13,1,0,9],
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1OneConstraintFiller.html":[9,0,0,13,1,0,10],
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1OneVarFiller.html":[9,0,0,13,1,0,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX13 =
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#ad5b24e14e1c5f3f0ce8debb13a83e870":[9,0,0,13,8,4,7,1],
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#ad86b1ec08e9d2776b9672ab341964936":[9,0,0,13,8,4,7,4],
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#af36bf39360b65d3a1309d63903678acb":[9,0,0,13,8,4,7,3],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGeneration.html":[9,0,0,13,8,4,6],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGeneration.html#a680fd0cefe3adafeecb4d18cf4a4ffc9":[9,0,0,13,8,4,6,4]
+"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGeneration.html":[9,0,0,13,8,4,6]
 };

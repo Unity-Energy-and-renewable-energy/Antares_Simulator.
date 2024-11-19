@@ -1465,6 +1465,7 @@ var annotated_dup =
     [ "SimplexResult", "structSimplexResult.html", null ],
     [ "SimulationHandler", "classSimulationHandler.html", null ],
     [ "SOLDE_MOYEN_DES_ECHANGES", "structSOLDE__MOYEN__DES__ECHANGES.html", null ],
+    [ "SparseVector", "classSparseVector.html", null ],
     [ "StartUpCostsData", "structStartUpCostsData.html", null ],
     [ "StringIsNotWellFormated", "classStringIsNotWellFormated.html", null ],
     [ "StubOptPeriodStringGenerator", "classStubOptPeriodStringGenerator.html", null ],

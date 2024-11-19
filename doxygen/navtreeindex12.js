@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"classAntares_1_1Map_1_1Tool_1_1Tool.html":[9,0,0,10,1,2],
 "classAntares_1_1Map_1_1Tool_1_1Tool.html#a0098121f2630f936fb25cfb316be1448":[9,0,0,10,1,2,2],
 "classAntares_1_1Map_1_1Tool_1_1Tool.html#a05b0b333bdc2dd0079a0913edf461d50":[9,0,0,10,1,2,3],
 "classAntares_1_1Map_1_1Tool_1_1Tool.html#a063207dbcd0f7a4492c45eacd0cd2276":[9,0,0,10,1,2,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1IMipConstraint.html":[9,0,0,13,1,0,4],
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1IMipSolution.html":[9,0,0,13,1,0,5],
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1IMipVariable.html":[9,0,0,13,1,0,6],
-"classAntares_1_1Solver_1_1Modeler_1_1Api_1_1LinearProblemBuilder.html":[9,0,0,13,1,0,7],
-"classAntares_1_1Solver_1_1Modeler_1_1Api_1_1LinearProblemData.html":[9,0,0,13,1,0,8]
+"classAntares_1_1Solver_1_1Modeler_1_1Api_1_1LinearProblemBuilder.html":[9,0,0,13,1,0,7]
 };

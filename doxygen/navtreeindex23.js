@@ -1,5 +1,7 @@
 var NAVTREEINDEX23 =
 {
+"namespaceLocalPolicy.html#a1333fdac82eb04f896ccba5d66b48ad3":[7,0,0,7],
+"namespaceLocalPolicy.html#a3edae9b28d73d8a57ea4104248b95b99":[7,0,0,6],
 "namespaceLocalPolicy.html#a47b0c7226dcf5d16ee301e7bbc468b14":[7,0,0,0],
 "namespaceLocalPolicy.html#a5437ae904734d642b435bd37a8f38e03":[7,0,0,3],
 "namespaceLocalPolicy.html#a948cec0d64b3dccb1fb46a257c25ce24":[7,0,0,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX23 =
 "structAntares_1_1Data_1_1MonthlyGenerationTargetData.html#ad55fd53671a5723f70682cfcb77e4420":[9,0,0,4,35,3],
 "structAntares_1_1Data_1_1MonthlyGenerationTargetData.html#ad94d7a42522c191d2b8fb1ddc01a7573":[9,0,0,4,35,1],
 "structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html":[9,0,0,4,37,0],
-"structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html#a05e715f1eb29b68c61b1c7a716acfcfc":[9,0,0,4,37,0,3],
-"structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html#a7d8a25ee0fb5862708223cac004f4acf":[9,0,0,4,37,0,5],
-"structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html#a8ab817b5425154ce88b258042b37522f":[9,0,0,4,37,0,6]
+"structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html#a05e715f1eb29b68c61b1c7a716acfcfc":[9,0,0,4,37,0,3]
 };
