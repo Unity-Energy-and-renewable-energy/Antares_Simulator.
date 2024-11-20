@@ -542,20 +542,6 @@ var annotated_dup =
           [ "UnaryNode", "classAntares_1_1Solver_1_1Nodes_1_1UnaryNode.html", "classAntares_1_1Solver_1_1Nodes_1_1UnaryNode" ],
           [ "VariableNode", "classAntares_1_1Solver_1_1Nodes_1_1VariableNode.html", null ]
         ] ],
-        [ "ObjectModel", null, [
-          [ "Constraint", "classAntares_1_1Solver_1_1ObjectModel_1_1Constraint.html", null ],
-          [ "Expression", "classAntares_1_1Solver_1_1ObjectModel_1_1Expression.html", null ],
-          [ "Library", "classAntares_1_1Solver_1_1ObjectModel_1_1Library.html", null ],
-          [ "LibraryBuilder", "classAntares_1_1Solver_1_1ObjectModel_1_1LibraryBuilder.html", "classAntares_1_1Solver_1_1ObjectModel_1_1LibraryBuilder" ],
-          [ "Model", "classAntares_1_1Solver_1_1ObjectModel_1_1Model.html", null ],
-          [ "ModelBuilder", "classAntares_1_1Solver_1_1ObjectModel_1_1ModelBuilder.html", "classAntares_1_1Solver_1_1ObjectModel_1_1ModelBuilder" ],
-          [ "Parameter", "classAntares_1_1Solver_1_1ObjectModel_1_1Parameter.html", "classAntares_1_1Solver_1_1ObjectModel_1_1Parameter" ],
-          [ "Port", "classAntares_1_1Solver_1_1ObjectModel_1_1Port.html", null ],
-          [ "PortField", "classAntares_1_1Solver_1_1ObjectModel_1_1PortField.html", null ],
-          [ "PortFieldDefinition", "classAntares_1_1Solver_1_1ObjectModel_1_1PortFieldDefinition.html", null ],
-          [ "PortType", "classAntares_1_1Solver_1_1ObjectModel_1_1PortType.html", null ],
-          [ "Variable", "classAntares_1_1Solver_1_1ObjectModel_1_1Variable.html", null ]
-        ] ],
         [ "Optimization", null, [
           [ "CsrQuadraticProblem", "classAntares_1_1Solver_1_1Optimization_1_1CsrQuadraticProblem.html", null ],
           [ "OptimizationOptions", "structAntares_1_1Solver_1_1Optimization_1_1OptimizationOptions.html", "structAntares_1_1Solver_1_1Optimization_1_1OptimizationOptions" ],
@@ -844,6 +830,22 @@ var annotated_dup =
       [ "Statistics", null, [
         [ "LogsDumper", "classAntares_1_1Statistics_1_1LogsDumper.html", null ],
         [ "Updater", "classAntares_1_1Statistics_1_1Updater.html", null ]
+      ] ],
+      [ "Study", null, [
+        [ "SystemModel", null, [
+          [ "Constraint", "classAntares_1_1Study_1_1SystemModel_1_1Constraint.html", null ],
+          [ "Expression", "classAntares_1_1Study_1_1SystemModel_1_1Expression.html", null ],
+          [ "Library", "classAntares_1_1Study_1_1SystemModel_1_1Library.html", null ],
+          [ "LibraryBuilder", "classAntares_1_1Study_1_1SystemModel_1_1LibraryBuilder.html", "classAntares_1_1Study_1_1SystemModel_1_1LibraryBuilder" ],
+          [ "Model", "classAntares_1_1Study_1_1SystemModel_1_1Model.html", null ],
+          [ "ModelBuilder", "classAntares_1_1Study_1_1SystemModel_1_1ModelBuilder.html", "classAntares_1_1Study_1_1SystemModel_1_1ModelBuilder" ],
+          [ "Parameter", "classAntares_1_1Study_1_1SystemModel_1_1Parameter.html", "classAntares_1_1Study_1_1SystemModel_1_1Parameter" ],
+          [ "Port", "classAntares_1_1Study_1_1SystemModel_1_1Port.html", null ],
+          [ "PortField", "classAntares_1_1Study_1_1SystemModel_1_1PortField.html", null ],
+          [ "PortFieldDefinition", "classAntares_1_1Study_1_1SystemModel_1_1PortFieldDefinition.html", null ],
+          [ "PortType", "classAntares_1_1Study_1_1SystemModel_1_1PortType.html", null ],
+          [ "Variable", "classAntares_1_1Study_1_1SystemModel_1_1Variable.html", null ]
+        ] ]
       ] ],
       [ "Toolbox", null, [
         [ "Components", null, [

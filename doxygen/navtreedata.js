@@ -107,19 +107,19 @@ var NAVTREEINDEX =
 "classAntares_1_1Forms_1_1ApplWnd.html#af937605f1b728ad6c2669a106720d3a3",
 "classAntares_1_1Map_1_1Tool_1_1Tool.html",
 "classAntares_1_1Solver_1_1Modeler_1_1Api_1_1LinearProblemData.html",
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGeneration.html#a680fd0cefe3adafeecb4d18cf4a4ffc9",
-"classAntares_1_1Solver_1_1Variable_1_1IVariable.html#ab8da98683d1d6eaf465a2ef0b9a8f9b0",
+"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1FlowQuad.html#aba0f0aaaf2a4a69e3450e0a6a56a1e62",
+"classAntares_1_1Solver_1_1Variable_1_1IntermediateValues.html#abcd1d5a0a4bb086ab2072c9c59375eaa",
 "classAntares_1_1Toolbox_1_1Filter_1_1ColumnIndex.html",
 "classAntares_1_1Window_1_1FileSearchProvider.html#a5c01ac90ccb35ca315514b51c72f002b",
 "classAntares_1_1Window_1_1XCast.html#aa3063e35751157739b757124bbb9d917",
 "classMaxPumping.html#a6d8321813803c01b92d9b34095a0e7e0",
 "dbgrid_8h_source.html",
-"dir_ade70c9ce0816f814aedf32407cf483d.html",
-"functions_vars_d.html",
-"namespaceLocalPolicy.html#a1333fdac82eb04f896ccba5d66b48ad3",
-"structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html#a7d8a25ee0fb5862708223cac004f4acf",
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardProductionByDispatchablePlant.html#ae7e192a761b40dc071ce0b483bfeb955",
-"structENERGIES__ET__PUISSANCES__HYDRAULIQUES.html"
+"dir_adbf51f7aaa512017cff9970f4a03155.html",
+"functions_vars_c.html",
+"namespaceLocalPolicy.html",
+"structAntares_1_1Data_1_1Parameters_1_1IncludeOptions.html#a9e5852bd63d85ffeaab67df71656e190",
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardProductionByRenewablePlant.html#a3c6b2721c744e9eac116a64bcbbfbed6",
+"structFictitiousLoadData.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
