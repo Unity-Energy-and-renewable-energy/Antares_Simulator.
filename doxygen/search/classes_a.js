@@ -53,10 +53,11 @@ var searchData=
   ['logfile_50',['LogFile',['../classAntares_1_1Component_1_1Datagrid_1_1Renderer_1_1LogFile.html',1,'Antares::Component::Datagrid::Renderer']]],
   ['logfilenameinfo_51',['LogFilenameInfo',['../classAntares_1_1Window_1_1StudyLogs_1_1LogFilenameInfo.html',1,'Antares::Window::StudyLogs']]],
   ['logsdumper_52',['LogsDumper',['../classAntares_1_1Statistics_1_1LogsDumper.html',1,'Antares::Statistics']]],
-  ['lold_53',['LOLD',['../classAntares_1_1Solver_1_1Variable_1_1Economy_1_1LOLD.html',1,'Antares::Solver::Variable::Economy']]],
-  ['lolp_54',['LOLP',['../classAntares_1_1Solver_1_1Variable_1_1Economy_1_1LOLP.html',1,'Antares::Solver::Variable::Economy']]],
-  ['loopflow_55',['LoopFlow',['../classAntares_1_1Solver_1_1Variable_1_1Economy_1_1LoopFlow.html',1,'Antares::Solver::Variable::Economy']]],
-  ['loopflowusagebutton_56',['loopFlowUsageButton',['../classAntares_1_1Window_1_1loopFlowUsageButton.html',1,'Antares::Window']]],
-  ['lpsfromantares_57',['LpsFromAntares',['../classAntares_1_1Solver_1_1LpsFromAntares.html',1,'Antares::Solver']]],
-  ['ltstr_58',['ltstr',['../structAntares_1_1Window_1_1StudyLogs_1_1LogFilenameInfo_1_1ltstr.html',1,'Antares::Window::StudyLogs::LogFilenameInfo']]]
+  ['logsink_53',['LogSink',['../structAntares_1_1Solver_1_1Visitors_1_1LogSink.html',1,'Antares::Solver::Visitors']]],
+  ['lold_54',['LOLD',['../classAntares_1_1Solver_1_1Variable_1_1Economy_1_1LOLD.html',1,'Antares::Solver::Variable::Economy']]],
+  ['lolp_55',['LOLP',['../classAntares_1_1Solver_1_1Variable_1_1Economy_1_1LOLP.html',1,'Antares::Solver::Variable::Economy']]],
+  ['loopflow_56',['LoopFlow',['../classAntares_1_1Solver_1_1Variable_1_1Economy_1_1LoopFlow.html',1,'Antares::Solver::Variable::Economy']]],
+  ['loopflowusagebutton_57',['loopFlowUsageButton',['../classAntares_1_1Window_1_1loopFlowUsageButton.html',1,'Antares::Window']]],
+  ['lpsfromantares_58',['LpsFromAntares',['../classAntares_1_1Solver_1_1LpsFromAntares.html',1,'Antares::Solver']]],
+  ['ltstr_59',['ltstr',['../structAntares_1_1Window_1_1StudyLogs_1_1LogFilenameInfo_1_1ltstr.html',1,'Antares::Window::StudyLogs::LogFilenameInfo']]]
 ];

@@ -104,6 +104,7 @@ var NAVTREEINDEX0 =
 "NbUnitsOutageLessThanNbUnitsStopGroup_8h_source.html":[10,0,0,4,10,0,0,0,0,1,38],
 "NbUnitsOutageLessThanNbUnitsStop_8h_source.html":[10,0,0,4,10,0,0,0,0,1,37],
 "NegationNode_8h_source.html":[10,0,0,4,2,0,0,0,0,1,11],
+"NodeRegistry_8h_source.html":[10,0,0,4,2,0,0,0,0,5],
 "NodeVisitor_8h_source.html":[10,0,0,4,2,0,0,0,0,2,8],
 "Node_8h_source.html":[10,0,0,4,2,0,0,0,0,1,12],
 "NodesForwardDeclaration_8h_source.html":[10,0,0,4,2,0,0,0,0,1,13],
@@ -121,7 +122,7 @@ var NAVTREEINDEX0 =
 "PrintVisitor_8h_source.html":[10,0,0,4,2,0,0,0,0,2,11],
 "ProblemMatrixEssential_8h_source.html":[10,0,0,4,10,0,0,0,0,14],
 "QuadraticProblemMatrix_8h_source.html":[10,0,0,4,10,0,0,0,0,15],
-"Registry_8hxx_source.html":[10,0,0,4,2,0,0,0,0,5],
+"Registry_8hxx_source.html":[10,0,0,4,2,0,0,0,0,6],
 "RenewableTSNumberData_8h_source.html":[10,0,0,3,0,25,0,0,0,8,6],
 "STSbyGroup_8h_source.html":[10,0,0,4,15,0,0,0,0,2,32],
 "STStorageCashFlowByCluster_8h_source.html":[10,0,0,4,15,0,0,0,0,2,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classAntares_1_1ATSP.html":[9,0,0,23],
 "classAntares_1_1ATSP.html#a50b71aaaf1e9e05bc9ff32a7bad7cd66":[9,0,0,23,1],
 "classAntares_1_1ATSP.html#a6c9d2186673b1051d61a1b48f4db6875":[9,0,0,23,2],
-"classAntares_1_1ATSP.html#ae2c6aa315bdf1d171c0412aa09a071b8":[9,0,0,23,4],
-"classAntares_1_1ATSP.html#ae4f06fd4320ffe4cbc48ec1c166f106a":[9,0,0,23,0]
+"classAntares_1_1ATSP.html#ae2c6aa315bdf1d171c0412aa09a071b8":[9,0,0,23,4]
 };
