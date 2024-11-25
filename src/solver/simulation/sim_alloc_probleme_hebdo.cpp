@@ -519,8 +519,7 @@ void SIM_AllocateAreas(PROBLEME_HEBDO& problem,
             problem.ResultatsHoraires[k].Reserves[j].ValeursHorairesInternalExcessReserve.assign(
               nbReserves, 0.);
             problem.ResultatsHoraires[k].HydroUsage[j].reserveParticipationOfCluster.assign(
-              1, // For the moment only one hydro cluster per area
-              0.);
+              nbLTStorageReserveParticipations, 0.);
         }
         // Short term storage results
         const unsigned long nbShortTermStorage = study.areas.byIndex[k]->shortTermStorage.count();

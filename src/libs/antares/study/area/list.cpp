@@ -911,7 +911,6 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
         }
     }
 
-
     // Reserves
     {
         fs::path reserves = study.folderInput / "reserves" / area.id.to<std::string>() / "reserves.ini";
@@ -1041,7 +1040,10 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                                  study.usedByTheSolver);
 
         fs::path reservesHydro = study.folderInput / "hydro" / "common" / area.id.to<std::string>() / "reserves.ini";
-        area.hydro.loadReserveParticipations(area, reservesHydro);
+        if (study.parameters.unitCommitment.ucMode != UnitCommitmentMode::ucHeuristicFast)
+        {
+            area.hydro.loadReserveParticipations(area, reservesHydro);
+        }
     }
 
     // Wind
@@ -1075,7 +1077,10 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
             area.thermal.list.enableMustrunForEveryone();
 	    }
         fs::path reservesThermal = study.folderInput / "thermal" / "clusters" / area.id.to<std::string>() / "reserves.ini";
-        area.thermal.list.loadReserveParticipations(area, reservesThermal);
+        if (study.parameters.unitCommitment.ucMode != UnitCommitmentMode::ucHeuristicFast)
+        {
+            area.thermal.list.loadReserveParticipations(area, reservesThermal);
+        }
     }
 
     // Short term storage
@@ -1089,7 +1094,10 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
 
         fs::path reservesPath = study.folderInput / "st-storage" / "clusters"
             / area.id.to<std::string>() / "reserves.ini";
-        area.shortTermStorage.loadReserveParticipations(area, reservesPath);
+        if (study.parameters.unitCommitment.ucMode != UnitCommitmentMode::ucHeuristicFast)
+        {
+            area.shortTermStorage.loadReserveParticipations(area, reservesPath);
+        }
     }
 
     // Renewable cluster list

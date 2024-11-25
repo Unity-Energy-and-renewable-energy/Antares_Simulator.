@@ -103,16 +103,20 @@ void POutBounds::add(int pays, int cluster, int pdt)
             return counter;
         };
 
+        int nbTermsUp = countReservesParticipations(
+            data.areaReserves[pays].areaCapacityReservationsUp);
+        int nbTermsDown = countReservesParticipations(
+            data.areaReserves[pays].areaCapacityReservationsDown);
+
         int nbTermsToAdd
           = countReservesParticipations(
               data.areaReserves[pays].areaCapacityReservationsUp)
             + countReservesParticipations(
               data.areaReserves[pays].areaCapacityReservationsDown);
 
+        builder.data.NbTermesContraintesPourLesReserves
+            += (nbTermsUp + 1) * (nbTermsUp > 0) + (nbTermsDown + 1) * (nbTermsDown > 0);
 
-
-        builder.data.NbTermesContraintesPourLesReserves += 2 * (nbTermsToAdd + 1);
-
-        builder.data.nombreDeContraintes += 2;
+        builder.data.nombreDeContraintes += (nbTermsUp > 0) + (nbTermsDown > 0);
     }
 }
