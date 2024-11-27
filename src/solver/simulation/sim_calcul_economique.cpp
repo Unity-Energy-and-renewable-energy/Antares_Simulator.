@@ -122,6 +122,7 @@ static void importShortTermStorages(
             toInsert.initialLevel = st.properties.initialLevel;
             toInsert.initialLevelOptim = st.properties.initialLevelOptim;
             toInsert.name = st.properties.name;
+            toInsert.clusterGlobalIndex = clusterGlobalIndex;
 
             toInsert.series = st.series;
 
@@ -143,6 +144,7 @@ static void importShortTermStorages(
                     reserveParticipation.participationCost = cluster.reserveCost(reserveName);
                     reserveParticipation.clusterName = cluster.id;
                     reserveParticipation.clusterIdInArea = idx;
+                    reserveParticipation.clusterId = cluster.properties.clusterGlobalIndex;
                     reserveParticipation.globalIndexClusterParticipation
                         = globalSTStorageClusterParticipationIndex;
                     reserveParticipation.areaIndexClusterParticipation = areaClusterParticipationIndex;
@@ -168,6 +170,7 @@ static void importShortTermStorages(
                     reserveParticipation.participationCost = cluster.reserveCost(reserveName);
                     reserveParticipation.clusterName = cluster.id;
                     reserveParticipation.clusterIdInArea = idx;
+                    reserveParticipation.clusterId = cluster.properties.clusterGlobalIndex;
                     reserveParticipation.globalIndexClusterParticipation
                         = globalSTStorageClusterParticipationIndex;
                     reserveParticipation.areaIndexClusterParticipation = areaClusterParticipationIndex;
@@ -511,6 +514,7 @@ void SIM_InitialisationProblemeHebdo(Data::Study& study,
                           reserveName);
                         reserveParticipation.clusterName = cluster->name();
                         reserveParticipation.clusterIdInArea = cluster->index;
+                        reserveParticipation.clusterId = NombrePaliers + cluster->index;
                         reserveParticipation.globalIndexClusterParticipation
                           = globalThermalClusterParticipationIndex;
                         reserveParticipation.areaIndexClusterParticipation
@@ -535,6 +539,7 @@ void SIM_InitialisationProblemeHebdo(Data::Study& study,
                         reserveParticipation.participationCost = cluster->reserveCost(reserveName);
                         reserveParticipation.clusterName = cluster->name();
                         reserveParticipation.clusterIdInArea = cluster->index;
+                        reserveParticipation.clusterId = NombrePaliers + cluster->index;
                         reserveParticipation.globalIndexClusterParticipation
                             = globalThermalClusterParticipationIndex;
                         reserveParticipation.areaIndexClusterParticipation

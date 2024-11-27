@@ -86,7 +86,6 @@ struct CORRESPONDANCES_DES_VARIABLES
         std::vector<int> WithdrawalVariable;
         std::vector<int> LevelVariable;
     } SIM_ShortTermStorage;
-
 };
 
 struct CORRESPONDANCES_DES_CONTRAINTES
@@ -116,14 +115,18 @@ struct CORRESPONDANCES_DES_CONTRAINTES
 
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterMaxWithdrawParticipation;
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterMaxInjectionParticipation;
-    std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMax;
-    std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMin;
+    std::vector<int>
+      NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMax;
+    std::vector<int>
+      NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMin;
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterPumpingCapacityThreasholds;
 
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterMaxWithdrawParticipation;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterMaxInjectionParticipation;
-    std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMax;
-    std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMin;
+    std::vector<int>
+      NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMax;
+    std::vector<int>
+      NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMin;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds;
 
     std::vector<int> NumeroDeContrainteDesNiveauxPays;
@@ -218,9 +221,9 @@ using AREA_INPUT = std::vector<::ShortTermStorage::PROPERTIES>; // index is loca
 struct RESULTS
 {
     // Index is the number of the STS in the area
-    std::vector<double> level;      // MWh
-    std::vector<double> injection;  // MWh
-    std::vector<double> withdrawal; // MWh
+    std::vector<double> level;                         // MWh
+    std::vector<double> injection;                     // MWh
+    std::vector<double> withdrawal;                    // MWh
     std::vector<double> reserveParticipationOfCluster; // MWh
 };
 } // namespace ShortTermStorage
@@ -296,24 +299,25 @@ struct RESERVE_PARTICIPATION_BASE
     int areaIndexClusterParticipation;
     std::string clusterName;
     int clusterIdInArea;
+    int clusterId;
 
     virtual ~RESERVE_PARTICIPATION_BASE() = default;
 };
 
-struct RESERVE_PARTICIPATION_THERMAL : public RESERVE_PARTICIPATION_BASE
+struct RESERVE_PARTICIPATION_THERMAL: public RESERVE_PARTICIPATION_BASE
 {
     float maxPower;
     float maxPowerOff;
     float participationCostOff;
 };
 
-struct RESERVE_PARTICIPATION_STSTORAGE : public RESERVE_PARTICIPATION_BASE
+struct RESERVE_PARTICIPATION_STSTORAGE: public RESERVE_PARTICIPATION_BASE
 {
     float maxTurbining;
     float maxPumping;
 };
 
-struct RESERVE_PARTICIPATION_LTSTORAGE : public RESERVE_PARTICIPATION_BASE
+struct RESERVE_PARTICIPATION_LTSTORAGE: public RESERVE_PARTICIPATION_BASE
 {
     float maxTurbining;
     float maxPumping;
@@ -322,9 +326,10 @@ struct RESERVE_PARTICIPATION_LTSTORAGE : public RESERVE_PARTICIPATION_BASE
 struct CAPACITY_RESERVATION
 {
     std::map</*area_clusterId*/ int, RESERVE_PARTICIPATION_THERMAL> AllThermalReservesParticipation;
-    std::map</*area_clusterId*/ int, RESERVE_PARTICIPATION_STSTORAGE> AllSTStorageReservesParticipation;
+    std::map</*area_clusterId*/ int, RESERVE_PARTICIPATION_STSTORAGE>
+      AllSTStorageReservesParticipation;
     std::vector<RESERVE_PARTICIPATION_LTSTORAGE> AllLTStorageReservesParticipation;
-    std::vector<int> need;      //!< Vector size is number of hours in year
+    std::vector<int> need; //!< Vector size is number of hours in year
     float failureCost = 0;
     float spillageCost = 0;
     std::string reserveName;
@@ -508,7 +513,6 @@ public:
     }
 };
 
-
 struct RESERVES
 {
     std::vector<double> ValeursHorairesInternalUnsatisfied;
@@ -525,11 +529,9 @@ struct RESULTATS_HORAIRES
 
     std::vector<double> ValeursHorairesDeDefaillanceNegative;
 
-
-
     std::vector<double> CoutsMarginauxHoraires;
     std::vector<PRODUCTION_THERMIQUE_OPTIMALE> ProductionThermique; // index is pdtHebdo
-    std::vector<OPTIMAL_HYDRO_USAGE> HydroUsage; // index is pdtHebdo
+    std::vector<OPTIMAL_HYDRO_USAGE> HydroUsage;                    // index is pdtHebdo
     std::vector<RESERVES> Reserves;
 
     std::vector<::ShortTermStorage::RESULTS> ShortTermStorage;

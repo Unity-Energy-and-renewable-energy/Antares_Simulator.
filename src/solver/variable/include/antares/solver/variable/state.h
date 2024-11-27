@@ -71,14 +71,14 @@ struct ReserveParticipationPerGroupForYear
 {
     //! Reserve Participation for all thermal group types (nuclear / coal / ...) for the whole
     //! year per reserve
-    std::map<Data::ThermalDispatchableGroup, std::map<Data::ReserveName, double>> thermalGroupsReserveParticipation;
+    std::map<Data::ThermalDispatchableGroup, std::map<Data::ReserveName, double>>
+      thermalGroupsReserveParticipation;
 
     //! Reserve Participation for all thermal Short Term storages types (PSP / Battery / ...)
     //! for the whole year per reserve
     std::map<Data::ShortTermStorage::Group, std::map<Data::ReserveName, double>>
       shortTermStorageGroupsReserveParticipation;
 };
-
 
 class State
 {
@@ -107,14 +107,14 @@ public:
     */
     void initFromThermalClusterIndex(const unsigned int areaWideIndex);
 
-     /*!
-     ** \brief Initialize some variable according a short term storage cluster index
-     **
-     ** We assume here that the variables related to an area
-     ** are properly initialized.
-     **
-     ** \param areaWideIndex Index of the short term storage cluster for the current area
-     */
+    /*!
+    ** \brief Initialize some variable according a short term storage cluster index
+    **
+    ** We assume here that the variables related to an area
+    ** are properly initialized.
+    **
+    ** \param areaWideIndex Index of the short term storage cluster for the current area
+    */
     void initFromShortTermStorageClusterIndex(const unsigned int areaWideIndex);
 
     /*!
@@ -139,21 +139,8 @@ public:
     void yearEndBuildFromThermalClusterIndex(const unsigned int areaWideIndex);
 
     void calculateReserveParticipationCosts();
-    
+
     void initFromHydroStorage();
-
-    //std::map<Data::ReserveName, double> hydroReserveParticipationForYear[Variable::maxHoursInAYear];
-    //double hydroReserveParticipationCostForYear[Variable::maxHoursInAYear];
-
-    // void initFromHydroStorage();
-
-    // void processReserve(const CAPACITY_RESERVATION& reserve, bool isUpReserve);
-
-    //int getAreaIndexReserveParticipationFromReserveAndLTStorage(
-    //   Data::ReserveName reserveName,
-    //   Data::ClusterName clusterName);
-
-
 
 private:
     /*!
@@ -170,7 +157,6 @@ private:
       const std::array<uint, HOURS_PER_YEAR>& ON_min,
       const std::array<uint, HOURS_PER_YEAR>& ON_opt,
       const Data::ThermalCluster* currentCluster);
-
 
     std::array<uint, HOURS_PER_YEAR> computeEconomicallyOptimalNbClustersONforEachHour(
       const uint& maxDurationON,
@@ -216,8 +202,6 @@ public:
     //! The current Short Term Storage cluster
     Data::ShortTermStorage::STStorageCluster* STStorageCluster;
 
-
-
     //! The current renewable cluster
     Data::RenewableCluster* renewableCluster;
     //! The Scratchpad for the current area
@@ -246,7 +230,6 @@ public:
     std::vector<ReserveParticipationPerGroupForYear> reserveParticipationPerGroupForYear{
       HOURS_PER_YEAR};
 
-
     struct DetailledParticipation
     {
         double totalParticipation = 0;
@@ -257,7 +240,7 @@ public:
         {
             totalParticipation += participation;
         }
-        
+
         void addOffParticipation(double participation)
         {
             offUnitsParticipation += participation;
@@ -277,12 +260,12 @@ public:
 
     //! Reserve Participation for each STStorage cluster per reserve
     std::vector<std::map<Data::ClusterName, std::map<Data::ReserveName, double>>>
-        reserveParticipationPerSTStorageClusterForYear{ HOURS_PER_YEAR };
+      reserveParticipationPerSTStorageClusterForYear{HOURS_PER_YEAR};
 
     //! Reserve Participation for each LTStorage cluster per reserve
     std::vector<std::map<Data::ClusterName, std::map<Data::ReserveName, double>>>
-        reserveParticipationPerLTStorageClusterForYear{ HOURS_PER_YEAR };
-    
+      reserveParticipationPerLTStorageClusterForYear{HOURS_PER_YEAR};
+
     //! Reserve Participation cost for the whole year
     double reserveParticipationCostForYear[HOURS_PER_YEAR];
 
@@ -303,8 +286,7 @@ public:
     double STStorageClusterReserveParticipationCostForYear[HOURS_PER_YEAR];
 
     //! Reserves participation cost of the Long Term Storage  for the whole year
-    double LTStorageClusterReserveParticipationCostForYear[HOURS_PER_YEAR];  
-
+    double LTStorageClusterReserveParticipationCostForYear[HOURS_PER_YEAR];
 
     double renewableClusterProduction;
 

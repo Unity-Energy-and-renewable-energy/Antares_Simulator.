@@ -77,6 +77,9 @@ public:
     /// cluster name
     std::string name;
 
+    /// Cluster gloval index (across areas)
+    int clusterGlobalIndex;
+
     /// Enabled ?
     bool enabled = true;
 

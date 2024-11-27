@@ -22,13 +22,13 @@
 #define __SOLVER_VARIABLE_INFO_H__
 
 #include <cmath>
-#include "./economy/vCardReserveParticipationByDispatchableOnUnitsPlant.h"
-#include "./economy/vCardReserveParticipationByDispatchableOffUnitsPlant.h"
-#include "./economy/vCardReserveParticipationBySTStorage.h"
-#include "./economy/vCardReserveParticipationByLTStorage.h"
-#include "./economy/vCardReserveParticipationBySTStorageGroup.h"
-#include "./economy/vCardReserveParticipationByThermalGroup.h"
-#include "./economy/vCardReserveParticipationUnsuppliedSpilled.h"
+#include "economy/vCardReserveParticipationByDispatchableOnUnitsPlant.h"
+#include "economy/vCardReserveParticipationByDispatchableOffUnitsPlant.h"
+#include "economy/vCardReserveParticipationBySTStorage.h"
+#include "economy/vCardReserveParticipationByLTStorage.h"
+#include "economy/vCardReserveParticipationBySTStorageGroup.h"
+#include "economy/vCardReserveParticipationByThermalGroup.h"
+#include "economy/vCardReserveParticipationUnsuppliedSpilled.h"
 
 #include "antares/solver/variable/surveyresults.h"
 #include "antares/study/fwd.h"
