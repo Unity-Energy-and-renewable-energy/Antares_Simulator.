@@ -304,7 +304,7 @@ void Parameters::reset()
     readonly = false;
     synthesis = true;
     //Outputing the delta of the number of groups that are on inside each clusters
-    deltaClusterOutput = false;
+    exportRawOptimizationResults = false;
 
     // Hydro heuristic policy
     hydroHeuristicPolicy.hhPolicy = hhpAccommodateRuleCurves;
@@ -625,9 +625,9 @@ static bool SGDIntLoadFamily_Output(Parameters& d,
     {
         return value.to<bool>(d.synthesis);
     }
-    if (key == "delta-cluster")
+    if (key == "export-raw-optimization-results")
     {
-        return value.to<bool>(d.deltaClusterOutput);
+        return value.to<bool>(d.exportRawOptimizationResults);
     }
     if (key == "hydro-debug")
     {

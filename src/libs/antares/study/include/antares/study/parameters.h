@@ -336,7 +336,7 @@ public:
     //! \name Delta Cluster
     //@{
     //! Output the delta of groups inside clusters for each hour of each mode
-    bool deltaClusterOutput;
+    bool exportRawOptimizationResults;
     //@}
 
     /*!
