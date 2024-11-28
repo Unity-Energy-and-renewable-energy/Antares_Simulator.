@@ -85,6 +85,12 @@ public:
         }
         return -1; // Return -1 if value is not found
     }
+
+    // Function to return the size of the bimap
+    int size()
+    {
+        return key_to_value.size();
+    }
 };
 
 namespace Antares

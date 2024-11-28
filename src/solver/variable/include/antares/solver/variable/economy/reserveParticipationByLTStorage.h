@@ -70,7 +70,7 @@ public:
         pSize = 0;
         for (int areaIndex = 0; areaIndex < study->areas.size(); areaIndex++)
         {
-                pSize += study->areas[areaIndex]->allCapacityReservations.size();
+            pSize += study->areas[areaIndex]->hydro.reserveParticipationsCount();
         }
         if (pSize)
         {

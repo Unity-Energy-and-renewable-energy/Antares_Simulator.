@@ -279,8 +279,7 @@ void VariableNamer::NumberOfOffUnitsParticipatingToReserve(unsigned int variable
                                                            const std::string& clusterName,
                                                            const std::string& reserveName)
 {
-    SetThermalClusterReserveElementName(
-      variable, "NumberOfOffUnitsParticipatingToReserve", clusterName);
+    SetThermalClusterAndReserveElementName(variable, "NumberOfOffUnitsParticipatingToReserve", clusterName, reserveName);
 }
 
 void VariableNamer::NumberStoppingDispatchableUnits(unsigned int variable,

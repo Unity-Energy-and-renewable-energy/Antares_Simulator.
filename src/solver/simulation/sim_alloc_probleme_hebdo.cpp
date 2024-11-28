@@ -248,10 +248,10 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
             study.runtime.thermalPlantTotalCount * study.runtime.capacityReservationCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesDePuissanceMinDuPalier.assign(
-            study.runtime.thermalPlantTotalCount, 0);
+            study.runtime.thermalPlantTotalCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesDePuissanceMaxDuPalier.assign(
-            study.runtime.thermalPlantTotalCount, 0);
+            study.runtime.thermalPlantTotalCount, -1);
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesSTStorageClusterMaxWithdrawParticipation.assign(
@@ -536,8 +536,7 @@ void SIM_AllocateAreas(PROBLEME_HEBDO& problem,
               nbReserves, 0.);
             problem.ResultatsHoraires[k].Reserves[j].CoutsMarginauxHoraires.assign(nbReserves, 0.);
             problem.ResultatsHoraires[k].HydroUsage[j].reserveParticipationOfCluster.assign(
-              1, // For the moment only one hydro cluster per area
-              0.);
+              nbLTStorageReserveParticipations, 0.);
         }
         // Short term storage results
         const unsigned long nbShortTermStorage = study.areas.byIndex[k]->shortTermStorage.count();

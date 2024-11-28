@@ -913,9 +913,8 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
 
     // Reserves
     {
-        buffer.clear() << study.folderInput << SEP << "reserves" << SEP << area.id << SEP
-                       << "reserves.ini";
-        if (ini.open(buffer, false))
+        fs::path reserves = study.folderInput / "reserves" / area.id.to<std::string>() / "reserves.ini";
+        if (ini.open(reserves, false))
         {
             ini.each(
               [&](const IniFile::Section& section)
@@ -1109,9 +1108,11 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                                  studyVersion,
                                                  study.usedByTheSolver);
 
-        buffer.clear() << study.folderInput << SEP << "hydro" << SEP << "common" << SEP << area.id
-                       << SEP << "reserves.ini";
-        ret = area.hydro.loadReserveParticipations(area, buffer) && ret;
+        fs::path reservesHydro = study.folderInput / "hydro" / "common" / area.id.to<std::string>() / "reserves.ini";
+        if (study.parameters.unitCommitment.ucMode != UnitCommitmentMode::ucHeuristicFast)
+        {
+            area.hydro.loadReserveParticipations(area, reservesHydro);
+        }
     }
 
     // Wind
@@ -1143,10 +1144,12 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
         if (study.usedByTheSolver && study.parameters.mode == SimulationMode::Adequacy)
         {
             area.thermal.list.enableMustrunForEveryone();
-	}
-        buffer.clear() << study.folderInput << SEP << "thermal" << SEP << "clusters" << SEP
-                       << area.id << SEP << "reserves.ini";
-        ret = area.thermal.list.loadReserveParticipations(area, buffer) && ret;
+	    }
+        fs::path reservesThermal = study.folderInput / "thermal" / "clusters" / area.id.to<std::string>() / "reserves.ini";
+        if (study.parameters.unitCommitment.ucMode != UnitCommitmentMode::ucHeuristicFast)
+        {
+            area.thermal.list.loadReserveParticipations(area, reservesThermal);
+        }
     }
 
     // Short term storage
@@ -1160,7 +1163,10 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
 
         fs::path reservesPath = study.folderInput / "st-storage" / "clusters"
             / area.id.to<std::string>() / "reserves.ini";
-        ret = area.shortTermStorage.loadReserveParticipations(area, reservesPath) && ret;
+        if (study.parameters.unitCommitment.ucMode != UnitCommitmentMode::ucHeuristicFast)
+        {
+            area.shortTermStorage.loadReserveParticipations(area, reservesPath);
+        }
     }
 
     // Renewable cluster list
