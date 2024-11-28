@@ -166,6 +166,10 @@ set(RTESOLVER_OPT
 		constraints/LTPumpingCapacityThreasholds.cpp
 		include/antares/solver/optimisation/constraints/LTStockLevelReserveParticipation.h
 		constraints/LTStockLevelReserveParticipation.cpp
+		include/antares/solver/optimisation/constraints/STStockEnergyLevelReserveParticipation.h
+		constraints/STStockEnergyLevelReserveParticipation.cpp
+		include/antares/solver/optimisation/constraints/STStockGlobalEnergyLevelReserveParticipation.h
+		constraints/STStockGlobalEnergyLevelReserveParticipation.cpp
 		include/antares/solver/optimisation/ProblemMatrixEssential.h
 		ProblemMatrixEssential.cpp
 		include/antares/solver/optimisation/LinearProblemMatrixStartUpCosts.h

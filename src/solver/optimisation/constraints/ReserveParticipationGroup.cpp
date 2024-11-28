@@ -42,7 +42,8 @@
 #include "antares/solver/optimisation/constraints/LTPumpingCapacityThreasholds.h"
 #include "antares/solver/optimisation/constraints/LTStockLevelReserveParticipation.h"
 #include "antares/solver/optimisation/constraints/STStockLevelReserveParticipation.h"
-
+#include "antares/solver/optimisation/constraints/STStockEnergyLevelReserveParticipation.h"
+#include "antares/solver/optimisation/constraints/STStockGlobalEnergyLevelReserveParticipation.h"
                                
 
 ReserveParticipationGroup::ReserveParticipationGroup(PROBLEME_HEBDO* problemeHebdo,
@@ -80,6 +81,7 @@ void ReserveParticipationGroup::BuildConstraints()
         STPumpingMaxReserve STPumpingMaxReserve(builder_, data);
         STReserveUpParticipation STReserveUpParticipation(builder_, data);
         STReserveDownParticipation STReserveDownParticipation(builder_, data);
+        STStockEnergyLevelReserveParticipation STStockEnergyLevelReserveParticipation(builder_, data);
         LTTurbiningMaxReserve LTTurbiningMaxReserve(builder_, data);
         LTPumpingMaxReserve LTPumpingMaxReserve(builder_, data);
         LTReserveUpParticipation LTReserveUpParticipation(builder_, data);
@@ -188,6 +190,9 @@ void ReserveParticipationGroup::BuildConstraints()
                             // 15 (o)
                             STReserveUpParticipation
                               .add(pays, reserve, clusterReserveParticipation.clusterIdInArea, pdt);
+
+                            // 15 (h)
+                            STStockEnergyLevelReserveParticipation.add(pays, clusterReserveParticipation.clusterIdInArea, reserve, pdt, true);
                         }
                         reserve++;
                     }
@@ -214,6 +219,9 @@ void ReserveParticipationGroup::BuildConstraints()
                             // 15 (p)
                             STReserveDownParticipation
                               .add(pays, reserve, clusterReserveParticipation.clusterIdInArea, pdt);
+
+                            // 15 (h)
+                            STStockEnergyLevelReserveParticipation.add(pays, clusterReserveParticipation.clusterIdInArea, reserve, pdt, false);
                         }
                         reserve++;
                     }
@@ -286,6 +294,7 @@ void ReserveParticipationGroup::BuildConstraints()
         LTPumpingCapacityThreasholds LTPumpingCapacityThreasholds(builder_, data);
         LTStockLevelReserveParticipation LTStockLevelReserveParticipation(builder_, data);
         STStockLevelReserveParticipation STStockLevelReserveParticipation(builder_, data);
+        STStockGlobalEnergyLevelReserveParticipation STStockGlobalEnergyLevelReserveParticipation(builder_, data);
 
         for (int pdt = 0; pdt < problemeHebdo_->NombreDePasDeTempsPourUneOptimisation; pdt++)
         {
@@ -312,8 +321,10 @@ void ReserveParticipationGroup::BuildConstraints()
                     STTurbiningCapacityThreasholds.add(pays, cluster, pdt);
                     // 15 (n)
                     STPumpingCapacityThreasholds.add(pays, cluster, pdt);
-                    // 15 (r)
+                    // 15 (g)
                     STStockLevelReserveParticipation.add(pays, cluster, pdt);
+                    // 15 (i)
+                    STStockGlobalEnergyLevelReserveParticipation.add(pays, cluster, pdt);
                 }
 
                 // Long Term Storage Clusters
@@ -337,7 +348,6 @@ void ReserveParticipationGroup::BuildConstraints()
                     LTPumpingCapacityThreasholds.add(pays, 0, pdt);
                     // 15 (r)
                     LTStockLevelReserveParticipation.add(pays, 0, pdt);
-
                 }
             }
         }

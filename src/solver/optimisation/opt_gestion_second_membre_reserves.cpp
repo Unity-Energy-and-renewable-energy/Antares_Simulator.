@@ -165,6 +165,21 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                             SecondMembre[cnt] = reserveParticipation.maxPumping;
                             AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                         }
+
+                        cnt
+                          = CorrespondanceCntNativesCntOptim
+                              .NumeroDeContrainteDesContraintesSTStockEnergyLevelReserveParticipation
+                                [reserveParticipation.globalIndexClusterParticipation];
+                        if (cnt >= 0)
+                        {
+                            auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
+                            std::vector<double>& Xmin = problemeHebdo->ProblemeAResoudre->Xmin;
+                            int clusterGlobalIndex = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterIdInArea].clusterGlobalIndex;
+                            int varLevel = variableManager.ShortTermStorageLevel(clusterGlobalIndex, pdtJour);
+                            double level_min = Xmin[varLevel];
+                            SecondMembre[cnt] = -areaReserveUp.maxEnergyActivationRatio * areaReserveUp.maxActivationDuration * level_min;
+                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                        }
                     }
                 }
                 auto& areaReservesDown
@@ -190,6 +205,21 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                         if (cnt >= 0)
                         {
                             SecondMembre[cnt] = reserveParticipation.maxPumping;
+                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                        }
+
+                        cnt
+                          = CorrespondanceCntNativesCntOptim
+                              .NumeroDeContrainteDesContraintesSTStockEnergyLevelReserveParticipation
+                                [reserveParticipation.globalIndexClusterParticipation];
+                        if (cnt >= 0)
+                        {
+                            auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
+                            std::vector<double>& Xmax = problemeHebdo->ProblemeAResoudre->Xmax;
+                            int clusterGlobalIndex = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterIdInArea].clusterGlobalIndex;
+                            int varLevel = variableManager.ShortTermStorageLevel(clusterGlobalIndex, pdtJour);
+                            double level_max = Xmax[varLevel];
+                            SecondMembre[cnt] = areaReserveDown.maxEnergyActivationRatio * areaReserveDown.maxActivationDuration * level_max;
                             AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                         }
                     }
@@ -230,13 +260,19 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
 
+                    auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
+                    int varLevel = variableManager.ShortTermStorageLevel(globalClusterIdx, pdtJour);
+                    std::vector<double>& Xmax = problemeHebdo->ProblemeAResoudre->Xmax;
+                    double level_max = Xmax[varLevel];
+                    std::vector<double>& Xmin = problemeHebdo->ProblemeAResoudre->Xmin;
+                    double level_min = Xmin[varLevel];
+
                     cnt = CorrespondanceCntNativesCntOptim
                              .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown
                                [globalClusterIdx];
                        if (cnt >= 0)
                        {
-                           SecondMembre[cnt] = cluster.reservoirCapacity
-                                     * cluster.series->upperRuleCurve[pdtJour];
+                           SecondMembre[cnt] = level_max;
                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
 
@@ -245,10 +281,27 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                [globalClusterIdx];
                        if (cnt >= 0)
                        {
-                           SecondMembre[cnt] = cluster.reservoirCapacity
-                                     * cluster.series->lowerRuleCurve[pdtJour];
+                           SecondMembre[cnt] = -level_min;
                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
+
+                       cnt = CorrespondanceCntNativesCntOptim
+                              .NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationDown
+                                [globalClusterIdx];
+                        if (cnt >= 0)
+                        {
+                            SecondMembre[cnt] = areaReserves[pays].maxGlobalActivationDurationDown * areaReserves[pays].maxGlobalEnergyActivationRatioDown * level_max;
+                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                        }
+
+                        cnt = CorrespondanceCntNativesCntOptim
+                              .NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationUp
+                                [globalClusterIdx];
+                        if (cnt >= 0)
+                        {
+                            SecondMembre[cnt] = -areaReserves[pays].maxGlobalActivationDurationUp * areaReserves[pays].maxGlobalEnergyActivationRatioUp * level_min;
+                            AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                        }
                 }
             }
 

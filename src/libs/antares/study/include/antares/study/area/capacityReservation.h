@@ -33,10 +33,11 @@
 /// @brief Represents an area capacity reservation using it's name, it's failure cost and it's spillage cost
 struct CapacityReservation
 {
-    CapacityReservation() : failureCost(0), spillageCost(0), need(timeseriesNumbers), maxActivationRatio(1.), maxActivationHours(0) {}
+    CapacityReservation() : failureCost(0), spillageCost(0), need(timeseriesNumbers), maxActivationRatio(0.), maxEnergyActivationRatio(1.), maxActivationHours(1.) {}
     float failureCost;
     float spillageCost;
     float maxActivationRatio;
+    float maxEnergyActivationRatio;
     int maxActivationHours;
     Antares::Data::TimeSeries need;
 
@@ -47,6 +48,11 @@ private:
 /// @brief Stores all the Capacity reservations in two vectors for the up and down reserves
 struct AllCapacityReservations
 {
+    float maxGlobalEnergyActivationRatioUp = 1.;
+    float maxGlobalEnergyActivationRatioDown = 1.;
+    int maxGlobalActivationDurationUp = 1;
+    int maxGlobalActivationDurationDown = 1;
+
     std::map<Data::ReserveName, CapacityReservation> areaCapacityReservationsUp;
     std::map<Data::ReserveName, CapacityReservation> areaCapacityReservationsDown;
 

@@ -43,6 +43,11 @@ static void importCapacityReservations(AreaList& areas, PROBLEME_HEBDO& problem)
         auto area = areas[areaIndex];
         auto& areaReserves = problem.allReserves[areaIndex];
 
+        areaReserves.maxGlobalActivationDurationDown = area->allCapacityReservations.maxGlobalActivationDurationDown;
+        areaReserves.maxGlobalActivationDurationUp = area->allCapacityReservations.maxGlobalActivationDurationUp;
+        areaReserves.maxGlobalEnergyActivationRatioDown = area->allCapacityReservations.maxGlobalEnergyActivationRatioDown;
+        areaReserves.maxGlobalEnergyActivationRatioUp = area->allCapacityReservations.maxGlobalEnergyActivationRatioUp;
+
         for (auto const& [reserveName, reserveCapacity] :
              area->allCapacityReservations.areaCapacityReservationsUp)
         {
@@ -50,6 +55,7 @@ static void importCapacityReservations(AreaList& areas, PROBLEME_HEBDO& problem)
             areaCapacityReservationsUp.failureCost = reserveCapacity.failureCost;
             areaCapacityReservationsUp.spillageCost = reserveCapacity.spillageCost;
             areaCapacityReservationsUp.maxActivationRatio = reserveCapacity.maxActivationRatio;
+            areaCapacityReservationsUp.maxEnergyActivationRatio = reserveCapacity.maxEnergyActivationRatio;
             areaCapacityReservationsUp.maxActivationDuration = reserveCapacity.maxActivationHours;
             areaCapacityReservationsUp.reserveName = reserveName;
             areaCapacityReservationsUp.globalReserveIndex = globalReserveIndex;
@@ -76,6 +82,7 @@ static void importCapacityReservations(AreaList& areas, PROBLEME_HEBDO& problem)
             areaCapacityReservationsDown.spillageCost = reserveCapacity.spillageCost;
             areaCapacityReservationsDown.maxActivationRatio = reserveCapacity.maxActivationRatio;
             areaCapacityReservationsDown.maxActivationDuration = reserveCapacity.maxActivationHours;
+            areaCapacityReservationsDown.maxEnergyActivationRatio = reserveCapacity.maxEnergyActivationRatio;
             areaCapacityReservationsDown.reserveName = reserveName;
             areaCapacityReservationsDown.globalReserveIndex = globalReserveIndex;
             areaCapacityReservationsDown.areaReserveIndex = areaReserveIndex;

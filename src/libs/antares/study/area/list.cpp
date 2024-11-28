@@ -920,7 +920,49 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
             ini.each(
               [&](const IniFile::Section& section)
               {
-                  if (area.allCapacityReservations.contains(section.name))
+                  if (section.name == "globalparameters" && section.firstProperty)
+                  {
+                      for (auto* p = section.firstProperty; p; p = p->next)
+                      {
+                          CString<30, false> tmp;
+                          tmp = p->key;
+                          tmp.toLower();
+
+                          if (tmp == "max_activation_ratio_up")
+                          {
+                              if (!p->value.to<float>(area.allCapacityReservations.maxGlobalEnergyActivationRatioUp))
+                              {
+                                  logs.warning()
+                                    << area.name << ": invalid maximum energy activation ratio for UP reserves";
+                              }
+                          }
+                          else if (tmp == "max_activation_ratio_down")
+                          {
+                              if (!p->value.to<float>(area.allCapacityReservations.maxGlobalEnergyActivationRatioDown))
+                              {
+                                  logs.warning()
+                                    << area.name << ": invalid maximum energy activation ratio for DOWN reserves";
+                              }
+                          }
+                          else if (tmp == "max_activation_duration_up")
+                          {
+                              if (!p->value.to<int>(area.allCapacityReservations.maxGlobalActivationDurationUp))
+                              {
+                                  logs.warning()
+                                    << area.name << ": invalid maximum energy activation duration for UP reserves";
+                              }
+                          }
+                          else if (tmp == "max_activation_duration_down")
+                          {
+                              if (!p->value.to<int>(area.allCapacityReservations.maxGlobalActivationDurationDown))
+                              {
+                                  logs.warning()
+                                    << area.name << ": invalid maximum energy activation duration for DOWN reserves";
+                              }
+                          }
+                      }
+                  }
+                  else if (area.allCapacityReservations.contains(section.name))
                   {
                       logs.warning() << area.name << ": reserve name already exists for reserve "
                                      << section.name;
@@ -960,6 +1002,15 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                               {
                                   logs.warning()
                                     << area.name << ": invalid maximum activation ratio for reserve "
+                                    << section.name;
+                              }
+                          }
+                          else if (tmp == "max-energy-activation-ratio")
+                          {
+                              if (!p->value.to<float>(tmpCapacityReservation.maxEnergyActivationRatio))
+                              {
+                                  logs.warning()
+                                    << area.name << ": invalid maximum energy activation ratio for reserve "
                                     << section.name;
                               }
                           }

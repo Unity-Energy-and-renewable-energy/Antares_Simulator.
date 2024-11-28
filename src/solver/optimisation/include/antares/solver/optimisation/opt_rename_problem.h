@@ -232,6 +232,10 @@ public:
     void STPumpingCapacityThreasholdsDown(unsigned int constraint, const std::string& clusterName);
     void STStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName);
     void STStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName);
+    void STEnergyStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName, const std::string& reserveName);
+    void STGlobalEnergyStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName);
+    void STGlobalEnergyStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName);
+
 
     void LTReserveUpParticipation(unsigned int constraint,
                                   const std::string& clusterName,
