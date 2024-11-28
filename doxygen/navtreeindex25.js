@@ -1,6 +1,5 @@
 var NAVTREEINDEX25 =
 {
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMiscGenMinusRowPSP.html":[9,0,0,13,8,4,78],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMiscGenMinusRowPSP.html#a500884d4187ee64804dbf8835b13be8a":[9,0,0,13,8,4,78,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMiscGenMinusRowPSP.html#adaae28064d39ab12fab29342d81a36f6":[9,0,0,13,8,4,78,1],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardNbOfDispatchedUnits.html":[9,0,0,13,8,4,79],
@@ -249,5 +248,6 @@ var NAVTREEINDEX25 =
 "structAntares_1_1Window_1_1Inspector_1_1PStudyThematicTrimming.html":[9,0,0,19,1,72],
 "structAntares_1_1Window_1_1Inspector_1_1PStudyYearByYear.html":[9,0,0,19,1,73],
 "structAntares_1_1Window_1_1Inspector_1_1PStudyYears.html":[9,0,0,19,1,74],
-"structAntares_1_1Window_1_1Inspector_1_1Unique.html":[9,0,0,19,1,76]
+"structAntares_1_1Window_1_1Inspector_1_1Unique.html":[9,0,0,19,1,76],
+"structAntares_1_1Window_1_1SortColor.html":[9,0,0,19,50]
 };

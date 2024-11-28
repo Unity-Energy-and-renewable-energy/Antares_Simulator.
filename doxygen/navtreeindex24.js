@@ -107,7 +107,6 @@ var NAVTREEINDEX24 =
 "structAntares_1_1Solver_1_1Modeler_1_1Api_1_1FillContext.html":[9,0,0,13,2,0,0],
 "structAntares_1_1Solver_1_1Optimization_1_1OptimizationOptions.html":[9,0,0,13,5,1],
 "structAntares_1_1Solver_1_1Optimization_1_1OptimizationOptions.html#a1b3d66ae8211fc0a17e451bbfd09d854":[9,0,0,13,5,1,0],
-"structAntares_1_1Solver_1_1Optimization_1_1OptimizationOptions.html#aa53e538badc0a91056f4378579854d7a":[9,0,0,13,5,1,1],
 "structAntares_1_1Solver_1_1PortFieldHash.html":[9,0,0,13,28],
 "structAntares_1_1Solver_1_1Simulation_1_1compareHydroCostsNoises.html":[9,0,0,13,7,5],
 "structAntares_1_1Solver_1_1Simulation_1_1optRuntimeData.html":[9,0,0,13,7,21],
@@ -249,5 +248,6 @@ var NAVTREEINDEX24 =
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMARGE.html#a5cb4c597576b00691ce461250e7d7611":[9,0,0,13,8,4,76,1],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMARGE.html#aa2bc74a0fdda4c40ab632cbcc7e68126":[9,0,0,13,8,4,76,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMarginalCost.html":[9,0,0,13,8,4,77],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMarginalCost.html#aced4e0865cb18c815e20390897886ff5":[9,0,0,13,8,4,77,0]
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMarginalCost.html#aced4e0865cb18c815e20390897886ff5":[9,0,0,13,8,4,77,0],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardMiscGenMinusRowPSP.html":[9,0,0,13,8,4,78]
 };
