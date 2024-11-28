@@ -208,6 +208,39 @@ const char* SimulationModeToCString(SimulationMode mode)
     }
 }
 
+const char* CompatibilityHydroPmaxToCString(Parameters::Compatibility::HydroPmax mode)
+{
+    switch (mode)
+    {
+    case Parameters::Compatibility::HydroPmax::Daily:
+        return "daily";
+    case Parameters::Compatibility::HydroPmax::Hourly:
+        return "hourly";
+    default:
+        return "Unknown";
+    }
+}
+
+bool StringToCompatibilityHydroPmax(Parameters::Compatibility::HydroPmax& mode,
+                                    Yuni::CString<20, false> text)
+{
+    if (text.empty())
+    {
+        return false;
+    }
+    if (text == "daily")
+    {
+        mode = Parameters::Compatibility::HydroPmax::Daily;
+        return true;
+    }
+    if (text == "hourly")
+    {
+        mode = Parameters::Compatibility::HydroPmax::Hourly;
+        return true;
+    }
+    return false;
+}
+
 bool Parameters::economy() const
 {
     return mode == SimulationMode::Economy;
@@ -1966,6 +1999,10 @@ void Parameters::saveToINI(IniFile& ini) const
         {
             section->add(SeedToID((SeedIndex)sd), seed[sd]);
         }
+    }
+    {
+        auto* section = ini.addSection("compatibility");
+        section->add("hydro-pmax", CompatibilityHydroPmaxToCString(compatibility.hydroPmax));
     }
 }
 
