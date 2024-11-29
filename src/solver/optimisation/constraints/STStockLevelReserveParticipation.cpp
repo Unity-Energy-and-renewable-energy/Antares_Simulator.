@@ -46,7 +46,7 @@ void STStockLevelReserveParticipation::add(int pays, int cluster, int pdt)
 
         // 15 (g) (2)
         // Participation of up reserves requires a sufficient level of stock
-        // R_t - Sum(P_{res} * R_{min,res}) >= R_down
+        // -R_t + Sum(P_{res} * R_{min,res}) <= -R_down
         // R_t : stock level at time t 
         // P_{res} : power participation for reserve up res
         // R_{min,res} : max power participation ratio 
@@ -61,7 +61,7 @@ void STStockLevelReserveParticipation::add(int pays, int cluster, int pdt)
                   RESERVE_PARTICIPATION_STSTORAGE reserveParticipations = capacityReservation.AllSTStorageReservesParticipation[cluster];
                   builder.STStorageClusterReserveUpParticipation(
                                 reserveParticipations.globalIndexClusterParticipation,
-                                -capacityReservation.maxActivationRatio);
+                                capacityReservation.maxActivationRatio);
                 }
             }
             if (builder.NumberOfVariables() > 0)

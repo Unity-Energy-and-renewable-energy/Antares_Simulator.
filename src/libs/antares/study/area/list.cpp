@@ -927,7 +927,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                           tmp = p->key;
                           tmp.toLower();
 
-                          if (tmp == "max_activation_ratio_up")
+                          if (tmp == "max-energy-activation-ratio-up")
                           {
                               if (!p->value.to<float>(area.allCapacityReservations.maxGlobalEnergyActivationRatioUp))
                               {
@@ -935,7 +935,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                     << area.name << ": invalid maximum energy activation ratio for UP reserves";
                               }
                           }
-                          else if (tmp == "max_activation_ratio_down")
+                          else if (tmp == "max-energy-activation-ratio-down")
                           {
                               if (!p->value.to<float>(area.allCapacityReservations.maxGlobalEnergyActivationRatioDown))
                               {
@@ -943,7 +943,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                     << area.name << ": invalid maximum energy activation ratio for DOWN reserves";
                               }
                           }
-                          else if (tmp == "max_activation_duration_up")
+                          else if (tmp == "max-activation-duration-up")
                           {
                               if (!p->value.to<int>(area.allCapacityReservations.maxGlobalActivationDurationUp))
                               {
@@ -951,7 +951,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                     << area.name << ": invalid maximum energy activation duration for UP reserves";
                               }
                           }
-                          else if (tmp == "max_activation_duration_down")
+                          else if (tmp == "max-activation-duration-down")
                           {
                               if (!p->value.to<int>(area.allCapacityReservations.maxGlobalActivationDurationDown))
                               {
@@ -995,7 +995,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                                     << section.name;
                               }
                           }
-                          else if (tmp == "max-activation-ratio")
+                          else if (tmp == "max-power-activation-ratio")
                           {
                               if (!p->value.to<float>(tmpCapacityReservation.maxActivationRatio))
                               {

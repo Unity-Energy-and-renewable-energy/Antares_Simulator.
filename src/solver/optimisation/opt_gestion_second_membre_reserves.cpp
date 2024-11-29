@@ -172,11 +172,12 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                 [reserveParticipation.globalIndexClusterParticipation];
                         if (cnt >= 0)
                         {
-                            auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
-                            std::vector<double>& Xmin = problemeHebdo->ProblemeAResoudre->Xmin;
-                            int clusterGlobalIndex = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterIdInArea].clusterGlobalIndex;
-                            int varLevel = variableManager.ShortTermStorageLevel(clusterGlobalIndex, pdtJour);
-                            double level_min = Xmin[varLevel];
+                            int weekFirstHour = problemeHebdo->weekInTheYear * 168;
+                            auto& cluster = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterIdInArea];
+                            int hourInTheYear = weekFirstHour + pdtHebdo;
+                            double level_min = cluster.reservoirCapacity
+                                             * cluster.series->lowerRuleCurve[hourInTheYear];
+
                             SecondMembre[cnt] = -areaReserveUp.maxEnergyActivationRatio * areaReserveUp.maxActivationDuration * level_min;
                             AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                         }
@@ -214,11 +215,11 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                 [reserveParticipation.globalIndexClusterParticipation];
                         if (cnt >= 0)
                         {
-                            auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
-                            std::vector<double>& Xmax = problemeHebdo->ProblemeAResoudre->Xmax;
-                            int clusterGlobalIndex = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterIdInArea].clusterGlobalIndex;
-                            int varLevel = variableManager.ShortTermStorageLevel(clusterGlobalIndex, pdtJour);
-                            double level_max = Xmax[varLevel];
+                            int weekFirstHour = problemeHebdo->weekInTheYear * 168;
+                            auto& cluster = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterIdInArea];
+                            int hourInTheYear = weekFirstHour + pdtHebdo;
+                            double level_max = cluster.reservoirCapacity
+                                             * cluster.series->upperRuleCurve[hourInTheYear];
                             SecondMembre[cnt] = areaReserveDown.maxEnergyActivationRatio * areaReserveDown.maxActivationDuration * level_max;
                             AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                         }
@@ -260,12 +261,12 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
 
-                    auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
-                    int varLevel = variableManager.ShortTermStorageLevel(globalClusterIdx, pdtJour);
-                    std::vector<double>& Xmax = problemeHebdo->ProblemeAResoudre->Xmax;
-                    double level_max = Xmax[varLevel];
-                    std::vector<double>& Xmin = problemeHebdo->ProblemeAResoudre->Xmin;
-                    double level_min = Xmin[varLevel];
+                    int weekFirstHour = problemeHebdo->weekInTheYear * 168;
+                    int hourInTheYear = weekFirstHour + pdtHebdo;
+                    double level_max = cluster.reservoirCapacity
+                                     * cluster.series->upperRuleCurve[hourInTheYear];
+                    double level_min = cluster.reservoirCapacity
+                                     * cluster.series->lowerRuleCurve[hourInTheYear];
 
                     cnt = CorrespondanceCntNativesCntOptim
                              .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown

@@ -648,9 +648,9 @@ void ConstraintNamer::STStockLevelReserveParticipationDown(unsigned int constrai
     SetSTStorageClusterElementName(constraint, "STStockLevelReserveParticipationDown", clusterName);
 }
 
-void ConstraintNamer::STEnergyStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName, const std::string& reserveName)
+void ConstraintNamer::STEnergyStockLevelReserveParticipation(unsigned int constraint, const std::string& clusterName, const std::string& reserveName)
 {
-    SetSTStorageClusterAndReserveElementName(constraint, "STEnergyStockLevelReserveParticipationDown", clusterName, reserveName);
+    SetSTStorageClusterAndReserveElementName(constraint, "STEnergyStockLevelReserveParticipation", clusterName, reserveName);
 }
 
 void ConstraintNamer::STGlobalEnergyStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName)
