@@ -1086,6 +1086,19 @@ static bool SGDIntLoadFamily_SeedsMersenneTwister(Parameters& d,
     return false;
 }
 
+static bool SGDIntLoadFamily_Compatibility(Parameters& d,
+                                           const String& key,
+                                           const String& value,
+                                           const String&)
+{
+    if (key == "hydro-pmax")
+    {
+        return StringToCompatibilityHydroPmax(d.compatibility.hydroPmax, value);
+    }
+
+    return false;
+}
+
 static bool SGDIntLoadFamily_Legacy(Parameters& d,
                                     const String& key,
                                     const String& value,
