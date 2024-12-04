@@ -222,7 +222,7 @@ const char* CompatibilityHydroPmaxToCString(Parameters::Compatibility::HydroPmax
 }
 
 bool StringToCompatibilityHydroPmax(Parameters::Compatibility::HydroPmax& mode,
-                                    Yuni::CString<20, false> text)
+                                    const std::string& text)
 {
     if (text.empty())
     {
@@ -1216,7 +1216,8 @@ bool Parameters::loadFromINI(const IniFile& ini, const StudyVersion& version)
       {"advanced parameters", &SGDIntLoadFamily_AdvancedParameters},
       {"playlist", &SGDIntLoadFamily_Playlist},
       {"variables selection", &SGDIntLoadFamily_VariablesSelection},
-      {"seeds - mersenne twister", &SGDIntLoadFamily_SeedsMersenneTwister}};
+      {"seeds - mersenne twister", &SGDIntLoadFamily_SeedsMersenneTwister},
+      {"compatibility", &SGDIntLoadFamily_Compatibility}};
 
     Callback handleAllKeysInSection;
     // Foreach section on the ini file...
