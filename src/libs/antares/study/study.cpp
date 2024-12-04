@@ -24,8 +24,10 @@
 #include <cassert>
 #include <climits>
 #include <cmath> // For use of floor(...) and ceil(...)
+#include <ctime>
 #include <optional>
 #include <sstream> // std::ostringstream
+#include <thread>
 
 #include <yuni/yuni.h>
 #include <yuni/core/string.h>
@@ -104,12 +106,11 @@ Study::~Study()
 
 void Study::clear()
 {
-    FreeAndNil(scenarioRules);
+    scenarioRules.reset();
     FreeAndNil(uiinfo);
 
     // areas
     setsOfAreas.clear();
-    setsOfLinks.clear();
 
     preproLoadCorrelation.clear();
     preproSolarCorrelation.clear();
@@ -123,10 +124,10 @@ void Study::clear()
     // no folder
     ClearAndShrink(header.caption);
     ClearAndShrink(header.author);
-    ClearAndShrink(folder);
-    ClearAndShrink(folderInput);
-    ClearAndShrink(folderOutput);
-    ClearAndShrink(folderSettings);
+    folder.clear();
+    folderInput.clear();
+    folderOutput.clear();
+    folderSettings.clear();
     inputExtension.clear();
 }
 
@@ -149,9 +150,7 @@ void Study::createAsNew()
 
     // Sets
     setsOfAreas.defaultForAreas();
-    setsOfLinks.clear();
     setsOfAreas.markAsModified();
-    setsOfLinks.markAsModified();
 
     // Binding constraints
     bindingConstraints.clear();
@@ -188,12 +187,11 @@ void Study::reduceMemoryUsage()
     ClearAndShrink(bufferLoadingTS);
 }
 
+// TODO remove with GUI
 uint64_t Study::memoryUsage() const
 {
-    return folder.capacity()
-           // Folders paths
-           + folderInput.capacity() + folderOutput.capacity() + folderSettings.capacity()
-           + buffer.capacity() + dataBuffer.capacity()
+    return buffer.capacity() // Folders paths
+           + dataBuffer.capacity()
            + bufferLoadingTS.capacity()
            // Simulation
            + simulationComments.memoryUsage()
@@ -209,112 +207,32 @@ uint64_t Study::memoryUsage() const
            + (uiinfo ? uiinfo->memoryUsage() : 0);
 }
 
-std::map<std::string, uint> Study::getRawNumberCoresPerLevel()
+unsigned Study::getNumberOfCoresPerMode(unsigned nbLogicalCores, int ncMode)
 {
-    std::map<std::string, uint> table;
-
-    uint nbLogicalCores = Yuni::System::CPU::Count();
     if (!nbLogicalCores)
     {
         logs.fatal() << "Number of logical cores available is 0.";
+        return 0;
     }
 
-    switch (nbLogicalCores)
+    switch (ncMode)
     {
-    case 1:
-        table["min"] = 1;
-        table["low"] = 1;
-        table["med"] = 1;
-        table["high"] = 1;
-        table["max"] = 1;
-        break;
-    case 2:
-        table["min"] = 1;
-        table["low"] = 1;
-        table["med"] = 1;
-        table["high"] = 2;
-        table["max"] = 2;
-        break;
-    case 3:
-        table["min"] = 1;
-        table["low"] = 2;
-        table["med"] = 2;
-        table["high"] = 2;
-        table["max"] = 3;
-        break;
-    case 4:
-        table["min"] = 1;
-        table["low"] = 2;
-        table["med"] = 2;
-        table["high"] = 3;
-        table["max"] = 4;
-        break;
-    case 5:
-        table["min"] = 1;
-        table["low"] = 2;
-        table["med"] = 3;
-        table["high"] = 4;
-        table["max"] = 5;
-        break;
-    case 6:
-        table["min"] = 1;
-        table["low"] = 2;
-        table["med"] = 3;
-        table["high"] = 4;
-        table["max"] = 6;
-        break;
-    case 7:
-        table["min"] = 1;
-        table["low"] = 2;
-        table["med"] = 3;
-        table["high"] = 5;
-        table["max"] = 7;
-        break;
-    case 8:
-        table["min"] = 1;
-        table["low"] = 2;
-        table["med"] = 4;
-        table["high"] = 6;
-        table["max"] = 8;
-        break;
-    case 9:
-        table["min"] = 1;
-        table["low"] = 3;
-        table["med"] = 5;
-        table["high"] = 7;
-        table["max"] = 8;
-        break;
-    case 10:
-        table["min"] = 1;
-        table["low"] = 3;
-        table["med"] = 5;
-        table["high"] = 8;
-        table["max"] = 9;
-        break;
-    case 11:
-        table["min"] = 1;
-        table["low"] = 3;
-        table["med"] = 6;
-        table["high"] = 8;
-        table["max"] = 10;
-        break;
-    case 12:
-        table["min"] = 1;
-        table["low"] = 3;
-        table["med"] = 6;
-        table["high"] = 9;
-        table["max"] = 11;
-        break;
+    case ncMin:
+        return 1;
+    case ncLow:
+        return std::ceil(nbLogicalCores / 4.);
+    case ncAvg:
+        return std::ceil(nbLogicalCores / 2.);
+    case ncHigh:
+        return std::ceil(3 * nbLogicalCores / 4.);
+    case ncMax:
+        return nbLogicalCores;
     default:
-        table["min"] = 1;
-        table["low"] = (uint)std::ceil(nbLogicalCores / 4.);
-        table["med"] = (uint)std::ceil(nbLogicalCores / 2.);
-        table["high"] = (uint)std::ceil(3 * nbLogicalCores / 4.);
-        table["max"] = nbLogicalCores - 1;
+        logs.fatal() << "Simulation cores level not correct : " << ncMode;
         break;
     }
 
-    return table;
+    return 0;
 }
 
 void Study::getNumberOfCores(const bool forceParallel, const uint nbYearsParallelForced)
@@ -325,33 +243,8 @@ void Study::getNumberOfCores(const bool forceParallel, const uint nbYearsParalle
             This number is limited by the smallest refresh span (if at least
             one type of time series is generated)
     */
-
-    std::map<std::string, uint> table = getRawNumberCoresPerLevel();
-
-    // Getting the number of parallel years based on the number of cores level.
-    switch (parameters.nbCores.ncMode)
-    {
-    case ncMin:
-        nbYearsParallelRaw = table["min"];
-        break;
-    case ncLow:
-        nbYearsParallelRaw = table["low"];
-        break;
-    case ncAvg:
-        nbYearsParallelRaw = table["med"];
-        break;
-    case ncHigh:
-        nbYearsParallelRaw = table["high"];
-        break;
-    case ncMax:
-        nbYearsParallelRaw = table["max"];
-        break;
-    default:
-        logs.fatal() << "Simulation cores level not correct : " << (int)parameters.nbCores.ncMode;
-        break;
-    }
-
-    maxNbYearsInParallel = nbYearsParallelRaw;
+    unsigned nbLogicalCores = std::thread::hardware_concurrency();
+    maxNbYearsInParallel = getNumberOfCoresPerMode(nbLogicalCores, parameters.nbCores.ncMode);
 
     // In case solver option '--force-parallel n' is used, previous computation is overridden.
     if (forceParallel)
@@ -560,11 +453,11 @@ static std::string getOutputSuffix(ResultFormat fmt)
     }
 }
 
-YString StudyCreateOutputPath(SimulationMode mode,
-                              ResultFormat fmt,
-                              const YString& outputRoot,
-                              const YString& label,
-                              int64_t startTime)
+fs::path StudyCreateOutputPath(SimulationMode mode,
+                               ResultFormat fmt,
+                               const fs::path& baseOutFolder,
+                               const std::string& label,
+                               const std::tm& startTime)
 {
     if (fmt == ResultFormat::inMemory)
     {
@@ -573,12 +466,9 @@ YString StudyCreateOutputPath(SimulationMode mode,
 
     auto suffix = getOutputSuffix(fmt);
 
-    YString folderOutput;
-
     // Determining the new output folder
     // This folder is composed by the name of the simulation + the current date/time
-    folderOutput.clear() << outputRoot << SEP;
-    DateTime::TimestampToString(folderOutput, "%Y%m%d-%H%M", startTime, false);
+    fs::path folderOutput = baseOutFolder / formatTime(startTime, "%Y%m%d-%H%M");
 
     switch (mode)
     {
@@ -598,10 +488,10 @@ YString StudyCreateOutputPath(SimulationMode mode,
     // Folder output
     if (not label.empty())
     {
-        folderOutput << '-' << transformNameIntoID(label);
+        folderOutput += '-' + transformNameIntoID(label);
     }
 
-    std::string outpath = folderOutput + suffix;
+    std::string outpath = folderOutput.string() + suffix;
     // avoid creating the same output twice
     if (fs::exists(outpath))
     {
@@ -610,30 +500,27 @@ YString StudyCreateOutputPath(SimulationMode mode,
         do
         {
             ++index;
-            newpath = folderOutput + '-' + std::to_string(index) + suffix;
+            newpath = folderOutput.string() + '-' + std::to_string(index) + suffix;
         } while (fs::exists(newpath) and index < 2000);
 
-        folderOutput << '-' << index;
+        folderOutput += '-' + std::to_string(index);
     }
     return folderOutput;
 }
 
 void Study::prepareOutput()
 {
-    pStartTime = DateTime::Now();
-
     if (parameters.noOutput || !usedByTheSolver)
     {
         return;
     }
-
-    buffer.clear() << folder << SEP << "output";
+    fs::path baseFolderOutput = folder / "output";
 
     folderOutput = StudyCreateOutputPath(parameters.mode,
                                          parameters.resultFormat,
-                                         buffer,
+                                         baseFolderOutput,
                                          simulationComments.name,
-                                         pStartTime);
+                                         getCurrentTime());
 
     logs.info() << "  Output folder : " << folderOutput;
 }
@@ -1086,34 +973,22 @@ bool Study::clusterRename(Cluster* cluster, ClusterName newName)
 
 void Study::destroyAllLoadTSGeneratorData()
 {
-    areas.each([](Data::Area& area) { FreeAndNil(area.load.prepro); });
+    areas.each([](Data::Area& area) { area.load.prepro.reset(); });
 }
 
 void Study::destroyAllSolarTSGeneratorData()
 {
-    areas.each([](Data::Area& area) { FreeAndNil(area.solar.prepro); });
+    areas.each([](Data::Area& area) { area.solar.prepro.reset(); });
 }
 
 void Study::destroyAllHydroTSGeneratorData()
 {
-    areas.each([](Data::Area& area) { FreeAndNil(area.hydro.prepro); });
+    areas.each([](Data::Area& area) { area.hydro.prepro.reset(); });
 }
 
 void Study::destroyAllWindTSGeneratorData()
 {
-    areas.each([](Data::Area& area) { FreeAndNil(area.wind.prepro); });
-}
-
-void Study::destroyAllThermalTSGeneratorData()
-{
-    areas.each(
-      [](const Data::Area& area)
-      {
-          for (const auto& cluster: area.thermal.list.each_enabled_and_not_mustrun())
-          {
-              FreeAndNil(cluster->prepro);
-          }
-      });
+    areas.each([](Data::Area& area) { area.wind.prepro.reset(); });
 }
 
 void Study::ensureDataAreLoadedForAllBindingConstraints()
@@ -1287,7 +1162,6 @@ bool Study::forceReload(bool reload) const
     ret = preproHydroCorrelation.forceReload(reload) and ret;
 
     ret = setsOfAreas.forceReload(reload) and ret;
-    ret = setsOfLinks.forceReload(reload) and ret;
     return ret;
 }
 
@@ -1303,15 +1177,14 @@ void Study::markAsModified() const
     bindingConstraints.markAsModified();
 
     setsOfAreas.markAsModified();
-    setsOfLinks.markAsModified();
 }
 
-void Study::relocate(const std::string& newFolder)
+void Study::relocate(const fs::path& newFolder)
 {
     folder = newFolder;
-    folderInput.clear() << newFolder << SEP << "input";
-    folderOutput.clear() << newFolder << SEP << "output";
-    folderSettings.clear() << newFolder << SEP << "settings";
+    folderInput = newFolder / "input";
+    folderOutput = newFolder / "output";
+    folderSettings = newFolder / "settings";
 }
 
 void Study::resizeAllTimeseriesNumbers(uint n)
@@ -1321,6 +1194,7 @@ void Study::resizeAllTimeseriesNumbers(uint n)
     bindingConstraintsGroups.resizeAllTimeseriesNumbers(n);
 }
 
+// TODO VP: Could be removed with the GUI
 bool Study::checkForFilenameLimits(bool output, const String& chfolder) const
 {
     enum

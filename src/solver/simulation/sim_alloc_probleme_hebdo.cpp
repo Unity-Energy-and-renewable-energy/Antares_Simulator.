@@ -20,11 +20,8 @@
 */
 #include "antares/solver/simulation/sim_alloc_probleme_hebdo.h"
 
-#include <yuni/yuni.h>
-
 #include <antares/study/study.h>
 #include "antares/solver/optimisation/opt_structure_probleme_a_resoudre.h"
-#include "antares/solver/simulation/sim_extern_variables_globales.h"
 #include "antares/solver/simulation/sim_structure_donnees.h"
 #include "antares/solver/simulation/sim_structure_probleme_economique.h"
 #include "antares/study/simulation.h"
@@ -86,7 +83,6 @@ void SIM_AllocationProblemeDonneesGenerales(PROBLEME_HEBDO& problem,
 
     problem.CoutDeDefaillancePositive.assign(nbPays, 0);
     problem.CoutDeDefaillanceNegative.assign(nbPays, 0);
-    problem.CoutDeDefaillanceEnReserve.assign(nbPays, 0);
 
     problem.NumeroDeContrainteEnergieHydraulique.assign(nbPays, 0);
     problem.NumeroDeContrainteMinEnergieHydraulique.assign(nbPays, 0);
@@ -252,10 +248,10 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
             study.runtime.thermalPlantTotalCount * study.runtime.capacityReservationCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesDePuissanceMinDuPalier.assign(
-            study.runtime.thermalPlantTotalCount, 0);
+            study.runtime.thermalPlantTotalCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesDePuissanceMaxDuPalier.assign(
-            study.runtime.thermalPlantTotalCount, 0);
+            study.runtime.thermalPlantTotalCount, -1);
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesSTStorageClusterMaxWithdrawParticipation.assign(
@@ -451,12 +447,12 @@ void SIM_AllocateAreas(PROBLEME_HEBDO& problem,
 
         problem.ResultatsHoraires[k].ValeursHorairesDeDefaillancePositive.assign(NombreDePasDeTemps,
                                                                                  0.);
+        problem.ResultatsHoraires[k]
+          .ValeursHorairesDeDefaillancePositiveCSR.assign(NombreDePasDeTemps, 0.);
         problem.ResultatsHoraires[k].ValeursHorairesDENS.assign(NombreDePasDeTemps,
                                                                 0.); // adq patch
         problem.ResultatsHoraires[k].ValeursHorairesLmrViolations.assign(NombreDePasDeTemps,
                                                                          0); // adq patch
-        problem.ResultatsHoraires[k].ValeursHorairesSpilledEnergyAfterCSR.assign(NombreDePasDeTemps,
-                                                                                 0.); // adq patch
         problem.ResultatsHoraires[k].ValeursHorairesDtgMrgCsr.assign(NombreDePasDeTemps,
                                                                      0.); // adq patch
 
@@ -523,8 +519,7 @@ void SIM_AllocateAreas(PROBLEME_HEBDO& problem,
             problem.ResultatsHoraires[k].Reserves[j].ValeursHorairesInternalExcessReserve.assign(
               nbReserves, 0.);
             problem.ResultatsHoraires[k].HydroUsage[j].reserveParticipationOfCluster.assign(
-              1, // For the moment only one hydro cluster per area
-              0.);
+              nbLTStorageReserveParticipations, 0.);
         }
         // Short term storage results
         const unsigned long nbShortTermStorage = study.areas.byIndex[k]->shortTermStorage.count();

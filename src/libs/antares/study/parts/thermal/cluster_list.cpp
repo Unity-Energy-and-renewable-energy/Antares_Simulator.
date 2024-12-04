@@ -1,23 +1,23 @@
 /*
-** Copyright 2007-2024, RTE (https://www.rte-france.com)
-** See AUTHORS.txt
-** SPDX-License-Identifier: MPL-2.0
-** This file is part of Antares-Simulator,
-** Adequacy and Performance assessment for interconnected energy networks.
-**
-** Antares_Simulator is free software: you can redistribute it and/or modify
-** it under the terms of the Mozilla Public Licence 2.0 as published by
-** the Mozilla Foundation, either version 2 of the License, or
-** (at your option) any later version.
-**
-** Antares_Simulator is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-** Mozilla Public Licence 2.0 for more details.
-**
-** You should have received a copy of the Mozilla Public Licence 2.0
-** along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
-*/
+ * Copyright 2007-2024, RTE (https://www.rte-france.com)
+ * See AUTHORS.txt
+ * SPDX-License-Identifier: MPL-2.0
+ * This file is part of Antares-Simulator,
+ * Adequacy and Performance assessment for interconnected energy networks.
+ *
+ * Antares_Simulator is free software: you can redistribute it and/or modify
+ * it under the terms of the Mozilla Public Licence 2.0 as published by
+ * the Mozilla Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Antares_Simulator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * Mozilla Public Licence 2.0 for more details.
+ *
+ * You should have received a copy of the Mozilla Public Licence 2.0
+ * along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
+ */
 
 #include "antares/study/parts/thermal/cluster_list.h"
 
@@ -45,6 +45,8 @@ namespace Antares
 namespace Data
 {
 using namespace Yuni;
+
+namespace fs = std::filesystem;
 
 ThermalClusterList::ThermalClusterList()
 {
@@ -119,7 +121,7 @@ unsigned int ThermalClusterList::capacityReservationsCount() const
     return uniqueReservations.size();
 }
 
-bool ThermalClusterList::loadFromFolder(Study& study, const AnyString& folder, Area* area)
+bool ThermalClusterList::loadFromFolder(Study& study, const fs::path& folder, Area* area)
 {
     assert(area && "A parent area is required");
 
@@ -127,9 +129,8 @@ bool ThermalClusterList::loadFromFolder(Study& study, const AnyString& folder, A
     logs.info() << "Loading thermal configuration for the area " << area->name;
 
     // Open the ini file
-    study.buffer.clear() << folder << SEP << "list.ini";
     IniFile ini;
-    if (!ini.open(study.buffer))
+    if (!ini.open(folder / "list.ini"))
     {
         return false;
     }
@@ -140,8 +141,6 @@ bool ThermalClusterList::loadFromFolder(Study& study, const AnyString& folder, A
     {
         return ret;
     }
-
-    String modulationFile;
 
     for (auto* section = ini.firstSection; section; section = section->next)
     {
@@ -175,16 +174,15 @@ bool ThermalClusterList::loadFromFolder(Study& study, const AnyString& folder, A
         // allow startup cost between [-5 000 000 ;-5 000 000] (was [-50 000;50 000])
 
         // Modulation
-        modulationFile.clear() << folder << SEP << ".." << SEP << ".." << SEP << "prepro" << SEP
-                               << cluster->parentArea->id << SEP << cluster->id() << SEP
-                               << "modulation." << study.inputExtension;
+        auto modulationFile = folder.parent_path().parent_path() / "prepro"
+                              / cluster->parentArea->id.c_str() / cluster->id() / "modulation.txt";
 
         enum
         {
             options = Matrix<>::optFixedSize,
         };
 
-        ret = cluster->modulation.loadFromCSVFile(modulationFile,
+        ret = cluster->modulation.loadFromCSVFile(modulationFile.string(),
                                                   thermalModulationMax,
                                                   HOURS_PER_YEAR,
                                                   options)
@@ -413,7 +411,7 @@ void ThermalClusterList::ensureDataPrepro()
     {
         if (!c->prepro)
         {
-            c->prepro = new PreproAvailability(c->id(), c->unitCount);
+            c->prepro = std::make_unique<PreproAvailability>(c->id(), c->unitCount);
         }
     }
 }
@@ -605,17 +603,16 @@ bool ThermalClusterList::saveEconomicCosts(const AnyString& folder) const
     return ret;
 }
 
-bool ThermalClusterList::loadPreproFromFolder(Study& study, const AnyString& folder)
+bool ThermalClusterList::loadPreproFromFolder(Study& study, const fs::path& folder)
 {
-    Clob buffer;
     auto hasPrepro = [](auto c) { return (bool)c->prepro; };
 
-    auto loadPrepro = [&buffer, &folder, &study](auto& c)
+    auto loadPrepro = [&folder, &study](auto& c)
     {
         assert(c->parentArea && "cluster: invalid parent area");
-        buffer.clear() << folder << SEP << c->parentArea->id << SEP << c->id();
 
-        return c->prepro->loadFromFolder(study, buffer);
+        auto preproPath = folder / c->parentArea->id.c_str() / c->id();
+        return c->prepro->loadFromFolder(study, preproPath);
     };
 
     return std::ranges::all_of(allClusters_ | std::views::filter(hasPrepro), loadPrepro);
@@ -649,17 +646,15 @@ bool ThermalClusterList::validatePrepro(const Study& study)
                                });
 }
 
-bool ThermalClusterList::loadEconomicCosts(Study& study, const AnyString& folder)
+bool ThermalClusterList::loadEconomicCosts(Study& study, const fs::path& folder)
 {
     return std::ranges::all_of(allClusters_,
                                [&study, folder](const auto& c)
                                {
                                    assert(c->parentArea && "cluster: invalid parent area");
-                                   Clob buffer;
-                                   buffer.clear()
-                                     << folder << SEP << c->parentArea->id << SEP << c->id();
+                                   auto filePath = folder / c->parentArea->id.c_str() / c->id();
 
-                                   bool result = c->ecoInput.loadFromFolder(study, buffer);
+                                   bool result = c->ecoInput.loadFromFolder(study, filePath);
                                    c->ComputeCostTimeSeries();
                                    return result;
                                });

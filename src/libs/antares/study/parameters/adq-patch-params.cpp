@@ -27,42 +27,6 @@
 namespace Antares::Data::AdequacyPatch
 {
 
-// -------------------
-// Local matching
-// -------------------
-
-void LocalMatching::reset()
-{
-    setToZeroOutsideInsideLinks = true;
-    setToZeroOutsideOutsideLinks = true;
-}
-
-bool LocalMatching::updateFromKeyValue(const Yuni::String& key, const Yuni::String& value)
-{
-    if (key == "set-to-null-ntc-from-physical-out-to-physical-in-for-first-step")
-    {
-        return value.to<bool>(setToZeroOutsideInsideLinks);
-    }
-    if (key == "set-to-null-ntc-between-physical-out-for-first-step")
-    {
-        return value.to<bool>(setToZeroOutsideOutsideLinks);
-    }
-    if (key == "enable-first-step")
-    {
-        return value.to<bool>(enabled);
-    }
-    return false;
-}
-
-void LocalMatching::addProperties(IniFile::Section* section) const
-{
-    section->add("set-to-null-ntc-from-physical-out-to-physical-in-for-first-step",
-                 setToZeroOutsideInsideLinks);
-    section->add("set-to-null-ntc-between-physical-out-for-first-step",
-                 setToZeroOutsideOutsideLinks);
-    section->add("enable-first-step", enabled);
-}
-
 // -----------------------
 // Curtailment sharing
 // -----------------------
@@ -71,7 +35,6 @@ void CurtailmentSharing::reset()
     priceTakingOrder = AdqPatchPTO::isDens;
     includeHurdleCost = false;
     checkCsrCostFunction = false;
-    recomputeDTGMRG = false;
     resetThresholds();
 }
 
@@ -122,11 +85,6 @@ bool CurtailmentSharing::updateFromKeyValue(const Yuni::String& key, const Yuni:
     {
         return value.to<bool>(checkCsrCostFunction);
     }
-    if (key == "recompute-dtg-mrg")
-    {
-        return value.to<bool>(recomputeDTGMRG);
-    }
-
     // Thresholds
     if (key == "threshold-initiate-curtailment-sharing-rule")
     {
@@ -162,7 +120,6 @@ void CurtailmentSharing::addProperties(IniFile::Section* section) const
     section->add("price-taking-order", PriceTakingOrderToString(priceTakingOrder));
     section->add("include-hurdle-cost-csr", includeHurdleCost);
     section->add("check-csr-cost-function", checkCsrCostFunction);
-    section->add("recompute-dtg-mrg", recomputeDTGMRG);
 
     // Thresholds
     section->add("threshold-initiate-curtailment-sharing-rule", thresholdRun);
@@ -177,8 +134,8 @@ void AdqPatchParams::reset()
 {
     enabled = false;
 
-    localMatching.reset();
     curtailmentSharing.reset();
+    setToZeroOutsideInsideLinks = true;
 }
 
 void AdqPatchParams::addExcludedVariables(std::vector<std::string>& out) const
@@ -187,14 +144,8 @@ void AdqPatchParams::addExcludedVariables(std::vector<std::string>& out) const
     {
         out.emplace_back("DENS");
         out.emplace_back("LMR VIOL.");
-        out.emplace_back("SPIL. ENRG. CSR");
+        out.emplace_back("UNSP. ENRG CSR");
         out.emplace_back("DTG MRG CSR");
-    }
-
-    // If the adequacy patch is enabled, but the LMR is disabled, the DENS variable shouldn't exist
-    if (enabled && !localMatching.enabled)
-    {
-        out.emplace_back("DENS");
     }
 }
 
@@ -204,17 +155,20 @@ bool AdqPatchParams::updateFromKeyValue(const Yuni::String& key, const Yuni::Str
     {
         return value.to<bool>(enabled);
     }
-
-    return curtailmentSharing.updateFromKeyValue(key, value)
-           != localMatching.updateFromKeyValue(key, value); // XOR
+    if (key == "set-to-null-ntc-from-physical-out-to-physical-in-for-first-step")
+    {
+        return value.to<bool>(setToZeroOutsideInsideLinks);
+    }
+    return curtailmentSharing.updateFromKeyValue(key, value);
 }
 
 void AdqPatchParams::saveToINI(IniFile& ini) const
 {
     auto* section = ini.addSection("adequacy patch");
     section->add("include-adq-patch", enabled);
+    section->add("set-to-null-ntc-from-physical-out-to-physical-in-for-first-step",
+                 setToZeroOutsideInsideLinks);
 
-    localMatching.addProperties(section);
     curtailmentSharing.addProperties(section);
 }
 

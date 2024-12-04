@@ -1,23 +1,23 @@
 /*
-** Copyright 2007-2024, RTE (https://www.rte-france.com)
-** See AUTHORS.txt
-** SPDX-License-Identifier: MPL-2.0
-** This file is part of Antares-Simulator,
-** Adequacy and Performance assessment for interconnected energy networks.
-**
-** Antares_Simulator is free software: you can redistribute it and/or modify
-** it under the terms of the Mozilla Public Licence 2.0 as published by
-** the Mozilla Foundation, either version 2 of the License, or
-** (at your option) any later version.
-**
-** Antares_Simulator is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-** Mozilla Public Licence 2.0 for more details.
-**
-** You should have received a copy of the Mozilla Public Licence 2.0
-** along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
-*/
+ * Copyright 2007-2024, RTE (https://www.rte-france.com)
+ * See AUTHORS.txt
+ * SPDX-License-Identifier: MPL-2.0
+ * This file is part of Antares-Simulator,
+ * Adequacy and Performance assessment for interconnected energy networks.
+ *
+ * Antares_Simulator is free software: you can redistribute it and/or modify
+ * it under the terms of the Mozilla Public Licence 2.0 as published by
+ * the Mozilla Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Antares_Simulator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * Mozilla Public Licence 2.0 for more details.
+ *
+ * You should have received a copy of the Mozilla Public Licence 2.0
+ * along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
+ */
 #ifndef __ANTARES_LIBS_STUDY_STUDY_H__
 #define __ANTARES_LIBS_STUDY_STUDY_H__
 
@@ -66,25 +66,8 @@ public:
     //! List of studies
     using List = std::list<Ptr>;
 
-    //! A single set of areas
-    // CompareAreaName : to control the order of areas in a set of areas. This order can have an
-    // effect, even if tiny, on the results of aggregations.
-    using SingleSetOfAreas = std::set<Area*, CompareAreaName>;
-
     //! Multiple sets of areas
-    using SetsOfAreas = Antares::Data::Sets<SingleSetOfAreas>;
-
-    //! A single set of links
-    using SingleSetOfLinks = std::set<AreaLink*>;
-    //! Multiple sets of links
-    using SetsOfLinks = Antares::Data::Sets<SingleSetOfLinks>;
-
-    //! List of disabled areas
-    using DisabledAreaList = std::set<AreaName>;
-    //! List of disabled links
-    using DisabledAreaLinkList = std::set<AreaLinkName>;
-    //! List of disabled thermal clusters
-    using DisabledThermalClusterList = std::set<ClusterName>;
+    using SetsOfAreas = Antares::Data::Sets;
 
     //! Extension filename
     using FileExtension = std::string;
@@ -158,7 +141,7 @@ public:
     ** This method does not have any effect except modifying
     ** internal variables (`folder`, `folderInput`, ...).
     */
-    void relocate(const std::string& newFolder);
+    void relocate(const std::filesystem::path& newFolder);
 
     /*!
     ** \brief Load a study from a folder
@@ -363,8 +346,6 @@ public:
     void destroyAllWindTSGeneratorData();
     //! Destroy all data of the hydro TS generator
     void destroyAllHydroTSGeneratorData();
-    //! Destroy all data of the thermal TS generator
-    void destroyAllThermalTSGeneratorData();
 
     /*!
     ** \brief Import all time-series into the input folder
@@ -391,10 +372,6 @@ public:
     ** \brief Re-Initialize/Re-Load the scenario builder data
     */
     void scenarioRulesCreate();
-    /*!
-    ** \brief Re-Initialize/Re-Load the scenario builder data but consider a single ruleset only
-    */
-    void scenarioRulesCreate(const RulesScenarioName& thisoneonly);
 
     /*!
     ** \brief Release the scenario builder
@@ -412,7 +389,7 @@ public:
     *"max").
     **
     */
-    std::map<std::string, uint> getRawNumberCoresPerLevel();
+    unsigned getNumberOfCoresPerMode(unsigned nbLogicalCores, int ncMode);
 
     /*!
     ** \brief Computes number of cores
@@ -478,13 +455,13 @@ public:
     //! \name Paths
     //@{
     //! The source folder of the study
-    YString folder;
+    std::filesystem::path folder;
     //! The input folder
-    YString folderInput;
+    std::filesystem::path folderInput;
     //! The output folder
-    YString folderOutput;
+    std::filesystem::path folderOutput;
     //! The settings folder
-    YString folderSettings;
+    std::filesystem::path folderSettings;
     //@}
 
     //! \name Simulation
@@ -579,14 +556,12 @@ public:
     //@{
     //! Sets of areas
     SetsOfAreas setsOfAreas;
-    //! Sets of links
-    SetsOfLinks setsOfLinks;
     //@}
 
     //! \name Scenario Builder
     //@{
     //! Rules for building scenarios (can be null)
-    ScenarioBuilder::Sets* scenarioRules = nullptr;
+    std::unique_ptr<ScenarioBuilder::Sets> scenarioRules;
     //@}
 
     TimeSeries::TS scenarioInitialHydroLevels;
@@ -658,7 +633,7 @@ protected:
     //! Load a study from a folder
     bool internalLoadFromFolder(const std::filesystem::path& path, const StudyLoadOptions& options);
     //! Load the study header
-    bool internalLoadHeader(const YString& folder);
+    bool internalLoadHeader(const std::filesystem::path& folder);
     //! Load all correlation matrices
     bool internalLoadCorrelationMatrices(const StudyLoadOptions& options);
     //! Load all binding constraints
@@ -667,7 +642,7 @@ protected:
     bool internalLoadSets();
     //@}
 
-    bool internalLoadIni(const YString& path, const StudyLoadOptions& options);
+    bool internalLoadIni(const std::filesystem::path& path, const StudyLoadOptions& options);
 
     void parameterFiller(const StudyLoadOptions& options);
 
@@ -684,11 +659,11 @@ protected:
 */
 extern YString StudyIconFile;
 
-YString StudyCreateOutputPath(SimulationMode mode,
-                              ResultFormat fmt,
-                              const YString& folder,
-                              const YString& label,
-                              int64_t startTime);
+std::filesystem::path StudyCreateOutputPath(SimulationMode mode,
+                                            ResultFormat fmt,
+                                            const std::filesystem::path& folder,
+                                            const std::string& label,
+                                            const std::tm& startTime);
 } // namespace Antares::Data
 
 #include "study.hxx"

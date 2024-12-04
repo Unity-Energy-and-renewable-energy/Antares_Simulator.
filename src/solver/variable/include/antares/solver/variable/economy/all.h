@@ -64,9 +64,9 @@
 #include "renewableGeneration.h"
 #include "reservoirlevel.h"
 #include "spilledEnergy.h"
-#include "spilledEnergyAfterCSR.h"
 #include "thermalAirPollutantEmissions.h"
 #include "unsupliedEnergy.h"
+#include "unsupliedEnergyCsr.h"
 #include "waterValue.h"
 
 // By thermal plant
@@ -140,29 +140,32 @@ typedef          // Prices
                             <DomesticUnsuppliedEnergy // Domestic Unsupplied Energy
                              <LMRViolations           // LMR Violations
                               <SpilledEnergy          // Spilled Energy
-                               <SpilledEnergyAfterCSR // SpilledEnergyAfterCSR
-                                <LOLD                 // LOLD
-                                 <LOLP                // LOLP
-                                  <AvailableDispatchGen<DispatchableGenMargin<
-                                    DtgMarginCsr // DTG MRG CSR
-                                    <Marge<NonProportionalCost<
-                                      NonProportionalCostByDispatchablePlant // Startup cost + Fixed
-                                                                             // cost per thermal
-                                                                             // plant detail
-                                      <NbOfDispatchedUnits         // Number of Units Dispatched
-                                       <NbOfDispatchedUnitsByPlant // Number of Units Dispatched by
-                                                                   // plant
-                                        <ProfitByPlant
-                                         <ReserveParticipationCost // Participation cost to the reserves
-                                          <ReserveParticipationByDispatchableOnUnitsPlant // Participation per thermal cluster for on units
-                                           <ReserveParticipationByDispatchableOffUnitsPlant // Participation per thermal cluster for off units
-                                            <ReserveParticipationByThermalGroup // Participation per thermal group
-                                             <ReserveParticipationBySTStorage // Participation per Short Term Storage cluster
-                                              <ReserveParticipationBySTStorageGroup // Participation per short term storage group
-                                               <ReserveParticipationByLTStorage // Participation per Short Term Storage cluster
-                                                <ReserveParticipationUnsuppliedSpilled 
-                                                 <Variable::Economy::Links // All links
-                                                  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                               <LOLD                  // LOLD
+                                <LOLP                 // LOLP
+                                 <AvailableDispatchGen<DispatchableGenMargin<DtgMarginCsr< // DTG
+                                                                                           // MRG
+                                                                                           // CSR
+                                   UnsupliedEnergyCSR< // Unsupplied energy after CSR
+                                     Marge<NonProportionalCost<
+                                       NonProportionalCostByDispatchablePlant // Startup cost +
+                                                                              // Fixed cost per
+                                                                              // thermal plant
+                                                                              // detail
+                                       <NbOfDispatchedUnits         // Number of Units Dispatched
+                                        <NbOfDispatchedUnitsByPlant // Number of Units Dispatched
+                                                                    // by plant
+                                         <ProfitByPlant
+                                          <ReserveParticipationCost // Participation cost to the reserves
+                                            <ReserveParticipationByDispatchableOnUnitsPlant // Participation per thermal cluster for on units
+                                            <ReserveParticipationByDispatchableOffUnitsPlant // Participation per thermal cluster for off units
+                                              <ReserveParticipationByThermalGroup // Participation per thermal group
+                                              <ReserveParticipationBySTStorage // Participation per Short Term Storage cluster
+                                                <ReserveParticipationBySTStorageGroup // Participation per short term storage group
+                                                <ReserveParticipationByLTStorage // Participation per Short Term Storage cluster
+                                                  <ReserveParticipationUnsuppliedSpilled 
+                                          // Links
+                                          <Variable::Economy::Links // All links
+                                           >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     VariablesPerArea;
 
 /*!
@@ -224,48 +227,36 @@ typedef // Prices
                                                   LMRViolations,
                                                   Common::SpatialAggregate<
                                                     SpilledEnergy,
+                                                    // LOLD
                                                     Common::SpatialAggregate<
-                                                      SpilledEnergyAfterCSR,
-                                                      // LOLD
+                                                      LOLD,
                                                       Common::SpatialAggregate<
-                                                        LOLD,
+                                                        LOLP,
                                                         Common::SpatialAggregate<
-                                                          LOLP,
+                                                          AvailableDispatchGen,
                                                           Common::SpatialAggregate<
-                                                            AvailableDispatchGen,
+                                                            DispatchableGenMargin,
                                                             Common::SpatialAggregate<
-                                                              DispatchableGenMargin,
+                                                              DtgMarginCsr,
                                                               Common::SpatialAggregate<
-                                                                DtgMarginCsr,
+                                                                Marge,
+
+                                                                // Detail Prices
                                                                 Common::SpatialAggregate<
-                                                                  Marge,
+                                                                  NonProportionalCost, // MBO
+                                                                                       // 13/05/2014
+                                                                                       // -
+                                                                                       // refs:
+                                                                                       // #21
 
-                                                                  // Detail Prices
+                                                                  // Number Of Dispatched Units
                                                                   Common::SpatialAggregate<
-                                                                    NonProportionalCost, // MBO
-                                                                                         // 13/05/2014
-                                                                                         // -
-                                                                                         // refs:
-                                                                                         // #21
-
-                                                                    // Number Of Dispatched Units
-                                                                    Common::SpatialAggregate<
-                                                                      NonProportionalCost, // MBO
-                                                                                           // 13/05/2014
-                                                                                           // -
-                                                                                           // refs:
-                                                                                           // #21
-
-                                                                      // Number Of Dispatched Units
-                                                                      Common::SpatialAggregate<
-                                                                        NbOfDispatchedUnits, // MBO
-                                                                                            // 25/02/2016
-                                                                                            // -
-                                                                                            // refs:
-                                                                                            // #55
-                                                                        Common::
-                                                                          SpatialAggregate<ReserveParticipationCost
-                                                                        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                                                    NbOfDispatchedUnits // MBO
+                                                                                        // 25/02/2016
+                                                                                        // -
+                                                                                        // refs:
+                                                                                        // #55
+                                                                    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     VariablesPerSetOfAreas;
 
 typedef BindingConstMarginCost< // Marginal cost for a binding constraint

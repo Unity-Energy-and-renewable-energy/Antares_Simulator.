@@ -138,7 +138,7 @@ public:
     */
     PartHydro();
     //! Destructor
-    ~PartHydro();
+    ~PartHydro() = default;
 
     /*!
     ** \brief Reset internal data
@@ -165,7 +165,7 @@ public:
 
     uint count() const;
 
-    bool loadReserveParticipations(Area& area, const AnyString& file);
+    bool loadReserveParticipations(Area& area, const std::filesystem::path& file);
 
     void addReserveParticipation(const std::string& reserveName,
                                  const LTStorageClusterReserveParticipation& participation);
@@ -233,10 +233,10 @@ public:
     HydroAllocation allocation;
 
     //! Data for the pre-processor
-    PreproHydro* prepro;
+    std::unique_ptr<PreproHydro> prepro;
 
     //! Data for time-series
-    DataSeriesHydro* series;
+    std::unique_ptr<DataSeriesHydro> series;
     // TODO : following time series could be hosted by the series data member above (of type
     // DataSeriesHydro),
     //        which contains other time.

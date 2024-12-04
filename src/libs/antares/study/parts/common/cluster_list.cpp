@@ -369,7 +369,7 @@ bool ClusterList<ClusterT>::saveDataSeriesToFolder(const AnyString& folder) cons
 }
 
 template<class ClusterT>
-bool ClusterList<ClusterT>::loadDataSeriesFromFolder(Study& s, const AnyString& folder)
+bool ClusterList<ClusterT>::loadDataSeriesFromFolder(Study& s, const std::filesystem::path& folder)
 {
     return std::ranges::all_of(allClusters_,
                                [&s, &folder](auto c)
@@ -377,7 +377,7 @@ bool ClusterList<ClusterT>::loadDataSeriesFromFolder(Study& s, const AnyString& 
 }
 
 template<class ClusterT>
-bool ClusterList<ClusterT>::loadReserveParticipations(Area& area, const AnyString& file)
+bool ClusterList<ClusterT>::loadReserveParticipations(Area& area, const std::filesystem::path& file)
 {
     IniFile ini;
     if (!ini.open(file, false))

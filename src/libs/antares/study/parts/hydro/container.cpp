@@ -49,15 +49,8 @@ PartHydro::PartHydro():
     leewayLowerBound(1.),
     leewayUpperBound(1.),
     pumpingEfficiency(1.),
-    prepro(nullptr),
     series(nullptr)
 {
-}
-
-PartHydro::~PartHydro()
-{
-    delete prepro;
-    delete series;
 }
 
 void PartHydro::reset()
@@ -768,7 +761,7 @@ bool PartHydro::CheckDailyMaxEnergy(const AnyString& areaName)
     return ret;
 }
 
-bool PartHydro::loadReserveParticipations(Area& area, const AnyString& file)
+bool PartHydro::loadReserveParticipations(Area& area, const std::filesystem::path& file)
 {
     IniFile ini;
     if (!ini.open(file, false))

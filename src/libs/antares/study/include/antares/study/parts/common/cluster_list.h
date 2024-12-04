@@ -167,7 +167,7 @@ public:
 
     /// \name IO functions
     /// @{
-    bool loadDataSeriesFromFolder(Study& study, const AnyString& folder);
+    bool loadDataSeriesFromFolder(Study& study, const std::filesystem::path& folder);
 
     /// @brief Load the reserve participation. For each entry, it checks if the reserve has been
     /// added to area.allCapacityReservations, if not then log the name of the reserve that has not been found.
@@ -175,7 +175,7 @@ public:
     /// @param area Reference to area
     /// @param file File to read the reserve participations entries
     /// @return false if the file opening failed, true otherwise
-    bool loadReserveParticipations(Area& area, const AnyString& folder);
+    bool loadReserveParticipations(Area& area, const std::filesystem::path& file);
 
     bool saveDataSeriesToFolder(const AnyString& folder) const;
 

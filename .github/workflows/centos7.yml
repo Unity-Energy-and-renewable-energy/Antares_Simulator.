@@ -43,8 +43,19 @@ jobs:
 
     - name: Install gcc 10
       run: |
+        # update mirrors, official centos7 is deprecated
+        sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo &&\
+        sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo &&\
+        sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo &&\
+        yum update -y
+
+        # not a typo, centos-release-scl is needed to install devtoolset-10 but introduce deprecated mirror
+        sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo &&\
+        sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo &&\
+        sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+
         yum install -y centos-release-scl
-        yum install -y devtoolset-10-gcc*
+        yum install -y devtoolset-11-gcc*
 
     - name: Install cmake 3.28
       run: pip3 install cmake==3.28.4
@@ -75,7 +86,7 @@ jobs:
 
     - name: Config OR-Tools URL
       run: |
-           echo "URL_ORTOOLS=https://github.com/rte-france/or-tools/releases/download/$(cat ortools_tag)/ortools_cxx_centos7_static_sirius.zip" >> $GITHUB_ENV
+           echo "URL_ORTOOLS=https://github.com/rte-france/or-tools-rte/releases/download/$(cat ortools_tag)/ortools_cxx_centos7_static_sirius.zip" >> $GITHUB_ENV
 
     - name: Download OR-Tools
       id: ortools
@@ -89,12 +100,12 @@ jobs:
       if: ${{ env.IS_RELEASE == 'true' }}
       run: |
            wget https://github.com/cli/cli/releases/download/v2.52.0/gh_2.52.0_linux_amd64.rpm
-           rpm -i gh_2.52.0_linux_amd64.rpm         
-           gh --version   
+           rpm -i gh_2.52.0_linux_amd64.rpm
+           gh --version
 
     - name: Configure
       run: |
-        source /opt/rh/devtoolset-10/enable
+        source /opt/rh/devtoolset-11/enable
         source /opt/rh/rh-git227/enable
         cmake -B _build -S src \
         -DCMAKE_C_COMPILER_LAUNCHER=ccache \
@@ -110,7 +121,7 @@ jobs:
 
     - name: Build
       run: |
-           source /opt/rh/devtoolset-10/enable
+           source /opt/rh/devtoolset-11/enable
            source /opt/rh/rh-git227/enable
            cmake --build _build --config Release -j$(nproc)
            ccache -s
@@ -135,16 +146,6 @@ jobs:
            cd _build
            cpack -G TGZ
 
-    - name: Installer TGZ push
-      uses: actions/upload-artifact@v3
-      with:
-        path: _build/*.tar.gz
-
-    - name: Installer RPM push
-      uses: actions/upload-artifact@v3
-      with:
-        path: _build/*.rpm
-
     - name: Publish assets
       if: ${{ env.IS_RELEASE == 'true' }}
       env:
@@ -152,7 +153,7 @@ jobs:
         tag: ${{ github.event.inputs.release_tag }}
       run: |
         gh release upload "$tag" _build/*.tar.gz _build/*.rpm
-        
+
     - name: Cache vcpkg binary dir
       if: always()
       id: save-cache-vcpkg-binary

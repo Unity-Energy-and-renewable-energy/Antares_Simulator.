@@ -172,7 +172,7 @@ averageResults OutputRetriever::thermalNbUnitsON(ThermalCluster* cluster)
 ScenarioBuilderRule::ScenarioBuilderRule(Study& study)
 {
     study.scenarioRulesCreate();
-    ScenarioBuilder::Sets* sets = study.scenarioRules;
+    auto sets = study.scenarioRules.get();
     if (sets && !sets->empty())
     {
         rules_ = sets->createNew("Custom");
@@ -196,8 +196,6 @@ void SimulationHandler::create()
                                                          resultWriter_,
                                                          observer_);
     Antares::Solver::ScenarioBuilderOwner(study_).callScenarioBuilder();
-
-    SIM_AllocationTableaux(study_);
 }
 
 // =========================

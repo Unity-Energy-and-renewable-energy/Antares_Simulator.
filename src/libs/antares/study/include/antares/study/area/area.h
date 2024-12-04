@@ -72,7 +72,7 @@ public:
         {
             return it->second; // Return the associated value if the key exists
         }
-        throw std::out_of_range::exception("This index is not in the BiMap");
+        throw std::out_of_range("This index is not in the BiMap");
     }
 
     // Function to get the key from the value
@@ -84,6 +84,12 @@ public:
             return it->second; // Return the associated key if the value exists
         }
         return -1; // Return -1 if value is not found
+    }
+
+    // Function to return the size of the bimap
+    int size()
+    {
+        return key_to_value.size();
     }
 };
 
@@ -513,7 +519,7 @@ public:
     ** \param filename The file to read
     ** \return A non-zero value if the operation was successful, 0 otherwise
     */
-    bool loadListFromFile(const AnyString& filename);
+    bool loadListFromFile(const std::filesystem::path& filename);
 
     /*!
     ** \brief Save all informations about areas into a folder (-> input/generalData)

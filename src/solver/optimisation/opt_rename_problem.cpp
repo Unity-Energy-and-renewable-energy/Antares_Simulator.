@@ -22,7 +22,7 @@
 #include "antares/solver/optimisation/opt_rename_problem.h"
 
 #include <map>
-#include <sstream>
+#include <string>
 
 const std::string HOUR("hour");
 const std::string DAY("day");
@@ -279,8 +279,7 @@ void VariableNamer::NumberOfOffUnitsParticipatingToReserve(unsigned int variable
                                                            const std::string& clusterName,
                                                            const std::string& reserveName)
 {
-    SetThermalClusterReserveElementName(
-      variable, "NumberOfOffUnitsParticipatingToReserve", clusterName);
+    SetThermalClusterAndReserveElementName(variable, "NumberOfOffUnitsParticipatingToReserve", clusterName, reserveName);
 }
 
 void VariableNamer::NumberStoppingDispatchableUnits(unsigned int variable,

@@ -22,7 +22,6 @@
 #include "antares/solver/optimisation/opt_structure_probleme_a_resoudre.h"
 
 #include "antares/solver/simulation/sim_structure_donnees.h"
-#include "antares/solver/simulation/sim_extern_variables_globales.h"
 
 #include "antares/solver/optimisation/opt_fonctions.h"
 
@@ -47,15 +46,12 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
     for (int pdtJour = 0, pdtHebdo = PremierPdtDeLIntervalle; pdtHebdo < DernierPdtDeLIntervalle;
          pdtHebdo++, pdtJour++)
     {
+        int hourInTheYear = problemeHebdo->weekInTheYear * 168 + pdtHebdo;
         const CORRESPONDANCES_DES_CONTRAINTES& CorrespondanceCntNativesCntOptim
           = problemeHebdo->CorrespondanceCntNativesCntOptim[pdtJour];
 
         for (uint32_t pays = 0; pays < problemeHebdo->NombreDePays; pays++)
         {
-            int pdtGlobal = problemeHebdo->weekInTheYear
-                              * problemeHebdo->NombreDePasDeTempsDUneJournee
-                              * problemeHebdo->NombreDeJours
-                            + pdtJour;
 
             // Thermal clusters
             {
@@ -68,7 +64,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                   [areaReserveUp.globalReserveIndex];
                     if (cnt >= 0)
                     {
-                        SecondMembre[cnt] = areaReserveUp.need.at(pdtGlobal);
+                        SecondMembre[cnt] = areaReserveUp.need.at(hourInTheYear);
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
 
@@ -100,7 +96,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                   [areaReserveDown.globalReserveIndex];
                     if (cnt >= 0)
                     {
-                        SecondMembre[cnt] = areaReserveDown.need.at(pdtGlobal);
+                        SecondMembre[cnt] = areaReserveDown.need.at(hourInTheYear);
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
                 }
@@ -202,7 +198,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                             [globalClusterIdx];
                     if (cnt >= 0)
                     {
-                        SecondMembre[cnt] = cluster.series.get()->maxWithdrawalModulation[pdtJour]
+                        SecondMembre[cnt] = cluster.series.get()->maxWithdrawalModulation[hourInTheYear]
                                             * cluster.withdrawalNominalCapacity;
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
@@ -213,7 +209,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                             [globalClusterIdx];
                     if (cnt >= 0)
                     {
-                        SecondMembre[cnt] = cluster.series.get()->lowerRuleCurve[pdtJour]
+                        SecondMembre[cnt] = cluster.series.get()->lowerRuleCurve[hourInTheYear]
                                             * cluster.withdrawalNominalCapacity;
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }
@@ -224,7 +220,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                             [globalClusterIdx];
                     if (cnt >= 0)
                     {
-                        SecondMembre[cnt] = cluster.series.get()->maxInjectionModulation[pdtJour]
+                        SecondMembre[cnt] = cluster.series.get()->maxInjectionModulation[hourInTheYear]
                                             * cluster.injectionNominalCapacity;
                         AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                     }

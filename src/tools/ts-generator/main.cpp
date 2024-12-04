@@ -28,7 +28,6 @@
 #include <antares/utils/utils.h>
 #include "antares/tools/ts-generator/linksTSgenerator.h"
 #include "antares/tools/ts-generator/tsGenerationOptions.h"
-using namespace Antares::TSGenerator;
 
 using namespace Antares::TSGenerator;
 
@@ -64,7 +63,7 @@ std::vector<Data::ThermalCluster*> getClustersToGen(Data::AreaList& areas,
     return clusters;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
     logs.applicationName("ts-generator");
 
@@ -109,7 +108,7 @@ int main(int argc, char* argv[])
 
         // === Writing generated TS on disk ===
         auto thermalSavePath = fs::path(settings.studyFolder) / "output"
-                               / FormattedTime("%Y%m%d-%H%M");
+                               / formatTime(getCurrentTime(), "%Y%m%d-%H%M");
         thermalSavePath /= "ts-generator";
         thermalSavePath /= "thermal";
         writeThermalTimeSeries(clusters, thermalSavePath);
