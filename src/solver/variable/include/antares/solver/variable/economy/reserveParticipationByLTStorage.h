@@ -68,7 +68,7 @@ public:
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
         // Get the number of LTStorage reserveParticipations
-        pSize = area->hydro.reserveParticipationsCount;
+        pSize = area->hydro.reserveParticipationsCount();
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
