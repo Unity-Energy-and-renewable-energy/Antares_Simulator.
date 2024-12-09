@@ -106,7 +106,7 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the area
+        // Get the number of Onthermal reserveParticipations
         pSize = area->thermal.list.reserveParticipationsCount();
 
         if (pSize)

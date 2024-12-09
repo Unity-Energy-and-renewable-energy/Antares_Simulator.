@@ -105,16 +105,8 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the area
-        pSize = 0;
-        for (int areaIndex = 0; areaIndex < study->areas.size(); areaIndex++)
-        {
-            if (study->areas[areaIndex]->allCapacityReservations.size() > 0)
-            {
-                pSize = area->shortTermStorage.reserveParticipationsCount();
-                break;
-            }
-        }
+        // Get the number of STStorage reserveParticipations
+        pSize = area->shortTermStorage.reserveParticipationsCount();
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
