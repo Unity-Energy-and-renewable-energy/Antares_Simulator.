@@ -1,5 +1,7 @@
 var NAVTREEINDEX19 =
 {
+"classIItem_1_1Tag.html#a744db431dc93c4ec31f8d0ec4de42352":[9,0,131,1,0],
+"classIItem_1_1Tag.html#ac96f2e7cdb26c00e59e50692fe0f131e":[9,0,131,1,3],
 "classIItem_1_1Tag.html#af1cce5df78504a1ddce9a4c3215798d7":[9,0,131,1,2],
 "classIProvider.html":[9,0,134],
 "classIProvider.html#a404a296cd37f1762278d58a2119d88da":[9,0,134,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX19 =
 "classtolerances_1_1Tolerances.html":[9,0,25,1],
 "classtolerances_1_1Win__tolerances.html":[9,0,25,2],
 "classunfeasible__problem_1_1behavior__flag.html":[9,0,26,0],
-"classunfeasible__problem_1_1unfeasible__problem.html":[9,0,26,1],
-"classunfeasible__problem_1_1weeks__in__year.html":[9,0,26,2],
-"cleaner_8h_source.html":[10,0,0,3,0,25,0,0,0,10]
+"classunfeasible__problem_1_1unfeasible__problem.html":[9,0,26,1]
 };

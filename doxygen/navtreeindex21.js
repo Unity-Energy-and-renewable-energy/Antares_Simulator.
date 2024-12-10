@@ -1,5 +1,8 @@
 var NAVTREEINDEX21 =
 {
+"dir_80a4f60ad72736ee103e1a8cccd74f5f.html":[10,0,0,8,2,2,9,5],
+"dir_8151ff04c252fc11dbcc2541bbcf115c.html":[10,0,0,3,0,18],
+"dir_81fa6c6b0bdbbfb2fb372445f3b3569c.html":[10,0,0,3,0,22,0,0],
 "dir_82e68c49439fe91b1c3f7ccd1fcbbabe.html":[10,0,0,8,1,0,2],
 "dir_84c8e4260ed2388ac0d5c9a6bb56a201.html":[10,0,0,3,0,1],
 "dir_8640bd4860e119638cc1ce702a6089ca.html":[10,0,0,4,8,0,0,0,0],
@@ -201,7 +204,7 @@ var NAVTREEINDEX21 =
 "drawingcontext_8h_source.html":[10,0,0,8,2,1,1,3,5],
 "dsm_8h_source.html":[10,0,0,8,2,1,1,1,1,1,3],
 "dtgMarginAfterCsr_8h_source.html":[10,0,0,4,16,0,0,0,0,2,8],
-"ecoInput_8h_source.html":[10,0,0,3,0,25,0,0,0,5,6,5],
+"ecoInput_8h_source.html":[10,0,0,3,0,25,0,0,0,5,6,6],
 "economy_2overallCost_8h_source.html":[10,0,0,4,16,0,0,0,0,2,22],
 "economy_2spilledEnergy_8h_source.html":[10,0,0,4,16,0,0,0,0,2,31],
 "economy_8h_source.html":[10,0,0,4,13,0,0,0,0,6],
@@ -238,16 +241,13 @@ var NAVTREEINDEX21 =
 "flowQuad_8h_source.html":[10,0,0,4,16,0,0,0,0,2,1,5],
 "fswalker_2statistics_8h_source.html":[10,0,0,3,1,4],
 "fswalker_8h_source.html":[10,0,0,3,1,1],
-"functions.html":[9,3,0,0],
 "functions.html":[9,3,0],
+"functions.html":[9,3,0,0],
 "functions_b.html":[9,3,0,1],
 "functions_c.html":[9,3,0,2],
 "functions_d.html":[9,3,0,3],
 "functions_e.html":[9,3,0,4],
 "functions_enum.html":[9,3,4],
 "functions_eval.html":[9,3,5],
-"functions_f.html":[9,3,0,5],
-"functions_func.html":[9,3,1],
-"functions_func.html":[9,3,1,0],
-"functions_func_b.html":[9,3,1,1]
+"functions_f.html":[9,3,0,5]
 };

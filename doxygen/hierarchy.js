@@ -235,8 +235,11 @@ var hierarchy =
     [ "CORRESPONDANCES_DES_CONTRAINTES_HEBDOMADAIRES", "structCORRESPONDANCES__DES__CONTRAINTES__HEBDOMADAIRES.html", null ],
     [ "CORRESPONDANCES_DES_CONTRAINTES_JOURNALIERES", "structCORRESPONDANCES__DES__CONTRAINTES__JOURNALIERES.html", null ],
     [ "CORRESPONDANCES_DES_VARIABLES", "structCORRESPONDANCES__DES__VARIABLES.html", null ],
+    [ "Antares::Data::CostProvider", "classAntares_1_1Data_1_1CostProvider.html", [
+      [ "Antares::Data::ConstantCostProvider", "classAntares_1_1Data_1_1ConstantCostProvider.html", null ],
+      [ "Antares::Data::ScenarizedCostProvider", "classAntares_1_1Data_1_1ScenarizedCostProvider.html", null ]
+    ] ],
     [ "Antares::Solver::Simulation::costStatistics", "classAntares_1_1Solver_1_1Simulation_1_1costStatistics.html", null ],
-    [ "Antares::Data::ThermalCluster::CostsTimeSeries", "structAntares_1_1Data_1_1ThermalCluster_1_1CostsTimeSeries.html", null ],
     [ "COUTS_DE_TRANSPORT", "structCOUTS__DE__TRANSPORT.html", null ],
     [ "CsrAreaBalanceData", "structCsrAreaBalanceData.html", null ],
     [ "CsrBindingConstraintHourData", "structCsrBindingConstraintHourData.html", null ],

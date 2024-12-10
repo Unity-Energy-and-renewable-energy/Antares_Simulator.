@@ -1,5 +1,7 @@
 var NAVTREEINDEX12 =
 {
+"classAntares_1_1Map_1_1Settings.html":[9,0,0,10,13],
+"classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html":[9,0,0,10,1,0],
 "classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html#a2324eb0c10ce5d14e35d84a641f7ef33":[9,0,0,10,1,0,0],
 "classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html#a7fc281507f4fff9a9b13ee77358ebb04":[9,0,0,10,1,0,1],
 "classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html#aa85cf9410b351136ee4b27e34364e604":[9,0,0,10,1,0,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX12 =
 "classAntares_1_1Solver_1_1IResultWriter.html":[9,0,0,13,23],
 "classAntares_1_1Solver_1_1IResultWriter.html#a866bc43cd373dc27cf69ec3968737c8c":[9,0,0,13,23,0],
 "classAntares_1_1Solver_1_1ImmediateFileResultWriter.html":[9,0,0,13,19],
-"classAntares_1_1Solver_1_1ImmediateFileResultWriter.html#af331f4ce440c90a0b402f9dbd6c67629":[9,0,0,13,19,0],
-"classAntares_1_1Solver_1_1InMemoryWriter.html":[9,0,0,13,21],
-"classAntares_1_1Solver_1_1InMemoryWriter.html#ae79bc278d4eff373baf313ebb426361b":[9,0,0,13,21,0]
+"classAntares_1_1Solver_1_1ImmediateFileResultWriter.html#af331f4ce440c90a0b402f9dbd6c67629":[9,0,0,13,19,0]
 };

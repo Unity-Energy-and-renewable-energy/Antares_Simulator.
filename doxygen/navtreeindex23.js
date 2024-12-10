@@ -1,5 +1,8 @@
 var NAVTREEINDEX23 =
 {
+"manager_8hxx_source.html":[10,0,0,8,2,1,1,3,8],
+"map_2nodes_2item_8h_source.html":[10,0,0,8,2,1,1,3,1,3],
+"mapnotebook_8h_source.html":[10,0,0,8,2,1,1,4,0],
 "marginalCost_8h_source.html":[10,0,0,4,16,0,0,0,0,2,1,8],
 "math_8hxx_source.html":[10,0,0,4,14,0,0,0,0,0,1],
 "matrix-bypass-load_8h_source.html":[10,0,0,6,1,0,0,0,1],
@@ -115,7 +118,7 @@ var NAVTREEINDEX23 =
 "performer_8h_source.html":[10,0,0,8,2,1,4,4],
 "playlist_8h_source.html":[10,0,0,8,2,2,9,4,0],
 "policy_8h_source.html":[10,0,0,3,0,27,0,0,0,1],
-"pollutant_8h_source.html":[10,0,0,3,0,25,0,0,0,5,6,6],
+"pollutant_8h_source.html":[10,0,0,3,0,25,0,0,0,5,6,7],
 "portFieldDefinition_8h_source.html":[10,0,0,5,0,0,0,0,0,8],
 "portField_8h_source.html":[10,0,0,5,0,0,0,0,0,7],
 "portType_8h_source.html":[10,0,0,5,0,0,0,0,0,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX23 =
 "solver_2variable_2include_2antares_2solver_2variable_2commons_2links_2links_8h_source.html":[10,0,0,4,16,0,0,0,0,1,0,0],
 "solver_2variable_2include_2antares_2solver_2variable_2container_8h_source.html":[10,0,0,4,16,0,0,0,0,10],
 "solver_2variable_2include_2antares_2solver_2variable_2container_8hxx_source.html":[10,0,0,4,16,0,0,0,0,11],
-"solver_2variable_2include_2antares_2solver_2variable_2economy_2all_8h_source.html":[10,0,0,4,16,0,0,0,0,2,2],
-"solver_2variable_2include_2antares_2solver_2variable_2economy_2links_8h_source.html":[10,0,0,4,16,0,0,0,0,2,12],
-"solver_2variable_2include_2antares_2solver_2variable_2info_8h_source.html":[10,0,0,4,16,0,0,0,0,13],
-"solver_2variable_2include_2antares_2solver_2variable_2state_8h_source.html":[10,0,0,4,16,0,0,0,0,17]
+"solver_2variable_2include_2antares_2solver_2variable_2economy_2all_8h_source.html":[10,0,0,4,16,0,0,0,0,2,2]
 };

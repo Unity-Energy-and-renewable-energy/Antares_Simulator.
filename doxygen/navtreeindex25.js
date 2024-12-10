@@ -1,5 +1,7 @@
 var NAVTREEINDEX25 =
 {
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardHurdleCosts.html":[9,0,0,13,8,4,68],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardHurdleCosts.html#aef1f6428c772a5fd4c6657cb740190d8":[9,0,0,13,8,4,68,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardHydroCost.html":[9,0,0,13,8,4,69],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardHydroCost.html#a8aa9f0ca24f11304ce8921a8ace69752":[9,0,0,13,8,4,69,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardHydroCost.html#adf804c5f778d5f24f893eaec18b84de8":[9,0,0,13,8,4,69,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "structAntares_1_1Window_1_1Inspector_1_1PConstraintType.html":[9,0,0,19,1,47],
 "structAntares_1_1Window_1_1Inspector_1_1PLinkArea.html":[9,0,0,19,1,48],
 "structAntares_1_1Window_1_1Inspector_1_1PLinkColor.html":[9,0,0,19,1,49],
-"structAntares_1_1Window_1_1Inspector_1_1PLinkColor_1_1Color.html":[9,0,0,19,1,49,0],
-"structAntares_1_1Window_1_1Inspector_1_1PLinkComments.html":[9,0,0,19,1,50],
-"structAntares_1_1Window_1_1Inspector_1_1PLinkDisplayComments.html":[9,0,0,19,1,51]
+"structAntares_1_1Window_1_1Inspector_1_1PLinkColor_1_1Color.html":[9,0,0,19,1,49,0]
 };

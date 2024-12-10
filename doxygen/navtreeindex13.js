@@ -1,5 +1,7 @@
 var NAVTREEINDEX13 =
 {
+"classAntares_1_1Solver_1_1InMemoryWriter.html":[9,0,0,13,21],
+"classAntares_1_1Solver_1_1InMemoryWriter.html#ae79bc278d4eff373baf313ebb426361b":[9,0,0,13,21,0],
 "classAntares_1_1Solver_1_1Initialization_1_1Error_1_1NoQueueService.html":[9,0,0,13,0,0,0],
 "classAntares_1_1Solver_1_1IntraModalConsistencyChecker.html":[9,0,0,13,22],
 "classAntares_1_1Solver_1_1LoadAreaNumberOfTSretriever.html":[9,0,0,13,24],
@@ -247,7 +249,5 @@ var NAVTREEINDEX13 =
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#a640b07127d51b0cdf1f6cffafe82a9ad":[9,0,0,13,8,4,7,2],
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#ad5b24e14e1c5f3f0ce8debb13a83e870":[9,0,0,13,8,4,7,1],
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#ad86b1ec08e9d2776b9672ab341964936":[9,0,0,13,8,4,7,4],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#af36bf39360b65d3a1309d63903678acb":[9,0,0,13,8,4,7,3],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGeneration.html":[9,0,0,13,8,4,6],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGeneration.html#a680fd0cefe3adafeecb4d18cf4a4ffc9":[9,0,0,13,8,4,6,4]
+"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html#af36bf39360b65d3a1309d63903678acb":[9,0,0,13,8,4,7,3]
 };

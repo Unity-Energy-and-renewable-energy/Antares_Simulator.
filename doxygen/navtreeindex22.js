@@ -1,5 +1,8 @@
 var NAVTREEINDEX22 =
 {
+"functions_func.html":[9,3,1,0],
+"functions_func.html":[9,3,1],
+"functions_func_b.html":[9,3,1,1],
 "functions_func_c.html":[9,3,1,2],
 "functions_func_d.html":[9,3,1,3],
 "functions_func_e.html":[9,3,1,4],
@@ -57,8 +60,8 @@ var NAVTREEINDEX22 =
 "functions_type_v.html":[9,3,3,15],
 "functions_u.html":[9,3,0,20],
 "functions_v.html":[9,3,0,21],
-"functions_vars.html":[9,3,2],
 "functions_vars.html":[9,3,2,0],
+"functions_vars.html":[9,3,2],
 "functions_vars_b.html":[9,3,2,1],
 "functions_vars_c.html":[9,3,2,2],
 "functions_vars_d.html":[9,3,2,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX22 =
 "main_8h_source.html":[10,0,0,8,2,0,3],
 "main_8hxx_source.html":[10,0,0,8,2,0,0,7],
 "mainpanel_8h_source.html":[10,0,0,8,2,1,1,7],
-"manager_8h_source.html":[10,0,0,8,2,1,1,3,7],
-"manager_8hxx_source.html":[10,0,0,8,2,1,1,3,8],
-"map_2nodes_2item_8h_source.html":[10,0,0,8,2,1,1,3,1,3],
-"mapnotebook_8h_source.html":[10,0,0,8,2,1,1,4,0]
+"manager_8h_source.html":[10,0,0,8,2,1,1,3,7]
 };

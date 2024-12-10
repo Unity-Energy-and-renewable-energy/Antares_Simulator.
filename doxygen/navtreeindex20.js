@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"classunfeasible__problem_1_1weeks__in__year.html":[9,0,26,2],
+"cleaner_8h_source.html":[10,0,0,3,0,25,0,0,0,10],
 "clipboard_8h_source.html":[10,0,0,8,2,1,0,0],
 "cluster-item_8h_source.html":[10,0,0,8,2,1,1,2,1,2],
 "cluster-order_8h_source.html":[10,0,0,8,2,1,1,2,0,0],
@@ -44,6 +46,7 @@ var NAVTREEINDEX20 =
 "correlation-post_8hxx_source.html":[10,0,0,8,0,0,0,0,5],
 "correlation-updater_8hxx_source.html":[10,0,0,3,0,25,0,0,0,12],
 "correlation_8hxx_source.html":[10,0,0,3,0,6,0,0,0,1],
+"cost__provider_8h_source.html":[10,0,0,3,0,25,0,0,0,5,6,4],
 "count__constraints__variables_8h_source.html":[10,0,0,4,11,0,0,0,0,0,3],
 "creditmodulations_8h_source.html":[10,0,0,8,2,1,1,1,1,1,2],
 "csr__quadratic__problem_8h_source.html":[10,0,0,4,11,0,0,0,0,0,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX20 =
 "dir_7f31de3c797197958df18663790f447e.html":[10,0,0,3,0,22],
 "dir_7f3bf3c1ec8d8b1920329e1e51e593cf.html":[10,0,0,3,0,5,0],
 "dir_7f9265255be167d9fc7d889839beddde.html":[10,0,0,4,11,0],
-"dir_8060b849091d032e6bd1ec519f08a094.html":[10,0,0,3,0,27],
-"dir_80a4f60ad72736ee103e1a8cccd74f5f.html":[10,0,0,8,2,2,9,5],
-"dir_8151ff04c252fc11dbcc2541bbcf115c.html":[10,0,0,3,0,18],
-"dir_81fa6c6b0bdbbfb2fb372445f3b3569c.html":[10,0,0,3,0,22,0,0]
+"dir_8060b849091d032e6bd1ec519f08a094.html":[10,0,0,3,0,27]
 };

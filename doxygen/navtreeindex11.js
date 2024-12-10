@@ -1,5 +1,7 @@
 var NAVTREEINDEX11 =
 {
+"classAntares_1_1Forms_1_1ApplWnd.html#ac06e606002631d37800029ed807d48f0":[9,0,0,8,0,20],
+"classAntares_1_1Forms_1_1ApplWnd.html#ac1815f9c91ca8418cb77151dbce470a6":[9,0,0,8,0,32],
 "classAntares_1_1Forms_1_1ApplWnd.html#ac3169d13ed5d79f33dcb51b2a177610c":[9,0,0,8,0,33],
 "classAntares_1_1Forms_1_1ApplWnd.html#ad234d349e7beecb8c80d0d89685634fd":[9,0,0,8,0,31],
 "classAntares_1_1Forms_1_1ApplWnd.html#ad26cba8245cbd0a00271d3dfcda0bde5":[9,0,0,8,0,38],
@@ -247,7 +249,5 @@ var NAVTREEINDEX11 =
 "classAntares_1_1Map_1_1PanelInfos.html#abdfdd7cb588f450b5e7133c557301da4":[9,0,0,10,11,0],
 "classAntares_1_1Map_1_1PanelInfos.html#ac708c2c9632313db98b3bbe31aaedeae":[9,0,0,10,11,3],
 "classAntares_1_1Map_1_1Private_1_1AddingToolsHelper.html":[9,0,0,10,0,0],
-"classAntares_1_1Map_1_1RemovalToolPredicate.html":[9,0,0,10,12],
-"classAntares_1_1Map_1_1Settings.html":[9,0,0,10,13],
-"classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html":[9,0,0,10,1,0]
+"classAntares_1_1Map_1_1RemovalToolPredicate.html":[9,0,0,10,12]
 };
