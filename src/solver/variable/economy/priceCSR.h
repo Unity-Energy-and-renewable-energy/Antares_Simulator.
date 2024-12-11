@@ -27,6 +27,7 @@
 #pragma once
 
 #include "yuni/yuni.h"
+#include "antares/logs/logs.h"
 #include "../variable.h"
 
 namespace Antares
@@ -241,7 +242,9 @@ public:
         //     after adq patch and DTG MRG netting UNSP. ENR CSR  =/=0  ) MRG. PRICE CSR = MRG.
         //     PRICE_org (== “MRG. PRICE” before any adq patch  IF after adq patch AND DTG MRG
         //     netting  UNSP. ENR CSR  = 0    )
-        if (Yuni::Math::Zero(
+        auto isLow = [](double x) { return ::fabs(x) < 1; };
+
+        if (isLow(
               state.hourlyResults->ValeursHorairesDeDefaillancePositiveCSR[state.hourInTheWeek]))
         {
             pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
@@ -249,6 +252,9 @@ public:
         }
         else
         {
+            Antares::logs.notice()
+              << state.area->name << " "
+              << state.hourlyResults->ValeursHorairesDeDefaillancePositiveCSR[state.hourInTheWeek];
             pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
               = state.area->thermal.unsuppliedEnergyCost;
         }
