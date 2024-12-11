@@ -27,7 +27,6 @@
 #pragma once
 
 #include "yuni/yuni.h"
-#include "antares/logs/logs.h"
 #include "../variable.h"
 
 namespace Antares
@@ -252,9 +251,6 @@ public:
         }
         else
         {
-            Antares::logs.notice()
-              << state.area->name << " "
-              << state.hourlyResults->ValeursHorairesDeDefaillancePositiveCSR[state.hourInTheWeek];
             pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
               = state.area->thermal.unsuppliedEnergyCost;
         }
