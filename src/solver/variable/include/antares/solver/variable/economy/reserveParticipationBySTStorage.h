@@ -258,13 +258,21 @@ public:
             // Write the data for the current year
             for (uint i = 0; i < pSize; ++i)
             {
-                auto [clusterName, reserveName]
-                  = results.data.area->reserveParticipationSTStorageClustersIndexMap.get(i);
-                // Write the data for the current year
-                results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
-                results.variableUnit = VCardType::Unit();
-                pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
-                  results, fileLevel, precision);
+                if (results.data.area->reserveParticipationSTStorageClustersIndexMap.size() == 0) //Bimap in empty
+                {
+                    logs.warning() << "Problem during the solver run, the STS bimap is empty for area " << results.data.area->name;
+                    break;
+                }
+                else
+                {
+                    auto [clusterName, reserveName]
+                        = results.data.area->reserveParticipationSTStorageClustersIndexMap.get(i);
+                    // Write the data for the current year
+                    results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
+                    results.variableUnit = VCardType::Unit();
+                    pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
+                        results, fileLevel, precision);
+                }
             }
         }
     }

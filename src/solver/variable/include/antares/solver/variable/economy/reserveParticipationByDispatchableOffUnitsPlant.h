@@ -179,15 +179,23 @@ public:
                 i <= state.study.runtime.rangeLimits.hour[Data::rangeEnd];
                 ++i)
             {
-                for (auto const& [reserveName, reserveParticipation] :
-                    state.reserveParticipationPerThermalClusterForYear[i][state.thermalCluster->name()])
+                /*if (results.data.area->reserveParticipationThermalClustersIndexMap.size() == 0) //Bimap in empty
                 {
-                    pValuesForTheCurrentYear
-                        [numSpace][state.area->reserveParticipationThermalClustersIndexMap.get(
-                            std::make_pair(reserveName, state.thermalCluster->name()))]
-                        .hour[i]
-                        = reserveParticipation.offUnitsParticipation;
+                    logs.warning() << "Problem during the solver run, the thermal bimap is empty for area " << results.data.area->name;
+                    break;
                 }
+                else
+                {*/
+                    for (auto const& [reserveName, reserveParticipation] :
+                        state.reserveParticipationPerThermalClusterForYear[i][state.thermalCluster->name()])
+                    {
+                        pValuesForTheCurrentYear
+                            [numSpace][state.area->reserveParticipationThermalClustersIndexMap.get(
+                                std::make_pair(reserveName, state.thermalCluster->name()))]
+                            .hour[i]
+                            = reserveParticipation.offUnitsParticipation;
+                    }
+                //}
             }
         }
         // Next variable
@@ -266,12 +274,20 @@ public:
             // Write the data for the current year
             for (uint i = 0; i < pSize; ++i)
             {
-                auto [clusterName, reserveName]
-                  = results.data.area->reserveParticipationThermalClustersIndexMap.get(i);
-                results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
-                results.variableUnit = VCardType::Unit();
-                pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
-                  results, fileLevel, precision);
+                if (results.data.area->reserveParticipationThermalClustersIndexMap.size() == 0) //Bimap is empty
+                {
+                    logs.warning() << "Problem during the solver run, the thermal bimap is empty for area " << results.data.area->name;
+                    break;
+                }
+                else
+                {
+                    auto [clusterName, reserveName]
+                        = results.data.area->reserveParticipationThermalClustersIndexMap.get(i);
+                    results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
+                    results.variableUnit = VCardType::Unit();
+                    pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
+                        results, fileLevel, precision);
+                }
             }
         }
     }
