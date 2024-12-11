@@ -199,11 +199,19 @@ void localBuildAnnualSurveyReport(SurveyResults& results,
             assert(NULL != results.data.area);
             for (uint i = 0; i < pSize; ++i)
             {
-                auto reserveName = results.data.area->reserveParticipationLTStorageIndexMap.get(i);
-                results.variableCaption = "LongTermStorage_" + reserveName; // VCardType::Caption();
-                results.variableUnit = VCardType::Unit();
-                pValuesForTheCurrentYear[numSpace][0].template buildAnnualSurveyReport<VCardType>(
-                  results, fileLevel, precision);
+                if (results.data.area->reserveParticipationLTStorageIndexMap.size() == 0) //Bimap in empty
+                {
+                    logs.warning() << "Problem during the results export, the LTS bimap is empty for area " << results.data.area->name;
+                    break;
+                }
+                else
+                {
+                    auto reserveName = results.data.area->reserveParticipationLTStorageIndexMap.get(i);
+                    results.variableCaption = "LongTermStorage_" + reserveName; // VCardType::Caption();
+                    results.variableUnit = VCardType::Unit();
+                    pValuesForTheCurrentYear[numSpace][0].template buildAnnualSurveyReport<VCardType>(
+                        results, fileLevel, precision);
+                }
             }
         }
     }

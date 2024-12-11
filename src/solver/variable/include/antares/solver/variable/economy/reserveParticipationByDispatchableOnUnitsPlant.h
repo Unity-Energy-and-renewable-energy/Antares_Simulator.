@@ -268,7 +268,7 @@ public:
             {
                 if (results.data.area->reserveParticipationThermalClustersIndexMap.size() == 0) //Bimap is empty
                 {
-                    logs.warning() << "Problem during the solver run, the thermal bimap is empty for area " << results.data.area->name;
+                    logs.warning() << "Problem during the results export, the thermal bimap is empty for area " << results.data.area->name;
                     break;
                 }
                 else

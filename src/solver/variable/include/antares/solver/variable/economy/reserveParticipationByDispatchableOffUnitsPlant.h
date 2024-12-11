@@ -179,23 +179,15 @@ public:
                 i <= state.study.runtime.rangeLimits.hour[Data::rangeEnd];
                 ++i)
             {
-                /*if (results.data.area->reserveParticipationThermalClustersIndexMap.size() == 0) //Bimap in empty
+                for (auto const& [reserveName, reserveParticipation] :
+                    state.reserveParticipationPerThermalClusterForYear[i][state.thermalCluster->name()])
                 {
-                    logs.warning() << "Problem during the solver run, the thermal bimap is empty for area " << results.data.area->name;
-                    break;
+                    pValuesForTheCurrentYear
+                        [numSpace][state.area->reserveParticipationThermalClustersIndexMap.get(
+                            std::make_pair(reserveName, state.thermalCluster->name()))]
+                        .hour[i]
+                        = reserveParticipation.offUnitsParticipation;
                 }
-                else
-                {*/
-                    for (auto const& [reserveName, reserveParticipation] :
-                        state.reserveParticipationPerThermalClusterForYear[i][state.thermalCluster->name()])
-                    {
-                        pValuesForTheCurrentYear
-                            [numSpace][state.area->reserveParticipationThermalClustersIndexMap.get(
-                                std::make_pair(reserveName, state.thermalCluster->name()))]
-                            .hour[i]
-                            = reserveParticipation.offUnitsParticipation;
-                    }
-                //}
             }
         }
         // Next variable
@@ -276,7 +268,7 @@ public:
             {
                 if (results.data.area->reserveParticipationThermalClustersIndexMap.size() == 0) //Bimap is empty
                 {
-                    logs.warning() << "Problem during the solver run, the thermal bimap is empty for area " << results.data.area->name;
+                    logs.warning() << "Problem during the results export, the thermal bimap is empty for area " << results.data.area->name;
                     break;
                 }
                 else

@@ -260,7 +260,7 @@ public:
             {
                 if (results.data.area->reserveParticipationSTStorageClustersIndexMap.size() == 0) //Bimap in empty
                 {
-                    logs.warning() << "Problem during the solver run, the STS bimap is empty for area " << results.data.area->name;
+                    logs.warning() << "Problem during the results export, the STS bimap is empty for area " << results.data.area->name;
                     break;
                 }
                 else
