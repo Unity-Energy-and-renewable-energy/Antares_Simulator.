@@ -4,27 +4,27 @@ set(src_solver_hydro "${CMAKE_SOURCE_DIR}/solver/hydro")
 set(src_libs_antares_study "${CMAKE_SOURCE_DIR}/libs/antares/study")
 
 set(SRC_TS_NUMBERS
-	# For confort in IDE, but not necessary
-	${src_solver_simulation}/include/antares/solver/simulation/timeseries-numbers.h
-	
-	# Necessary cpp files
-	${src_solver_simulation}/timeseries-numbers.cpp
-	${src_solver_simulation}/include/antares/solver/simulation/ITimeSeriesNumbersWriter.h)
+        # For confort in IDE, but not necessary
+        ${src_solver_simulation}/include/antares/solver/simulation/timeseries-numbers.h
+
+        # Necessary cpp files
+        ${src_solver_simulation}/timeseries-numbers.cpp
+        ${src_solver_simulation}/include/antares/solver/simulation/ITimeSeriesNumbersWriter.h)
 
 add_executable(tests-ts-numbers tests-ts-numbers.cpp ${SRC_TS_NUMBERS})
 
 target_include_directories(tests-ts-numbers
-								PRIVATE
-									"${src_solver_simulation}"
-									"${src_libs_antares_study}"
+        PRIVATE
+        "${src_solver_simulation}"
+        "${src_libs_antares_study}"
 )
 target_link_libraries(tests-ts-numbers
-						PRIVATE
-                            Antares::utils
-							Boost::unit_test_framework
-							model_antares
-							antares-solver-simulation
-							antares-solver-ts-generator
+        PRIVATE
+        Antares::utils
+        Boost::unit_test_framework
+        model_antares
+        antares-solver-simulation
+        antares-solver-ts-generator
 )
 
 # Storing tests-ts-numbers under the folder Unit-tests in the IDE
@@ -38,23 +38,23 @@ set_property(TEST ts-numbers PROPERTY LABELS unit)
 # Tests on area's store-timeseries-number
 # ===================================
 set(SRC_STORE_TS
-		test-store-timeseries-number.cpp
-		)
+        test-store-timeseries-number.cpp
+)
 add_executable(test-store-timeseries-number ${SRC_STORE_TS})
 
 target_link_libraries(test-store-timeseries-number
-		PRIVATE
-		Boost::unit_test_framework
+        PRIVATE
+        Boost::unit_test_framework
         test_utils_unit
-		antares-solver-simulation
-		Antares::study
-		Antares::result_writer
-		)
+        antares-solver-simulation
+        Antares::study
+        Antares::result_writer
+)
 
 # Linux
-if(UNIX AND NOT APPLE)
-	target_link_libraries(test-store-timeseries-number PRIVATE stdc++fs)
-endif()
+if (UNIX AND NOT APPLE)
+    target_link_libraries(test-store-timeseries-number PRIVATE stdc++fs)
+endif ()
 
 set_target_properties(test-store-timeseries-number PROPERTIES FOLDER Unit-tests)
 
@@ -66,22 +66,22 @@ set_property(TEST store-timeseries-number PROPERTY LABELS unit)
 # Tests on time series
 # ===================================
 set(SRC_STORE_TS
-		test-time_series.cpp
-		)
+        test-time_series.cpp
+)
 add_executable(test-time_series ${SRC_STORE_TS})
 
 target_link_libraries(test-time_series
-		PRIVATE
-		Boost::unit_test_framework
+        PRIVATE
+        Boost::unit_test_framework
         test_utils_unit
-		antares-solver-simulation
-		Antares::study
-		)
+        antares-solver-simulation
+        Antares::study
+)
 
 # Linux
-if(UNIX AND NOT APPLE)
-	target_link_libraries(test-time_series PRIVATE stdc++fs)
-endif()
+if (UNIX AND NOT APPLE)
+    target_link_libraries(test-time_series PRIVATE stdc++fs)
+endif ()
 
 
 set_target_properties(test-time_series PROPERTIES FOLDER Unit-tests)
@@ -97,26 +97,49 @@ set_property(TEST time_series PROPERTY LABELS unit)
 add_executable(test-hydro_final test-hydro-final-reservoir-level-functions.cpp)
 
 target_include_directories(test-hydro_final
-	PRIVATE
-	"${src_solver_simulation}"
-	"${src_libs_antares_study}"
-	"${src_solver_hydro}"
+        PRIVATE
+        "${src_solver_simulation}"
+        "${src_libs_antares_study}"
+        "${src_solver_hydro}"
 )
 target_link_libraries(test-hydro_final
-	PRIVATE
-	Boost::unit_test_framework
-	Antares::study
-	antares-solver-simulation
-	Antares::array
+        PRIVATE
+        Boost::unit_test_framework
+        Antares::study
+        antares-solver-simulation
+        Antares::array
 )
 
 # Linux
-if(UNIX AND NOT APPLE)
-	target_link_libraries(test-hydro_final PRIVATE stdc++fs)
-endif()
+if (UNIX AND NOT APPLE)
+    target_link_libraries(test-hydro_final PRIVATE stdc++fs)
+endif ()
 
 set_target_properties(test-hydro_final PROPERTIES FOLDER Unit-tests)
 
 add_test(NAME hydro_final COMMAND test-hydro_final)
 
 set_property(TEST hydro_final PROPERTY LABELS unit)
+
+
+# ===================================
+# Tests on hydro remix algorithm
+# ===================================
+add_executable(test-hydro-remix
+        test-hydro-remix.cpp
+        ${src_solver_simulation}/hydro-remix-new.cpp
+)
+
+target_link_libraries(test-hydro-remix
+        PRIVATE
+        Boost::unit_test_framework
+)
+
+# gp : do we need this ?
+if (UNIX AND NOT APPLE)
+    target_link_libraries(test-hydro_final PRIVATE stdc++fs)
+endif ()
+
+set_target_properties(test-hydro-remix PROPERTIES FOLDER Unit-tests)
+add_test(NAME hydro_remix COMMAND test-hydro-remix)
+set_property(TEST hydro_remix PROPERTY LABELS unit)
