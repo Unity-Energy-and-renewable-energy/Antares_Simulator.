@@ -1,26 +1,14 @@
 #include <algorithm>
-#include <cmath>
-#include <iomanip>
-#include <iostream>
-#include <limits>
-#include <numeric>
 #include <vector>
-
-using namespace std;
 
 namespace Antares::Solver::Simulation
 {
 
-bool new_remix_hydro()
-{
-    return true;
-}
-
-int find_min_index(const vector<double>& G_plus_H,
-                   const vector<double>& new_D,
-                   const vector<double>& new_H,
-                   const vector<int>& tried_creux,
-                   const vector<double>& P_max,
+int find_min_index(const std::vector<double>& G_plus_H,
+                   const std::vector<double>& new_D,
+                   const std::vector<double>& new_H,
+                   const std::vector<int>& tried_creux,
+                   const std::vector<double>& P_max,
                    double top)
 {
     double min_val = top;
@@ -39,10 +27,10 @@ int find_min_index(const vector<double>& G_plus_H,
     return min_idx;
 }
 
-int find_max_index(const vector<double>& G_plus_H,
-                   const vector<double>& new_H,
-                   const vector<int>& tried_pic,
-                   const vector<double>& P_min,
+int find_max_index(const std::vector<double>& G_plus_H,
+                   const std::vector<double>& new_H,
+                   const std::vector<int>& tried_pic,
+                   const std::vector<double>& P_min,
                    double ref_value,
                    double eps)
 {
@@ -62,27 +50,28 @@ int find_max_index(const vector<double>& G_plus_H,
     return max_idx;
 }
 
-pair<vector<double>, vector<double>> new_remix_hydro(const vector<double>& G,
-                                                     const vector<double>& H,
-                                                     const vector<double>& D,
-                                                     const vector<double>& P_max,
-                                                     const vector<double>& P_min,
-                                                     double initial_level,
-                                                     double capa,
-                                                     const vector<double>& inflow)
+std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
+  const std::vector<double>& G,
+  const std::vector<double>& H,
+  const std::vector<double>& D,
+  const std::vector<double>& P_max,
+  const std::vector<double>& P_min,
+  double initial_level,
+  double capa,
+  const std::vector<double>& inflow)
 {
-    vector<double> new_H = H;
-    vector<double> new_D = D;
+    std::vector<double> new_H = H;
+    std::vector<double> new_D = D;
 
     int loop = 1000;
     double eps = 1e-2;
     double top = *max_element(G.begin(), G.end()) + *max_element(H.begin(), H.end())
                  + *max_element(D.begin(), D.end()) + 1;
 
-    vector<double> G_plus_H(G.size());
-    transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), plus<>());
+    std::vector<double> G_plus_H(G.size());
+    transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), std::plus<>());
 
-    vector<double> level(G.size());
+    std::vector<double> level(G.size());
     level[0] = initial_level + inflow[0] - new_H[0];
     for (size_t i = 1; i < level.size(); ++i)
     {
@@ -91,7 +80,7 @@ pair<vector<double>, vector<double>> new_remix_hydro(const vector<double>& G,
 
     while (loop-- > 0)
     {
-        vector<int> tried_creux(G.size(), 0);
+        std::vector<int> tried_creux(G.size(), 0);
         double delta = 0;
 
         while (true)
@@ -102,7 +91,7 @@ pair<vector<double>, vector<double>> new_remix_hydro(const vector<double>& G,
                 break;
             }
 
-            vector<int> tried_pic(G.size(), 0);
+            std::vector<int> tried_pic(G.size(), 0);
             while (true)
             {
                 int idx_pic = find_max_index(G_plus_H,
@@ -116,20 +105,21 @@ pair<vector<double>, vector<double>> new_remix_hydro(const vector<double>& G,
                     break;
                 }
 
-                vector<double> intermediate_level(level.begin() + min(idx_creux, idx_pic),
-                                                  level.begin() + max(idx_creux, idx_pic));
+                std::vector<double> intermediate_level(level.begin() + std::min(idx_creux, idx_pic),
+                                                       level.begin()
+                                                         + std::max(idx_creux, idx_pic));
 
-                double max_pic = min(new_H[idx_pic] - P_min[idx_pic],
-                                     capa
-                                       - *max_element(intermediate_level.begin(),
-                                                      intermediate_level.end()));
-                double max_creux = min(
+                double max_pic = std::min(new_H[idx_pic] - P_min[idx_pic],
+                                          capa
+                                            - *max_element(intermediate_level.begin(),
+                                                           intermediate_level.end()));
+                double max_creux = std::min(
                   {P_max[idx_creux] - new_H[idx_creux],
                    new_D[idx_creux],
                    *min_element(intermediate_level.begin(), intermediate_level.end())});
-                double dif_pic_creux = max(G_plus_H[idx_pic] - G_plus_H[idx_creux], 0.0);
+                double dif_pic_creux = std::max(G_plus_H[idx_pic] - G_plus_H[idx_creux], 0.0);
 
-                delta = max(min({max_pic, max_creux, dif_pic_creux / 2.0}), 0.0);
+                delta = std::max(std::min({max_pic, max_creux, dif_pic_creux / 2.0}), 0.0);
 
                 if (delta > 0)
                 {
@@ -157,7 +147,7 @@ pair<vector<double>, vector<double>> new_remix_hydro(const vector<double>& G,
             break;
         }
 
-        transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), plus<>());
+        transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), std::plus<>());
         level[0] = initial_level + inflow[0] - new_H[0];
         for (size_t i = 1; i < level.size(); ++i)
         {
