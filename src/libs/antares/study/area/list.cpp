@@ -923,7 +923,7 @@ static bool AreaListLoadFromFolderSingleArea(Study& study,
                   {
                       for (auto* p = section.firstProperty; p; p = p->next)
                       {
-                          CString<30, false> tmp;
+                          CString<32, false> tmp;
                           tmp = p->key;
                           tmp.toLower();
 
