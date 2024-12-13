@@ -22,7 +22,7 @@ std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
 
 using namespace Antares::Solver::Simulation;
 
-BOOST_AUTO_TEST_CASE(first_dummy_unit_test___will_be_removed)
+BOOST_AUTO_TEST_CASE(dummy_unit_test___will_be_removed)
 {
     std::vector<double> G = {1.0, 2.0, 3.0, 4.0, 5.0};
     std::vector<double> H = {2.0, 3.0, 4.0, 5.0, 6.0};
@@ -80,4 +80,25 @@ BOOST_AUTO_TEST_CASE(input_is_acceptable__no_exception_raised)
     double capa = 1.;
 
     BOOST_CHECK_NO_THROW(new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows));
+}
+
+BOOST_AUTO_TEST_CASE(hydro_prod_very_changing__smoothing_required___smoothing_limited_by_pmax)
+{
+    double pmax = 10.;
+    std::vector<double> G(5, 100.);
+    std::vector<double> H = {0., 20., 40.0, 60.0, 80.0};
+    std::vector<double> D = {80.0, 60., 40., 20., 0.};
+    std::vector<double> P_max(5, pmax);
+    std::vector<double> P_min(5, 0.);
+    double initial_level = 200.;
+    double capa = 400.;
+    std::vector<double> inflows(5, 0.);
+
+    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    BOOST_CHECK(new_H[0] < pmax);
+    BOOST_CHECK(new_H[1] < pmax);
+    BOOST_CHECK(new_H[2] < pmax);
+    BOOST_CHECK(new_H[3] < pmax);
+    BOOST_CHECK(new_H[4] < pmax);
 }
