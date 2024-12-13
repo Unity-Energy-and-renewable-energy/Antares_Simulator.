@@ -132,7 +132,9 @@ struct CORRESPONDANCES_DES_CONTRAINTES
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds;
     std::vector<int> NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp;
     std::vector<int> NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown;
-
+    std::vector<int> NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation;
+    std::vector<int> NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationDown;
 
     std::vector<int> NumeroDeContrainteDesNiveauxPays;
 

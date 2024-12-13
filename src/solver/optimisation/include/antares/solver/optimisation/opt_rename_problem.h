@@ -255,6 +255,9 @@ public:
     void LTPumpingCapacityThreasholdsDown(unsigned int constraint, const std::string& clusterName);
     void LTStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName);
     void LTStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName);
+    void LTEnergyStockLevelReserveParticipation(unsigned int constraint, const std::string& clusterName, const std::string& reserveName);
+    void LTGlobalEnergyStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName);
+    void LTGlobalEnergyStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName);
 
     void ReserveSatisfaction(unsigned int constraint, const std::string& reserveName);
     void PMaxDispatchableGeneration(unsigned int constraint, const std::string& clusterName);

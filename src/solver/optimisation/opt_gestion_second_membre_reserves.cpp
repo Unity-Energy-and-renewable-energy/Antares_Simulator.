@@ -144,7 +144,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                   = areaReserves[pays].areaCapacityReservationsUp;
                 for (const auto& areaReserveUp : areaReservesUp)
                 {
-                    for (const auto& [clusterId, reserveParticipation] :
+                    for (const auto& [clusterId, reserveParticipation]:
                          areaReserveUp.AllSTStorageReservesParticipation)
                     {
                         int cnt
@@ -325,6 +325,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                SecondMembre[cnt] = reserveParticipation.maxTurbining;
                                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                            }
+
                            cnt
                              = CorrespondanceCntNativesCntOptim
                                  .NumeroDeContrainteDesContraintesLTStorageClusterMaxInjectionParticipation
@@ -332,6 +333,24 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                            if (cnt >= 0)
                            {
                                SecondMembre[cnt] = reserveParticipation.maxPumping;
+                               AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                           }
+
+                           cnt
+                             = CorrespondanceCntNativesCntOptim
+                                 .NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation
+                                   [reserveParticipation.globalIndexClusterParticipation];
+                           if (cnt >= 0)
+                           {
+                               int weekFirstHour = problemeHebdo->weekInTheYear * 168;
+                               auto& hydroCluster = problemeHebdo
+                                                      ->CaracteristiquesHydrauliques[pays];
+                               int hourInTheYear = weekFirstHour + pdtHebdo;
+                               double level_min = hydroCluster.NiveauHoraireInf[pdtHebdo];
+
+                               SecondMembre[cnt] = -areaReserveUp.maxEnergyActivationRatio
+                                                   * areaReserveUp.maxActivationDuration
+                                                   * level_min;
                                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                            }
                        }
@@ -360,6 +379,22 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                                SecondMembre[cnt] = reserveParticipation.maxPumping;
                                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                            }
+                           cnt
+                             = CorrespondanceCntNativesCntOptim
+                                 .NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation
+                                   [reserveParticipation.globalIndexClusterParticipation];
+                           if (cnt >= 0)
+                           {
+                               int weekFirstHour = problemeHebdo->weekInTheYear * 168;
+                               auto& hydroCluster = problemeHebdo
+                                                      ->CaracteristiquesHydrauliques[pays];
+                               int hourInTheYear = weekFirstHour + pdtHebdo;
+                               double level_max = hydroCluster.NiveauHoraireSup[pdtHebdo];
+                               SecondMembre[cnt] = areaReserveDown.maxEnergyActivationRatio
+                                                   * areaReserveDown.maxActivationDuration
+                                                   * level_max;
+                               AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                           }
                        }
                    }
 
@@ -379,60 +414,85 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                        || isClusterParticipatingToReserves(
                          problemeHebdo->allReserves[pays].areaCapacityReservationsUp))
                    {
+                       int weekFirstHour = problemeHebdo->weekInTheYear * 168;
+                       int hourInTheYear = weekFirstHour + pdtHebdo;
                        auto& hydroCluster = problemeHebdo->CaracteristiquesHydrauliques[pays];
+                       double level_max = hydroCluster.NiveauHoraireSup[pdtHebdo];
+                       double level_min = hydroCluster.NiveauHoraireInf[pdtHebdo];
 
                        int globalClusterIdx = hydroCluster.GlobalHydroIndex;
-                       int cnt1
+                       int cnt
                          = CorrespondanceCntNativesCntOptim
                              .NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMax
                                [globalClusterIdx];
-                       if (cnt1 >= 0)
+                       if (cnt >= 0)
                        {
-                           SecondMembre[cnt1] = hydroCluster
-                                                  .ContrainteDePmaxHydrauliqueHoraire[pdtJour];
-                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt1] = nullptr;
+                           SecondMembre[cnt] = hydroCluster
+                                                 .ContrainteDePmaxHydrauliqueHoraire[pdtJour];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
-                       
-                       int cnt2
+
+                       cnt
                          = CorrespondanceCntNativesCntOptim
                              .NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMin
                                [globalClusterIdx];
-                       if (cnt2 >= 0)
+                       if (cnt >= 0)
                        {
-                           SecondMembre[cnt2] = hydroCluster
-                                                  .MingenHoraire[pdtJour];
-                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt2] = nullptr;
+                           SecondMembre[cnt] = hydroCluster.MingenHoraire[pdtJour];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
 
-                       int cnt3
+                       cnt
                          = CorrespondanceCntNativesCntOptim
                              .NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds
                                [globalClusterIdx];
-                       if (cnt3 >= 0)
+                       if (cnt >= 0)
                        {
-                           SecondMembre[cnt3] = hydroCluster
-                                                  .ContrainteDePmaxPompageHoraire[pdtJour];
-                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt3] = nullptr;
+                           SecondMembre[cnt] = hydroCluster.ContrainteDePmaxPompageHoraire[pdtJour];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
 
-                       int cnt4 
-                           = CorrespondanceCntNativesCntOptim
-                             .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown
-                               [globalClusterIdx];
-                       if (cnt4 >= 0)
+                       cnt = CorrespondanceCntNativesCntOptim
+                               .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown
+                                 [globalClusterIdx];
+                       if (cnt >= 0)
                        {
-                           SecondMembre[cnt4] = hydroCluster.NiveauHoraireSup[pdtHebdo];;
-                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt4] = nullptr;
+                           SecondMembre[cnt] = hydroCluster.NiveauHoraireSup[pdtHebdo];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
 
-                      int cnt5
-                           = CorrespondanceCntNativesCntOptim
-                             .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp
-                               [globalClusterIdx];
-                       if (cnt5 >= 0)
+                       cnt = CorrespondanceCntNativesCntOptim
+                               .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp
+                                 [globalClusterIdx];
+                       if (cnt >= 0)
                        {
-                           SecondMembre[cnt5] = hydroCluster.NiveauHoraireInf[pdtHebdo];;
-                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt5] = nullptr;
+                           SecondMembre[cnt] = hydroCluster.NiveauHoraireInf[pdtHebdo];
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                       }
+
+                       cnt
+                         = CorrespondanceCntNativesCntOptim
+                             .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationDown
+                               [globalClusterIdx];
+                       if (cnt >= 0)
+                       {
+                           SecondMembre[cnt] = areaReserves[pays].maxGlobalActivationDurationDown
+                                               * areaReserves[pays]
+                                                   .maxGlobalEnergyActivationRatioDown
+                                               * level_max;
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                       }
+
+                       cnt
+                         = CorrespondanceCntNativesCntOptim
+                             .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationUp
+                               [globalClusterIdx];
+                       if (cnt >= 0)
+                       {
+                           SecondMembre[cnt] = -areaReserves[pays].maxGlobalActivationDurationUp
+                                               * areaReserves[pays].maxGlobalEnergyActivationRatioUp
+                                               * level_min;
+                           AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
                        }
                    }
                 }

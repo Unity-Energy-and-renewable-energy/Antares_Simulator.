@@ -729,6 +729,21 @@ void ConstraintNamer::LTStockLevelReserveParticipationDown(unsigned int constrai
     SetLTStorageClusterElementName(constraint, "LTStockLevelReserveParticipationDown", clusterName);
 }
 
+void ConstraintNamer::LTEnergyStockLevelReserveParticipation(unsigned int constraint, const std::string& clusterName, const std::string& reserveName)
+{
+    SetLTStorageClusterAndReserveElementName(constraint, "LTEnergyStockLevelReserveParticipation", clusterName, reserveName);
+}
+
+void ConstraintNamer::LTGlobalEnergyStockLevelReserveParticipationDown(unsigned int constraint, const std::string& clusterName)
+{
+    SetLTStorageClusterElementName(constraint, "LTGlobalEnergyStockLevelReserveParticipationDown", clusterName);
+}
+
+void ConstraintNamer::LTGlobalEnergyStockLevelReserveParticipationUp(unsigned int constraint, const std::string& clusterName)
+{
+    SetLTStorageClusterElementName(constraint, "LTGlobalEnergyStockLevelReserveParticipationUp", clusterName);
+}
+
 void ConstraintNamer::ReserveSatisfaction(unsigned int constraint, const std::string& reserveName)
 {
     SetThermalClusterReserveElementName(constraint, "ReserveSatisfaction", reserveName);

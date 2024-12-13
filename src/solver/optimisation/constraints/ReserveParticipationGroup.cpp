@@ -20,31 +20,33 @@
 */
 
 #include "antares/solver/optimisation/constraints/ReserveParticipationGroup.h"
+
 #include "antares/solver/optimisation/constraints/ConstraintGroup.h"
-#include "antares/solver/optimisation/constraints/PMaxReserve.h"
-#include "antares/solver/optimisation/constraints/OffUnitsThermalParticipatingToReserves.h"
-#include "antares/solver/optimisation/constraints/POffUnits.h"
-#include "antares/solver/optimisation/constraints/POutCapacityThreasholds.h"
-#include "antares/solver/optimisation/constraints/ThermalReserveParticipation.h"
-#include "antares/solver/optimisation/constraints/ReserveSatisfaction.h"
-#include "antares/solver/optimisation/constraints/POutBounds.h"
-#include "antares/solver/optimisation/constraints/STTurbiningMaxReserve.h"
-#include "antares/solver/optimisation/constraints/STPumpingMaxReserve.h"
-#include "antares/solver/optimisation/constraints/STTurbiningCapacityThreasholds.h"
-#include "antares/solver/optimisation/constraints/STPumpingCapacityThreasholds.h"
-#include "antares/solver/optimisation/constraints/STReserveUpParticipation.h"
-#include "antares/solver/optimisation/constraints/STReserveDownParticipation.h"
-#include "antares/solver/optimisation/constraints/LTTurbiningMaxReserve.h"
-#include "antares/solver/optimisation/constraints/LTPumpingMaxReserve.h"
-#include "antares/solver/optimisation/constraints/LTReserveUpParticipation.h"
-#include "antares/solver/optimisation/constraints/LTReserveDownParticipation.h"
-#include "antares/solver/optimisation/constraints/LTTurbiningCapacityThreasholds.h"
 #include "antares/solver/optimisation/constraints/LTPumpingCapacityThreasholds.h"
+#include "antares/solver/optimisation/constraints/LTPumpingMaxReserve.h"
+#include "antares/solver/optimisation/constraints/LTReserveDownParticipation.h"
+#include "antares/solver/optimisation/constraints/LTReserveUpParticipation.h"
+#include "antares/solver/optimisation/constraints/LTStockEnergyLevelReserveParticipation.h"
+#include "antares/solver/optimisation/constraints/LTStockGlobalEnergyLevelReserveParticipation.h"
 #include "antares/solver/optimisation/constraints/LTStockLevelReserveParticipation.h"
-#include "antares/solver/optimisation/constraints/STStockLevelReserveParticipation.h"
+#include "antares/solver/optimisation/constraints/LTTurbiningCapacityThreasholds.h"
+#include "antares/solver/optimisation/constraints/LTTurbiningMaxReserve.h"
+#include "antares/solver/optimisation/constraints/OffUnitsThermalParticipatingToReserves.h"
+#include "antares/solver/optimisation/constraints/PMaxReserve.h"
+#include "antares/solver/optimisation/constraints/POffUnits.h"
+#include "antares/solver/optimisation/constraints/POutBounds.h"
+#include "antares/solver/optimisation/constraints/POutCapacityThreasholds.h"
+#include "antares/solver/optimisation/constraints/ReserveSatisfaction.h"
+#include "antares/solver/optimisation/constraints/STPumpingCapacityThreasholds.h"
+#include "antares/solver/optimisation/constraints/STPumpingMaxReserve.h"
+#include "antares/solver/optimisation/constraints/STReserveDownParticipation.h"
+#include "antares/solver/optimisation/constraints/STReserveUpParticipation.h"
 #include "antares/solver/optimisation/constraints/STStockEnergyLevelReserveParticipation.h"
 #include "antares/solver/optimisation/constraints/STStockGlobalEnergyLevelReserveParticipation.h"
-                               
+#include "antares/solver/optimisation/constraints/STStockLevelReserveParticipation.h"
+#include "antares/solver/optimisation/constraints/STTurbiningCapacityThreasholds.h"
+#include "antares/solver/optimisation/constraints/STTurbiningMaxReserve.h"
+#include "antares/solver/optimisation/constraints/ThermalReserveParticipation.h"
 
 ReserveParticipationGroup::ReserveParticipationGroup(PROBLEME_HEBDO* problemeHebdo,
                                                      bool simulation,
@@ -82,6 +84,8 @@ void ReserveParticipationGroup::BuildConstraints()
         STReserveUpParticipation STReserveUpParticipation(builder_, data);
         STReserveDownParticipation STReserveDownParticipation(builder_, data);
         STStockEnergyLevelReserveParticipation STStockEnergyLevelReserveParticipation(builder_, data);
+        LTStockEnergyLevelReserveParticipation LTStockEnergyLevelReserveParticipation(builder_,
+                                                                                      data);
         LTTurbiningMaxReserve LTTurbiningMaxReserve(builder_, data);
         LTPumpingMaxReserve LTPumpingMaxReserve(builder_, data);
         LTReserveUpParticipation LTReserveUpParticipation(builder_, data);
@@ -251,6 +255,14 @@ void ReserveParticipationGroup::BuildConstraints()
                             // 15 (e)
                             LTReserveUpParticipation
                               .add(pays, reserve, clusterReserveParticipation.clusterIdInArea, pdt);
+
+                            // 15 (s)
+                            LTStockEnergyLevelReserveParticipation.add(
+                              pays,
+                              clusterReserveParticipation.clusterIdInArea,
+                              reserve,
+                              pdt,
+                              true);
                         }
                         reserve++;
                     }
@@ -277,6 +289,14 @@ void ReserveParticipationGroup::BuildConstraints()
                             // 15 (f)
                             LTReserveDownParticipation
                               .add(pays, reserve, clusterReserveParticipation.clusterIdInArea, pdt);
+
+                            // 15 (s)
+                            LTStockEnergyLevelReserveParticipation.add(
+                              pays,
+                              clusterReserveParticipation.clusterIdInArea,
+                              reserve,
+                              pdt,
+                              false);
                         }
                         reserve++;
                     }
@@ -295,6 +315,7 @@ void ReserveParticipationGroup::BuildConstraints()
         LTStockLevelReserveParticipation LTStockLevelReserveParticipation(builder_, data);
         STStockLevelReserveParticipation STStockLevelReserveParticipation(builder_, data);
         STStockGlobalEnergyLevelReserveParticipation STStockGlobalEnergyLevelReserveParticipation(builder_, data);
+        LTStockGlobalEnergyLevelReserveParticipation LTStockGlobalEnergyLevelReserveParticipation(builder_, data);
 
         for (int pdt = 0; pdt < problemeHebdo_->NombreDePasDeTempsPourUneOptimisation; pdt++)
         {
@@ -348,6 +369,8 @@ void ReserveParticipationGroup::BuildConstraints()
                     LTPumpingCapacityThreasholds.add(pays, 0, pdt);
                     // 15 (r)
                     LTStockLevelReserveParticipation.add(pays, 0, pdt);
+                    // 15 (t)
+                    LTStockGlobalEnergyLevelReserveParticipation.add(pays, 0, pdt);
                 }
             }
         }

@@ -2,12 +2,12 @@
 #include "ConstraintBuilder.h"
 
 /*
- * represent 'LTPumpingCapacityThreasholds' Constraint type
+ * represent 'LTStockLevelReserveParticipation' Constraint type
  */
-class LTPumpingCapacityThreasholds : private ConstraintFactory
+class LTStockGlobalEnergyLevelReserveParticipation : private ConstraintFactory
 {
 public:
-    LTPumpingCapacityThreasholds(ConstraintBuilder& builder, ReserveData& data) :
+    LTStockGlobalEnergyLevelReserveParticipation(ConstraintBuilder& builder, ReserveData& data) :
      ConstraintFactory(builder), data(data)
     {
     }
@@ -23,4 +23,3 @@ public:
 private:
     ReserveData& data;
 };
-

@@ -170,6 +170,10 @@ set(RTESOLVER_OPT
 		constraints/STStockEnergyLevelReserveParticipation.cpp
 		include/antares/solver/optimisation/constraints/STStockGlobalEnergyLevelReserveParticipation.h
 		constraints/STStockGlobalEnergyLevelReserveParticipation.cpp
+		include/antares/solver/optimisation/constraints/LTStockEnergyLevelReserveParticipation.h
+		constraints/LTStockEnergyLevelReserveParticipation.cpp
+		include/antares/solver/optimisation/constraints/LTStockGlobalEnergyLevelReserveParticipation.h
+		constraints/LTStockGlobalEnergyLevelReserveParticipation.cpp
 		include/antares/solver/optimisation/ProblemMatrixEssential.h
 		ProblemMatrixEssential.cpp
 		include/antares/solver/optimisation/LinearProblemMatrixStartUpCosts.h

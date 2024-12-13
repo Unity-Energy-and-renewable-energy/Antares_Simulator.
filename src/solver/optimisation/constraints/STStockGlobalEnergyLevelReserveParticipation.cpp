@@ -7,6 +7,7 @@ void STStockGlobalEnergyLevelReserveParticipation::add(int pays, int cluster, in
 
     if (!data.Simulation)
     {
+        // 15 (i)
         // Stock participation is energy constrained (optional constraints)
         //  Sum(P_{res,t_st} * R_{min,res} +/- J_down/up * R_{lambda,t_st}) <= n_min * R_up
         // R_t : stock level at time t 

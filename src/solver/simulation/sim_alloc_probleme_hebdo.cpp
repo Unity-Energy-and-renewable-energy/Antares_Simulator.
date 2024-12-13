@@ -299,7 +299,15 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
             .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown.assign(study.runtime.longTermStorageCount, -1);
         problem.CorrespondanceCntNativesCntOptim[k]
             .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp.assign(study.runtime.longTermStorageCount, -1);
-
+        problem.CorrespondanceCntNativesCntOptim[k]
+          .NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation
+          .assign(study.runtime.longTermStorageCount * study.runtime.capacityReservationCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+          .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationUp
+          .assign(study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+          .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationDown
+          .assign(study.runtime.longTermStorageCount, -1);
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeLaDeuxiemeContrainteDesContraintesDesGroupesQuiTombentEnPanne.assign(

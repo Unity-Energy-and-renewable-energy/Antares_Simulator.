@@ -471,6 +471,15 @@ struct VariableAccessor<ResultsT, Category::dynamicColumns>
                     results.variableCaption
                       = reserveName + "_" + Economy::unsuppliedSpilledToString(unsuppliedOrSpilled);
                 }
+                else if constexpr (std::is_same_v<
+                                     VCardT,
+                                     Economy::VCardReserveParticipationMarginalCost>)
+                {
+                    auto [unsuppliedOrSpilled, reserveName]
+                      = thermal.list.reserveParticipationUnsuppliedSpilledAt(results.data.area, i);
+                    results.variableCaption = reserveName + "_"
+                                              + Economy::marginalCostToString();
+                }
                 else
                     results.variableCaption = thermal.list.enabledClusterAt(i)->name();
 
