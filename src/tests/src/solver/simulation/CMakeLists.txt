@@ -133,6 +133,7 @@ add_executable(test-hydro-remix
 target_link_libraries(test-hydro-remix
         PRIVATE
         Boost::unit_test_framework
+        test_utils_unit
 )
 
 # gp : do we need this ?
