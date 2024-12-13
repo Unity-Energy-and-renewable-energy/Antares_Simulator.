@@ -437,12 +437,30 @@ bool ClusterList<ClusterT>::loadReserveParticipations(Area& area, const std::fil
           auto cluster = area.thermal.list.getClusterByName(tmpClusterName);
           if (reserve && cluster)
           {
-              ThermalClusterReserveParticipation tmpReserveParticipation{reserve.value(),
-                                                                         tmpMaxPower,
-                                                                         tmpParticipationCost,
-                                                                         tmpMaxPowerOff,
-                                                                         tmpParticipationCostOff};
-              cluster.value().get()->addReserveParticipation(section.name, tmpReserveParticipation);
+              bool isClusterMustRun = false;
+              for (const auto& clusterMustRun : area.thermal.list.each_mustrun_and_enabled())
+              {
+                  if (clusterMustRun->id() == cluster.value().get()->id())
+                  {
+                      isClusterMustRun = true;
+                      break;
+                  }
+              }
+              if (!isClusterMustRun)
+              {
+                  ThermalClusterReserveParticipation tmpReserveParticipation{ reserve.value(),
+                                                                             tmpMaxPower,
+                                                                             tmpParticipationCost,
+                                                                             tmpMaxPowerOff,
+                                                                             tmpParticipationCostOff };
+
+
+                  cluster.value().get()->addReserveParticipation(section.name, tmpReserveParticipation);
+              }
+              else
+              {
+                  logs.warning() << area.name << " : " << tmpClusterName << " is mustrun and is participating in capacity reservation " << section.name << ", ignored.";
+              }
           }
           else
           {

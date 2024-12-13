@@ -105,16 +105,8 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the area
-        pSize = 0;
-        for (int areaIndex = 0; areaIndex < study->areas.size(); areaIndex++)
-        {
-            if (study->areas[areaIndex]->allCapacityReservations.size() > 0)
-            {
-                pSize = area->shortTermStorage.reserveParticipationsCount();
-                break;
-            }
-        }
+        // Get the number of STStorage reserveParticipations
+        pSize = area->shortTermStorage.reserveParticipationsCount();
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
@@ -266,13 +258,21 @@ public:
             // Write the data for the current year
             for (uint i = 0; i < pSize; ++i)
             {
-                auto [clusterName, reserveName]
-                  = results.data.area->reserveParticipationSTStorageClustersIndexMap.get(i);
-                // Write the data for the current year
-                results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
-                results.variableUnit = VCardType::Unit();
-                pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
-                  results, fileLevel, precision);
+                if (results.data.area->reserveParticipationSTStorageClustersIndexMap.size() == 0) //Bimap in empty
+                {
+                    logs.warning() << "Problem during the results export, the STS bimap is empty for area " << results.data.area->name;
+                    break;
+                }
+                else
+                {
+                    auto [clusterName, reserveName]
+                        = results.data.area->reserveParticipationSTStorageClustersIndexMap.get(i);
+                    // Write the data for the current year
+                    results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
+                    results.variableUnit = VCardType::Unit();
+                    pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
+                        results, fileLevel, precision);
+                }
             }
         }
     }
