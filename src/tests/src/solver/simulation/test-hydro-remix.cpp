@@ -2,6 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 
+#include <algorithm>
 #include <unit_test_utils.h>
 #include <vector>
 
@@ -82,23 +83,94 @@ BOOST_AUTO_TEST_CASE(input_is_acceptable__no_exception_raised)
     BOOST_CHECK_NO_THROW(new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows));
 }
 
-BOOST_AUTO_TEST_CASE(hydro_prod_very_changing__smoothing_required___smoothing_limited_by_pmax)
+BOOST_AUTO_TEST_CASE(hydro_increases_but_pmax_only_10mwh___10mwh_are_moved_from_last_to_first_hour)
 {
-    double pmax = 10.;
     std::vector<double> G(5, 100.);
-    std::vector<double> H = {0., 20., 40.0, 60.0, 80.0};
+    std::vector<double> H = {0., 20., 40., 60., 80.};
     std::vector<double> D = {80.0, 60., 40., 20., 0.};
-    std::vector<double> P_max(5, pmax);
+    std::vector<double> P_max(5, 10.);
     std::vector<double> P_min(5, 0.);
-    double initial_level = 200.;
-    double capa = 400.;
+    double initial_level = 500.;
+    double capa = 1000.;
     std::vector<double> inflows(5, 0.);
 
     auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
 
-    BOOST_CHECK(new_H[0] < pmax);
-    BOOST_CHECK(new_H[1] < pmax);
-    BOOST_CHECK(new_H[2] < pmax);
-    BOOST_CHECK(new_H[3] < pmax);
-    BOOST_CHECK(new_H[4] < pmax);
+    std::vector<double> expected_H = {10., 20., 40., 60., 70.};
+    std::vector<double> expected_D = {70., 60., 40., 20., 10.};
+    BOOST_CHECK(new_H == expected_H);
+    BOOST_CHECK(new_D == expected_D);
 }
+
+BOOST_AUTO_TEST_CASE(hydro_increases_but_pmax_only_20mwh___20mwh_are_moved_from_last_to_first_hour)
+{
+    std::vector<double> G(5, 100.);
+    std::vector<double> H = {0., 20., 40., 60., 80.};
+    std::vector<double> D = {80.0, 60., 40., 20., 0.};
+    std::vector<double> P_max(5, 20.);
+    std::vector<double> P_min(5, 0.);
+    double initial_level = 500.;
+    double capa = 1000.;
+    std::vector<double> inflows(5, 0.);
+
+    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H = {20., 20., 40., 60., 60.};
+    BOOST_CHECK(new_H == expected_H);
+}
+
+BOOST_AUTO_TEST_CASE(hydro_increases_but_pmax_only_30mwh___30mwh_are_moved_from_last_to_first_hour)
+{
+    std::vector<double> G(5, 100.);
+    std::vector<double> H = {0., 20., 40., 60., 80.};
+    std::vector<double> D = {80.0, 60., 40., 20., 0.};
+    std::vector<double> P_max(5, 30.);
+    std::vector<double> P_min(5, 0.);
+    double initial_level = 500.;
+    double capa = 1000.;
+    std::vector<double> inflows(5, 0.);
+
+    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H = {30., 30., 40., 50., 50.};
+    BOOST_CHECK(new_H == expected_H);
+}
+
+BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___final_hydro_is_flat_and_limited_by_pmax)
+{
+    std::vector<double> G(5, 100.);
+    std::vector<double> H = {0., 20., 40., 60., 80.};
+    std::vector<double> D = {80.0, 60., 40., 20., 0.};
+    std::vector<double> P_max(5, 40.);
+    std::vector<double> P_min(5, 0.);
+    double initial_level = 500.;
+    double capa = 1000.;
+    std::vector<double> inflows(5, 0.);
+
+    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H = {40., 40., 40., 40., 40.};
+    BOOST_CHECK(new_H == expected_H);
+}
+
+BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_50mwh___final_hydro_is_flat_and_limited_by_pmax)
+{
+    std::vector<double> G(5, 100.);
+    std::vector<double> H = {0., 20., 40., 60., 80.};
+    std::vector<double> D = {80.0, 60., 40., 20., 0.};
+    std::vector<double> P_max(5, 50.);
+    std::vector<double> P_min(5, 0.);
+    double initial_level = 500.;
+    double capa = 1000.;
+    std::vector<double> inflows(5, 0.);
+
+    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H = {40., 40., 40., 40., 40.};
+    BOOST_CHECK(new_H == expected_H);
+}
+
+// Comment for further tests :
+// - Remix hydro algorithm seems symetrical (if we have input vectors and corresponding output
+//   vectors, run the algo on reversed vectors gives reversed output result vectors)
+// - After running remix hydro algo, sum(H), sum(H + D) must remain the same.
