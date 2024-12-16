@@ -129,7 +129,7 @@ BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_smoothed_to_mean_H_20
     BOOST_CHECK(new_D == expected_D);
 }
 
-BOOST_AUTO_TEST_CASE(Pmax_does_not_influence_results_when_greater_than_40mwh)
+BOOST_AUTO_TEST_CASE(Pmax_does_not_impact_results_when_greater_than_40mwh)
 {
     std::vector<double> P_max(5, 50.);
     std::vector<double> P_min(5, 0.);
@@ -155,7 +155,6 @@ BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_smoothed_to_mean_H_20
     std::vector<double> P_min(5, 0.);
     std::vector<double> G(5, 100.);
     std::vector<double> H = {40., 30., 20., 10., 0.}; // H <= Pmax everywhere
-    // std::vector<double> D = {80.0, 60., 40., 20., 0.};
     std::vector<double> D = {0., 20., 40., 60., 80.};
     double initial_level = 500.;
     double capa = 1000.;
@@ -170,8 +169,36 @@ BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_smoothed_to_mean_H_20
     BOOST_CHECK(new_D == expected_D);
 }
 
-// Comment for further tests :
-// - Remix hydro algorithm seems symetrical (if we have input vectors and corresponding output
+BOOST_AUTO_TEST_CASE(influence_of_pmax)
+{
+    std::vector<double> P_max(5, 20.);
+    std::vector<double> P_min(5, 0.);
+
+    // G decreases
+    std::vector<double> G = {100., 80., 60., 40., 20.};
+
+    // H is flat and must respect H <= Pmax everywhere
+    std::vector<double> H = {20., 20., 20., 20., 20.}; // H <= Pmax everywhere
+    std::vector<double> D = {50., 50., 50., 50., 50.};
+    double initial_level = 500.;
+    double capa = 1000.;
+    std::vector<double> inflows(5, 0.);
+
+    // What we expect to happen :
+    // Algorithm tends to flatten G + H, so it would require to increase H.
+    // But H is limited by P_max. So Algo does nothing in the end.
+    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H = {20., 20., 20., 20., 20.};
+    std::vector<double> expected_D = {50., 50., 50., 50., 50.};
+    BOOST_CHECK(new_H == expected_H);
+    BOOST_CHECK(new_D == expected_D);
+}
+
+// Ideas for building further tests :
+// ================================
+// - Remix hydro algorithm seems symmetrical (if we have input vectors and corresponding output
 //   vectors, run the algo on reversed vectors gives reversed output result vectors)
+// - How to test influence of Pmin ?
 // - After running remix hydro algo, sum(H), sum(H + D) must remain the same.
 // - influence of D : low values of G + H are searched where D > 0 (not where D >= 0)
