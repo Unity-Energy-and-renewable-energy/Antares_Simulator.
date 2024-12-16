@@ -194,57 +194,58 @@ void OPT_ExportRawOptimizationResults(PROBLEME_HEBDO* problemeHebdo,
         const std::string fileName = std::string("RawResultsWeek") + std::to_string(problemeHebdo->weekInTheYear) + "_" + filename + ".txt";
         std::string content;
         std::string baseContent;
-        content += "year:\t" + problemeHebdo->year;
-        content += "weekInTheYear:\t" + problemeHebdo->weekInTheYear;
-        content += "OptimisationAuPasHebdomadaire:\t" + problemeHebdo->OptimisationAuPasHebdomadaire;
-        content += "TypeDeLissageHydraulique:\t" + problemeHebdo->TypeDeLissageHydraulique;
-        content += "WaterValueAccurate:\t" + problemeHebdo->WaterValueAccurate;
-        content += "OptimisationAvecCoutsDeDemarrage:\t" + problemeHebdo->OptimisationAvecCoutsDeDemarrage;
-        content += "OptimisationAvecVariablesEntieres:\t" + problemeHebdo->OptimisationAvecVariablesEntieres;
-        content += "NombreDePays:\t" + problemeHebdo->NombreDePays;
-        content += "NombreDePaliersThermiques:\t" + problemeHebdo->NombreDePaliersThermiques;
-        content += "NombreDInterconnexions:\t" + problemeHebdo->NombreDInterconnexions;
-        content += "NombreDePasDeTemps:\t" + problemeHebdo->NombreDePasDeTemps;
-        content += "NombreDePasDeTempsPourUneOptimisation:\t" + problemeHebdo->NombreDePasDeTempsPourUneOptimisation;
-        content += "NombreDeJours:\t" + problemeHebdo->NombreDeJours;
-        content += "NombreDePasDeTempsDUneJournee:\t" + problemeHebdo->NombreDePasDeTempsDUneJournee;
-        content += "NumberOfShortTermStorages:\t" + problemeHebdo->NumberOfShortTermStorages;
-        content += "NbTermesContraintesPourLesCoutsDeDemarrage:\t" + problemeHebdo->NbTermesContraintesPourLesCoutsDeDemarrage;
-        content += "TypeDOptimisation:\t" + problemeHebdo->TypeDOptimisation;
-        content += "NombreDeContraintesCouplantes:\t" + problemeHebdo->NombreDeContraintesCouplantes;
-        content += "ReinitOptimisation:\t" + problemeHebdo->ReinitOptimisation;
-        content += "exportMPSOnError:\t" + problemeHebdo->exportMPSOnError;
-        content += "NamedProblems:\t" + problemeHebdo->NamedProblems;
-        content += "exportRawOptimizationResults:\t" + problemeHebdo->exportRawOptimizationResults;
-        content += "HeureDansLAnnee:\t" + problemeHebdo->HeureDansLAnnee;
-        content += "LeProblemeADejaEteInstancie:\t" + problemeHebdo->LeProblemeADejaEteInstancie;
-        content += "firstWeekOfSimulation:\t" + problemeHebdo->firstWeekOfSimulation;
-        content += "Expansion:\t" + problemeHebdo->Expansion;
-        content += "YaDeLaReserveJmoins1:\t" + problemeHebdo->YaDeLaReserveJmoins1;
+        content += "year:\t" + std::to_string(problemeHebdo->year) + "\r\n";
+        content += "weekInTheYear:\t" + std::to_string(problemeHebdo->weekInTheYear) + "\r\n";
+        content += "OptimisationAuPasHebdomadaire:\t" + std::to_string(problemeHebdo->OptimisationAuPasHebdomadaire) + "\r\n";
+        content += "TypeDeLissageHydraulique:\t" + std::to_string(problemeHebdo->TypeDeLissageHydraulique) + "\r\n";
+        content += "WaterValueAccurate:\t" + std::to_string(problemeHebdo->WaterValueAccurate) + "\r\n";
+        content += "OptimisationAvecCoutsDeDemarrage:\t" + std::to_string(problemeHebdo->OptimisationAvecCoutsDeDemarrage) + "\r\n";
+        content += "OptimisationAvecVariablesEntieres:\t" + std::to_string(problemeHebdo->OptimisationAvecVariablesEntieres) + "\r\n";
+        content += "NombreDePays:\t" + std::to_string(problemeHebdo->NombreDePays) + "\r\n";
+        content += "NombreDePaliersThermiques:\t" + std::to_string(problemeHebdo->NombreDePaliersThermiques) + "\r\n";
+        content += "NombreDInterconnexions:\t" + std::to_string(problemeHebdo->NombreDInterconnexions) + "\r\n";
+        content += "NombreDePasDeTemps:\t" + std::to_string(problemeHebdo->NombreDePasDeTemps) + "\r\n";
+        content += "NombreDePasDeTempsPourUneOptimisation:\t" + std::to_string(problemeHebdo->NombreDePasDeTempsPourUneOptimisation) + "\r\n";
+        content += "NombreDeJours:\t" + std::to_string(problemeHebdo->NombreDeJours) + "\r\n";
+        content += "NombreDePasDeTempsDUneJournee:\t" + std::to_string(problemeHebdo->NombreDePasDeTempsDUneJournee) + "\r\n";
+        content += "NumberOfShortTermStorages:\t" + std::to_string(problemeHebdo->NumberOfShortTermStorages) + "\r\n";
+        content += "NbTermesContraintesPourLesCoutsDeDemarrage:\t" + std::to_string(problemeHebdo->NbTermesContraintesPourLesCoutsDeDemarrage) + "\r\n";
+        content += "TypeDOptimisation:\t" + std::to_string(problemeHebdo->TypeDOptimisation) + "\r\n";
+        content += "NombreDeContraintesCouplantes:\t" + std::to_string(problemeHebdo->NombreDeContraintesCouplantes) + "\r\n";
+        content += "ReinitOptimisation:\t" + std::to_string(problemeHebdo->ReinitOptimisation) + "\r\n";
+        content += "exportMPSOnError:\t" + std::to_string(problemeHebdo->exportMPSOnError) + "\r\n";
+        content += "NamedProblems:\t" + std::to_string(problemeHebdo->NamedProblems) + "\r\n";
+        content += "exportRawOptimizationResults:\t" + std::to_string(problemeHebdo->exportRawOptimizationResults) + "\r\n";
+        content += "HeureDansLAnnee:\t" + std::to_string(problemeHebdo->HeureDansLAnnee) + "\r\n";
+        content += "LeProblemeADejaEteInstancie:\t" + std::to_string(problemeHebdo->LeProblemeADejaEteInstancie) + "\r\n";
+        content += "firstWeekOfSimulation:\t" + std::to_string(problemeHebdo->firstWeekOfSimulation) + "\r\n";
+        content += "Expansion(bool):\t" + std::to_string(problemeHebdo->Expansion) + "\r\n";
+        content += "YaDeLaReserveJmoins1(bool):\t" + std::to_string(problemeHebdo->YaDeLaReserveJmoins1) + "\r\n";
+
         //Interconnexion
         for (uint indexInterco = 0; indexInterco < problemeHebdo->NombreDInterconnexions; indexInterco++)
         {
-            content += "Interconnexion<" + std::to_string(indexInterco) + ">:PaysOrigineDeLInterconnexion:\t" + std::string(problemeHebdo->NomsDesPays[problemeHebdo->PaysOrigineDeLInterconnexion[indexInterco]]);
-            content += "Interconnexion<" + std::to_string(indexInterco) + ">:PaysExtremiteDeLInterconnexion:\t" + std::string(problemeHebdo->NomsDesPays[problemeHebdo->PaysExtremiteDeLInterconnexion[indexInterco]]);
+            content += "Interconnexion<" + std::to_string(indexInterco) + ">:PaysOrigineDeLInterconnexion:\t" + std::string(problemeHebdo->NomsDesPays[problemeHebdo->PaysOrigineDeLInterconnexion[indexInterco]]) + "\r\n";
+            content += "Interconnexion<" + std::to_string(indexInterco) + ">:PaysExtremiteDeLInterconnexion:\t" + std::string(problemeHebdo->NomsDesPays[problemeHebdo->PaysExtremiteDeLInterconnexion[indexInterco]]) + "\r\n";
             baseContent = "Interconnexion<" + std::to_string(indexInterco) + ">:CoutDeTransport:";
             auto coutDeTransport = problemeHebdo->CoutDeTransport[indexInterco];
-            content += baseContent + "IntercoGereeAvecDesCouts:\t" + std::to_string(coutDeTransport.IntercoGereeAvecDesCouts);
-            content += baseContent + "IntercoGereeAvecLoopFlow:\t" + std::to_string(coutDeTransport.IntercoGereeAvecLoopFlow);
+            content += baseContent + "IntercoGereeAvecDesCouts:\t" + std::to_string(coutDeTransport.IntercoGereeAvecDesCouts) + "\r\n";
+            content += baseContent + "IntercoGereeAvecLoopFlow:\t" + std::to_string(coutDeTransport.IntercoGereeAvecLoopFlow) + "\r\n";
             for (uint32_t pdtHebdo = 0; pdtHebdo < NombreDePasDeTempsProblemeHebdo; pdtHebdo++)
             {
-                content += baseContent + "CoutDeTransportOrigineVersExtremite<" + std::to_string(pdtHebdo)  +">:\t" + std::to_string(coutDeTransport.CoutDeTransportOrigineVersExtremite[pdtHebdo]);
-                content += baseContent + "CoutDeTransportExtremiteVersOrigine<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(coutDeTransport.CoutDeTransportExtremiteVersOrigine[pdtHebdo]);
-                content += baseContent + "CoutDeTransportOrigineVersExtremiteRef<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(coutDeTransport.CoutDeTransportOrigineVersExtremiteRef[pdtHebdo]);
-                content += baseContent + "CoutDeTransportExtremiteVersOrigineRef<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(coutDeTransport.CoutDeTransportExtremiteVersOrigineRef[pdtHebdo]);
+                content += baseContent + "CoutDeTransportOrigineVersExtremite<" + std::to_string(pdtHebdo)  +">:\t" + std::to_string(coutDeTransport.CoutDeTransportOrigineVersExtremite[pdtHebdo]) + "\r\n";
+                content += baseContent + "CoutDeTransportExtremiteVersOrigine<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(coutDeTransport.CoutDeTransportExtremiteVersOrigine[pdtHebdo]) + "\r\n";
+                content += baseContent + "CoutDeTransportOrigineVersExtremiteRef<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(coutDeTransport.CoutDeTransportOrigineVersExtremiteRef[pdtHebdo]) + "\r\n";
+                content += baseContent + "CoutDeTransportExtremiteVersOrigineRef<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(coutDeTransport.CoutDeTransportExtremiteVersOrigineRef[pdtHebdo]) + "\r\n";
             }
             baseContent = "Interconnexion<" + std::to_string(indexInterco) + ">:ValeursDeNTC:";
             for (uint32_t pdtHebdo = 0; pdtHebdo < NombreDePasDeTempsProblemeHebdo; pdtHebdo++)
             {
-                content += baseContent + "ValeurDeNTCOrigineVersExtremite<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDeNTCOrigineVersExtremite[indexInterco]);
-                content += baseContent + "ValeurDeNTCExtremiteVersOrigine<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDeNTCExtremiteVersOrigine[indexInterco]);
-                content += baseContent + "ValeurDeLoopFlowOrigineVersExtremite<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDeLoopFlowOrigineVersExtremite[indexInterco]);
-                content += baseContent + "ResistanceApparente<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ResistanceApparente[indexInterco]);
-                content += baseContent + "ValeurDuFlux<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDuFlux[indexInterco]);
+                content += baseContent + "ValeurDeNTCOrigineVersExtremite<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDeNTCOrigineVersExtremite[indexInterco]) + "\r\n";
+                content += baseContent + "ValeurDeNTCExtremiteVersOrigine<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDeNTCExtremiteVersOrigine[indexInterco]) + "\r\n";
+                content += baseContent + "ValeurDeLoopFlowOrigineVersExtremite<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDeLoopFlowOrigineVersExtremite[indexInterco]) + "\r\n";
+                content += baseContent + "ResistanceApparente<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ResistanceApparente[indexInterco]) + "\r\n";
+                content += baseContent + "ValeurDuFlux<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ValeursDeNTC[pdtHebdo].ValeurDuFlux[indexInterco]) + "\r\n";
             }
         } 
 
@@ -358,13 +359,35 @@ void OPT_ExportRawOptimizationResults(PROBLEME_HEBDO* problemeHebdo,
             for (uint32_t pdtHebdo = 0; pdtHebdo < NombreDePasDeTempsProblemeHebdo; pdtHebdo++)
             {
                 content += "SoldeMoyenHoraire:<" + areaName + ">:SoldeMoyenDuPays<" +  std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->SoldeMoyenHoraire[pdtHebdo].SoldeMoyenDuPays[pays]) + "\r\n";
+                content += "ReserveJMoins1:<" + areaName + ">:ReserveHoraireJmoins1<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ReserveJMoins1[pays].ReserveHoraireJMoins1[pdtHebdo]) + "\r\n";
+                content += "AllMustRunGeneration:<" + std::to_string(pdtHebdo) + ">:AllMustRunGenerationOfArea<" + areaName + ">:\t" + std::to_string(problemeHebdo->AllMustRunGeneration[pdtHebdo].AllMustRunGenerationOfArea[pays]) + "\r\n";
             }
+            content += "area<" + areaName + ">:CoefficientEcretementPMaxHydraulique:\t" + std::to_string(problemeHebdo->CoefficientEcretementPMaxHydraulique[pays]) + "\r\n";
+            content += "area<" + areaName + ">:previousSimulationFinalLevel:\t" + std::to_string(problemeHebdo->previousSimulationFinalLevel[pays]) + "\r\n";
+
+        }
+        for (int opt = 0; opt < 2; opt++)
+        {
+            content += "timeMeasure<" + std::to_string(opt) + ">:solveTime:\t" + std::to_string(problemeHebdo->timeMeasure[opt].solveTime) + "\r\n";
+            content += "timeMeasure<" + std::to_string(opt) + ">:updateTime:\t" + std::to_string(problemeHebdo->timeMeasure[opt].updateTime) + "\r\n";
+        }
+        for (int opt = 0; opt < 7; opt++)
+        {
+            content += "coutOptimalSolution2<" + std::to_string(opt) + ">:\t" + std::to_string(problemeHebdo->coutOptimalSolution2[opt]) + "\r\n";
+            content += "coutOptimalSolution1<" + std::to_string(opt) + ">:\t" + std::to_string(problemeHebdo->coutOptimalSolution1[opt]) + "\r\n";
+        }
+        for (int nbJournAn = 0; nbJournAn < 366; nbJournAn++)
+        {
+            content += "maxPminThermiqueByDay<" + std::to_string(nbJournAn) + ">:\t" + std::to_string(problemeHebdo->maxPminThermiqueByDay[nbJournAn]) + "\r\n";
         }
 
         for (uint32_t pdtHebdo = 0; pdtHebdo < NombreDePasDeTempsProblemeHebdo; pdtHebdo++)
         {
             content += "NumeroDeJourDuPasDeTemps<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->NumeroDeJourDuPasDeTemps[pdtHebdo]) + "\r\n";
             content += "NumeroDIntervalleOptimiseDuPasDeTemps<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->NumeroDIntervalleOptimiseDuPasDeTemps[pdtHebdo]) + "\r\n";
+            content += "NbGrpCourbeGuide<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->NbGrpCourbeGuide[pdtHebdo]) + "\r\n";
+            content += "NbGrpOpt<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->NbGrpOpt[pdtHebdo]) + "\r\n";
+
 
             for (uint32_t pays = 0; pays < problemeHebdo->NombreDePays; pays++)
             {
@@ -375,16 +398,38 @@ void OPT_ExportRawOptimizationResults(PROBLEME_HEBDO* problemeHebdo,
                     = problemeHebdo->PaliersThermiquesDuPays[pays];
                 
                 content += "area<" + areaName + ">:ConsommationsAbattues:ConsommationAbattueDuPays<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(problemeHebdo->ConsommationsAbattues[pdtHebdo].ConsommationAbattueDuPays[pays]) + "\r\n";
+                //Resultats Horaires
+                content += "ResultatsHoraires<" + areaName + ">:ValeursHorairesDeDefaillancePositive<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.ValeursHorairesDeDefaillancePositive[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:ValeursHorairesDeDefaillancePositiveCSR<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.ValeursHorairesDeDefaillancePositiveCSR[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:ValeursHorairesDENS<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.ValeursHorairesDENS[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:ValeursHorairesLmrViolations<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.ValeursHorairesLmrViolations[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:ValeursHorairesDtgMrgCsr<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.ValeursHorairesDtgMrgCsr[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:ValeursHorairesDeDefaillanceNegative<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.ValeursHorairesDeDefaillanceNegative[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:PompageHoraire<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.PompageHoraire[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:TurbinageHoraire<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.TurbinageHoraire[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:niveauxHoraires<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.niveauxHoraires[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:valeurH2oHoraire<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.valeurH2oHoraire[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:debordementsHoraires<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.debordementsHoraires[pdtHebdo]) + "\r\n";
+                content += "ResultatsHoraires<" + areaName + ">:CoutsMarginauxHoraires<" + std::to_string(pdtHebdo) + ">:\t" + std::to_string(ResultatsHoraires.CoutsMarginauxHoraires[pdtHebdo]) + "\r\n";
 
-                for (int index = 0; index < PaliersThermiquesDuPays.NombreDePaliersThermiques; index++)
+                for (int indexThermique = 0; indexThermique < PaliersThermiquesDuPays.NombreDePaliersThermiques ; indexThermique++)
                 {
-                    std::string clusterName = PaliersThermiquesDuPays.NomsDesPaliersThermiques[index];
+                    std::string clusterName = PaliersThermiquesDuPays.NomsDesPaliersThermiques[indexThermique];
                 
-                    baseContent = "ResultatsHoraires:ProductionThermique:area<" + areaName + ">:ThermalCluster<" + clusterName + ">:";
-                    content += baseContent + "NombreDeGroupesEnMarcheDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesEnMarcheDuPalier[index]) + "\r\n";
-                    content += baseContent + "NombreDeGroupesQuiDemarrentDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiDemarrentDuPalier[index]) + "\r\n";
-                    content += baseContent + "NombreDeGroupesQuiSArretentDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiSArretentDuPalier[index]) + "\r\n";
-                    content += baseContent + "NombreDeGroupesQuiTombentEnPanneDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiTombentEnPanneDuPalier[index]) + "\r\n";
+                    baseContent = "ResultatsHoraires<" + areaName + ">:ProductionThermique<" + clusterName + ">:";
+                    content += baseContent + "NombreDeGroupesEnMarcheDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesEnMarcheDuPalier[indexThermique]) + "\r\n";
+                    content += baseContent + "NombreDeGroupesQuiDemarrentDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiDemarrentDuPalier[indexThermique]) + "\r\n";
+                    content += baseContent + "NombreDeGroupesQuiSArretentDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiSArretentDuPalier[indexThermique]) + "\r\n";
+                    content += baseContent + "NombreDeGroupesQuiTombentEnPanneDuPalier<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ProductionThermique[pdtHebdo].NombreDeGroupesQuiTombentEnPanneDuPalier[indexThermique]) + "\r\n";
+                }
+                auto& ShortTermStorage
+                    = problemeHebdo->ShortTermStorage[pays];
+                for (int indexSTS = 0; indexSTS < ShortTermStorage.size(); indexSTS++)
+                {
+                    baseContent = "ResultatsHoraires<" + areaName + ">:ShortTermStorage<" + ShortTermStorage[indexSTS].name + ">:";
+                    content += baseContent + "level<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ResultatsHoraires.ShortTermStorage[pdtHebdo].level[indexSTS]) + "\r\n";
+                    content += baseContent + "injection<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ResultatsHoraires.ShortTermStorage[pdtHebdo].injection[indexSTS]) + "\r\n";
+                    content += baseContent + "withdrawal<" + std::to_string(pdtHebdo) + ">" + "\t" + std::to_string(ResultatsHoraires.ShortTermStorage[pdtHebdo].withdrawal[indexSTS]) + "\r\n";
                 }
             }
             writer.addEntryFromBuffer(fileName, content);
