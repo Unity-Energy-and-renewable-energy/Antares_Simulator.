@@ -29,6 +29,7 @@
 #include "economy/vCardReserveParticipationBySTStorageGroup.h"
 #include "economy/vCardReserveParticipationByThermalGroup.h"
 #include "economy/vCardReserveParticipationUnsuppliedSpilled.h"
+#include "economy/vCardReserveParticipationMarginalCost.h"
 
 #include "antares/solver/variable/surveyresults.h"
 #include "antares/study/fwd.h"
@@ -470,6 +471,15 @@ struct VariableAccessor<ResultsT, Category::dynamicColumns>
                     results.variableCaption
                       = reserveName + "_" + Economy::unsuppliedSpilledToString(unsuppliedOrSpilled);
                 }
+                else if constexpr (std::is_same_v<
+                                     VCardT,
+                                     Economy::VCardReserveParticipationMarginalCost>)
+                {
+                    auto [unsuppliedOrSpilled, reserveName]
+                      = thermal.list.reserveParticipationUnsuppliedSpilledAt(results.data.area, i);
+                    results.variableCaption = reserveName + "_"
+                                              + Economy::marginalCostToString();
+                }
                 else
                     results.variableCaption = thermal.list.enabledClusterAt(i)->name();
 
@@ -616,6 +626,16 @@ struct VariableAccessor<ResultsT, Category::dynamicColumns>
                     results.variableCaption = reserveName + "_"
                                               + Economy::unsuppliedSpilledToString(
                                                 unsuppliedOrSpilled);
+                    res = true;
+                }
+                else if constexpr (std::is_same_v<
+                                     VCardType,
+                                     Economy::VCardReserveParticipationMarginalCost>)
+                {
+                    auto [unsuppliedOrSpilled, reserveName]
+                      = thermal.list.reserveParticipationUnsuppliedSpilledAt(results.data.area, i);
+                    results.variableCaption = reserveName + "_"
+                                              + Economy::marginalCostToString();
                     res = true;
                 }
                 else

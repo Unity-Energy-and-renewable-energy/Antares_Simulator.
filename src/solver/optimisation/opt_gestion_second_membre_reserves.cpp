@@ -44,7 +44,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
         const std::unique_ptr<PROBLEME_ANTARES_A_RESOUDRE>& ProblemeAResoudre;
         std::vector<double>& SecondMembre;
         std::vector<double*>& AdresseOuPlacerLaValeurDesCoutsMarginaux;
-        int pdtJour, pdtGlobal, pays;
+        int pdtJour, pdtHebdo, pdtGlobal, pays;
 
         ReserveVariablesRightSidesSetter(PROBLEME_HEBDO* hebdo):
             problemeHebdo(hebdo),
@@ -53,6 +53,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
             AdresseOuPlacerLaValeurDesCoutsMarginaux(
               ProblemeAResoudre->AdresseOuPlacerLaValeurDesCoutsMarginaux),
             pdtJour(0),
+            pdtHebdo(0),
             pdtGlobal(0),
             pays(0)
         {
@@ -61,6 +62,11 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
         void setPdtJour(int pdt)
         {
             pdtJour = pdt;
+        }
+
+        void setPdtHebdo(int pdt)
+        {
+            pdtHebdo = pdt;
         }
 
         void setPdtGlobal(int pdt)
@@ -85,7 +91,10 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
             if (cnt >= 0)
             {
                 SecondMembre[cnt] = reserve.need.at(pdtGlobal);
-                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+                double* adresseDuResultat = &(problemeHebdo->ResultatsHoraires[pays]
+                                                .Reserves[pdtHebdo]
+                                                .CoutsMarginauxHoraires[reserve.areaReserveIndex]);
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = adresseDuResultat;
             }
         }
 
@@ -151,7 +160,9 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
 
         // Common setter for the ShortTerm Storage clusters
         void setSTStorageReserveParticipationRightSides(
-          const RESERVE_PARTICIPATION_STSTORAGE& reserveParticipation)
+          const RESERVE_PARTICIPATION_STSTORAGE& reserveParticipation,
+          const AREA_RESERVES_VECTOR& reserves,
+          const CAPACITY_RESERVATION& reserve)
         {
             const auto& CorrespondanceCntNativesCntOptim = problemeHebdo
                                                              ->CorrespondanceCntNativesCntOptim
@@ -164,7 +175,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
             auto& cluster = problemeHebdo->ShortTermStorage[pays][reserveParticipation.clusterId];
             if (cnt >= 0)
             {
-                SecondMembre[cnt] = cluster.series.get()->maxWithdrawalModulation[pdtJour]
+                SecondMembre[cnt] = cluster.series.get()->maxWithdrawalModulation[pdtGlobal]
                                     * cluster.withdrawalNominalCapacity;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
@@ -174,7 +185,7 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                       [reserveParticipation.clusterId];
             if (cnt >= 0)
             {
-                SecondMembre[cnt] = cluster.series.get()->lowerRuleCurve[pdtJour]
+                SecondMembre[cnt] = cluster.series.get()->lowerRuleCurve[pdtGlobal]
                                     * cluster.withdrawalNominalCapacity;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
@@ -184,17 +195,62 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                       [reserveParticipation.clusterId];
             if (cnt >= 0)
             {
-                SecondMembre[cnt] = cluster.series.get()->maxInjectionModulation[pdtJour]
+                SecondMembre[cnt] = cluster.series.get()->maxInjectionModulation[pdtGlobal]
                                     * cluster.injectionNominalCapacity;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+            double level_max = cluster.reservoirCapacity
+                               * cluster.series->upperRuleCurve[pdtGlobal];
+            double level_min = cluster.reservoirCapacity
+                               * cluster.series->lowerRuleCurve[pdtGlobal];
+
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown
+                      [reserveParticipation.clusterId];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = level_max;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationUp
+                      [reserveParticipation.clusterId];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = -level_min;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+
+            cnt
+              = CorrespondanceCntNativesCntOptim
+                  .NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationDown
+                    [reserveParticipation.clusterId];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = reserves.maxGlobalActivationDurationDown
+                                    * reserves.maxGlobalEnergyActivationRatioDown * level_max;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationUp
+                      [reserveParticipation.clusterId];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = -reserves.maxGlobalActivationDurationUp
+                                    * reserves.maxGlobalEnergyActivationRatioUp * level_min;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
         }
 
         // Set the rigth sides of equations for a ShortTerm cluster participation to a reserve up
         void setSTStorageReserveUpParticipationRightSides(
-          const RESERVE_PARTICIPATION_STSTORAGE& reserveParticipation)
+          const RESERVE_PARTICIPATION_STSTORAGE& reserveParticipation,
+          const AREA_RESERVES_VECTOR& reserves,
+          const CAPACITY_RESERVATION& reserve)
         {
-            setSTStorageReserveParticipationRightSides(reserveParticipation);
+            setSTStorageReserveParticipationRightSides(reserveParticipation, reserves, reserve);
             const auto& CorrespondanceCntNativesCntOptim = problemeHebdo
                                                              ->CorrespondanceCntNativesCntOptim
                                                                [pdtJour];
@@ -212,15 +268,31 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
             if (cnt >= 0)
             {
                 SecondMembre[cnt] = reserveParticipation.maxPumping;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesSTStockEnergyLevelReserveParticipation
+                      [reserveParticipation.globalIndexClusterParticipation];
+            if (cnt >= 0)
+            {
+                auto& cluster = problemeHebdo
+                                  ->ShortTermStorage[pays][reserveParticipation.clusterIdInArea];
+                double level_min = cluster.reservoirCapacity
+                                   * cluster.series->lowerRuleCurve[pdtGlobal];
+
+                SecondMembre[cnt] = -reserve.maxEnergyActivationRatio
+                                    * reserve.maxActivationDuration * level_min;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
         }
 
         // Set the rigth sides of equations for a ShortTerm cluster participation to a reserve down
         void setSTStorageReserveDownParticipationRightSides(
-          const RESERVE_PARTICIPATION_STSTORAGE& reserveParticipation)
+          const RESERVE_PARTICIPATION_STSTORAGE& reserveParticipation,
+          const AREA_RESERVES_VECTOR& reserves,
+          const CAPACITY_RESERVATION& reserve)
         {
-            setSTStorageReserveParticipationRightSides(reserveParticipation);
+            setSTStorageReserveParticipationRightSides(reserveParticipation, reserves, reserve);
             const auto& CorrespondanceCntNativesCntOptim = problemeHebdo
                                                              ->CorrespondanceCntNativesCntOptim
                                                                [pdtJour];
@@ -240,10 +312,26 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                 SecondMembre[cnt] = reserveParticipation.maxPumping;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesSTStockEnergyLevelReserveParticipation
+                      [reserveParticipation.globalIndexClusterParticipation];
+            if (cnt >= 0)
+            {
+                auto& cluster = problemeHebdo
+                                  ->ShortTermStorage[pays][reserveParticipation.clusterIdInArea];
+                double level_max = cluster.reservoirCapacity
+                                   * cluster.series->upperRuleCurve[pdtGlobal];
+                SecondMembre[cnt] = reserve.maxEnergyActivationRatio * reserve.maxActivationDuration
+                                    * level_max;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
         }
 
         // Common setter for the LongTerm Storage clusters
-        void setLTStorageReserveParticipationRightSides()
+        void setLTStorageReserveParticipationRightSides(
+          const RESERVE_PARTICIPATION_LTSTORAGE& reserveParticipation,
+          const AREA_RESERVES_VECTOR& reserves,
+          const CAPACITY_RESERVATION& reserve)
         {
             const auto& CorrespondanceCntNativesCntOptim = problemeHebdo
                                                              ->CorrespondanceCntNativesCntOptim
@@ -278,13 +366,56 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                 SecondMembre[cnt] = hydroCluster.ContrainteDePmaxPompageHoraire[pdtJour];
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
+
+            double level_max = hydroCluster.NiveauHoraireSup[pdtHebdo];
+            double level_min = hydroCluster.NiveauHoraireInf[pdtHebdo];
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown
+                      [globalClusterIdx];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = hydroCluster.NiveauHoraireSup[pdtHebdo];
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp
+                      [globalClusterIdx];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = hydroCluster.NiveauHoraireInf[pdtHebdo];
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+
+            cnt
+              = CorrespondanceCntNativesCntOptim
+                  .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationDown
+                    [globalClusterIdx];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = reserves.maxGlobalActivationDurationDown
+                                    * reserves.maxGlobalEnergyActivationRatioDown * level_max;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationUp
+                      [globalClusterIdx];
+            if (cnt >= 0)
+            {
+                SecondMembre[cnt] = -reserves.maxGlobalActivationDurationUp
+                                    * reserves.maxGlobalEnergyActivationRatioUp * level_min;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
         }
 
         // Set the rigth sides of equations for a LongTerm cluster participation to a reserve up
         void setLTStorageReserveUpParticipationRightSides(
-          const RESERVE_PARTICIPATION_LTSTORAGE& reserveParticipation)
+          const RESERVE_PARTICIPATION_LTSTORAGE& reserveParticipation,
+          const AREA_RESERVES_VECTOR& reserves,
+          const CAPACITY_RESERVATION& reserve)
         {
-            setLTStorageReserveParticipationRightSides();
+            setLTStorageReserveParticipationRightSides(reserveParticipation, reserves, reserve);
             const auto& CorrespondanceCntNativesCntOptim = problemeHebdo
                                                              ->CorrespondanceCntNativesCntOptim
                                                                [pdtJour];
@@ -302,15 +433,29 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
             if (cnt >= 0)
             {
                 SecondMembre[cnt] = reserveParticipation.maxPumping;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation
+                      [reserveParticipation.globalIndexClusterParticipation];
+            if (cnt >= 0)
+            {
+                auto& hydroCluster = problemeHebdo->CaracteristiquesHydrauliques[pays];
+                double level_min = hydroCluster.NiveauHoraireInf[pdtHebdo];
+
+                SecondMembre[cnt] = -reserve.maxEnergyActivationRatio
+                                    * reserve.maxActivationDuration * level_min;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
         }
 
         // Set the rigth sides of equations for a LongTerm cluster participation to a reserve down
         void setLTStorageReserveDownParticipationRightSides(
-          const RESERVE_PARTICIPATION_LTSTORAGE& reserveParticipation)
+          const RESERVE_PARTICIPATION_LTSTORAGE& reserveParticipation,
+          const AREA_RESERVES_VECTOR& reserves,
+          const CAPACITY_RESERVATION& reserve)
         {
-            setLTStorageReserveParticipationRightSides();
+            setLTStorageReserveParticipationRightSides(reserveParticipation, reserves, reserve);
             const auto& CorrespondanceCntNativesCntOptim = problemeHebdo
                                                              ->CorrespondanceCntNativesCntOptim
                                                                [pdtJour];
@@ -328,6 +473,17 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
             if (cnt >= 0)
             {
                 SecondMembre[cnt] = reserveParticipation.maxPumping;
+                AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
+            }
+            cnt = CorrespondanceCntNativesCntOptim
+                    .NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation
+                      [reserveParticipation.globalIndexClusterParticipation];
+            if (cnt >= 0)
+            {
+                auto& hydroCluster = problemeHebdo->CaracteristiquesHydrauliques[pays];
+                double level_max = hydroCluster.NiveauHoraireSup[pdtHebdo];
+                SecondMembre[cnt] = reserve.maxEnergyActivationRatio * reserve.maxActivationDuration
+                                    * level_max;
                 AdresseOuPlacerLaValeurDesCoutsMarginaux[cnt] = nullptr;
             }
         }
@@ -343,9 +499,10 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                         + pdtJour;
 
         reserveVariablesRightSidesSetter.setPdtJour(pdtJour);
+        reserveVariablesRightSidesSetter.setPdtHebdo(pdtHebdo);
         reserveVariablesRightSidesSetter.setPdtGlobal(pdtGlobal);
 
-        for (uint32_t pays = 0; pays < problemeHebdo->NombreDePays; pays++)
+        for (int pays = 0; pays < problemeHebdo->NombreDePays; pays++)
         {
             reserveVariablesRightSidesSetter.setPays(pays);
             const auto& areaReserves = problemeHebdo->allReserves[pays];
@@ -368,7 +525,9 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                      areaReserveUp.AllSTStorageReservesParticipation)
                 {
                     reserveVariablesRightSidesSetter.setSTStorageReserveUpParticipationRightSides(
-                      clusterReserveParticipation);
+                      clusterReserveParticipation,
+                      areaReserves,
+                      areaReserveUp);
                 }
 
                 // Long Term Storage Cluster
@@ -376,7 +535,9 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                      areaReserveUp.AllLTStorageReservesParticipation)
                 {
                     reserveVariablesRightSidesSetter.setLTStorageReserveUpParticipationRightSides(
-                      clusterReserveParticipation);
+                      clusterReserveParticipation,
+                      areaReserves,
+                      areaReserveUp);
                 }
             }
             for (const auto& areaReserveDown: areaReserves.areaCapacityReservationsDown)
@@ -396,7 +557,9 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                      areaReserveDown.AllSTStorageReservesParticipation)
                 {
                     reserveVariablesRightSidesSetter.setSTStorageReserveDownParticipationRightSides(
-                      clusterReserveParticipation);
+                      clusterReserveParticipation,
+                      areaReserves,
+                      areaReserveDown);
                 }
 
                 // Long Term Storage Cluster
@@ -404,7 +567,9 @@ void OPT_InitialiserLeSecondMembreDuProblemeLineaireReserves(PROBLEME_HEBDO* pro
                      areaReserveDown.AllLTStorageReservesParticipation)
                 {
                     reserveVariablesRightSidesSetter.setLTStorageReserveDownParticipationRightSides(
-                      clusterReserveParticipation);
+                      clusterReserveParticipation,
+                      areaReserves,
+                      areaReserveDown);
                 }
             }
         }

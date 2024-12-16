@@ -120,6 +120,11 @@ struct CORRESPONDANCES_DES_CONTRAINTES
     std::vector<int>
       NumeroDeContrainteDesContraintesSTStorageClusterTurbiningCapacityThreasholdsMin;
     std::vector<int> NumeroDeContrainteDesContraintesSTStorageClusterPumpingCapacityThreasholds;
+    std::vector<int> NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown;
+    std::vector<int> NumeroDeContrainteDesContraintesSTStockEnergyLevelReserveParticipation;
+    std::vector<int> NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationDown;
 
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterMaxWithdrawParticipation;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterMaxInjectionParticipation;
@@ -128,6 +133,11 @@ struct CORRESPONDANCES_DES_CONTRAINTES
     std::vector<int>
       NumeroDeContrainteDesContraintesLTStorageClusterTurbiningCapacityThreasholdsMin;
     std::vector<int> NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds;
+    std::vector<int> NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown;
+    std::vector<int> NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation;
+    std::vector<int> NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationUp;
+    std::vector<int> NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationDown;
 
     std::vector<int> NumeroDeContrainteDesNiveauxPays;
 
@@ -332,6 +342,9 @@ struct CAPACITY_RESERVATION
     std::vector<int> need; //!< Vector size is number of hours in year
     float failureCost = 0;
     float spillageCost = 0;
+    float maxActivationRatio = 0;
+    float maxEnergyActivationRatio = 1;
+    int maxActivationDuration = 0;
     std::string reserveName;
     int globalReserveIndex;
     int areaReserveIndex;
@@ -340,6 +353,10 @@ struct CAPACITY_RESERVATION
 // Vector size is number of reserves up or down
 struct AREA_RESERVES_VECTOR
 {
+    float maxGlobalEnergyActivationRatioUp = 1.;
+    float maxGlobalEnergyActivationRatioDown = 1.;
+    int maxGlobalActivationDurationUp = 0;
+    int maxGlobalActivationDurationDown = 0;
     std::vector<CAPACITY_RESERVATION> areaCapacityReservationsUp;
     std::vector<CAPACITY_RESERVATION> areaCapacityReservationsDown;
 };
@@ -517,6 +534,7 @@ struct RESERVES
 {
     std::vector<double> ValeursHorairesInternalUnsatisfied;
     std::vector<double> ValeursHorairesInternalExcessReserve;
+    std::vector<double> CoutsMarginauxHoraires;
 };
 
 struct RESULTATS_HORAIRES

@@ -24,11 +24,11 @@
 **
 ** SPDX-License-Identifier: licenceRef-GPL3_WITH_RTE-Exceptions
 */
-#ifndef __SOLVER_VARIABLE_ECONOMY_ReserveParticipationBySTStorage_H__
-#define __SOLVER_VARIABLE_ECONOMY_ReserveParticipationBySTStorage_H__
+#ifndef __SOLVER_VARIABLE_ECONOMY_ReserveParticipationMarginalCost_H__
+#define __SOLVER_VARIABLE_ECONOMY_ReserveParticipationMarginalCost_H__
 
 #include "../variable.h"
-#include "./vCardReserveParticipationBySTStorage.h"
+#include "./vCardReserveParticipationMarginalCost.h"
 
 namespace Antares
 {
@@ -40,22 +40,20 @@ namespace Economy
 {
 
 /*!
-** \brief C02 Average value of the overrall OperatingCost emissions expected from all
-**   the thermal dispatchable clusters
+** \brief Reserve participation unsupplied and spilled volumes for an area
 */
 template<class NextT = Container::EndOfList>
-class ReserveParticipationBySTStorage
- : public Variable::
-     IVariable<ReserveParticipationBySTStorage<NextT>, NextT, VCardReserveParticipationBySTStorage>
+class ReserveParticipationMarginalCost : public Variable::IVariable<ReserveParticipationMarginalCost<NextT>,
+                                                               NextT,
+                                                               VCardReserveParticipationMarginalCost>
 {
 public:
     //! Type of the next static variable
     typedef NextT NextType;
     //! VCard
-    typedef VCardReserveParticipationBySTStorage VCardType;
+    typedef VCardReserveParticipationMarginalCost VCardType;
     //! Ancestor
-    typedef Variable::IVariable<ReserveParticipationBySTStorage<NextT>, NextT, VCardType>
-      AncestorType;
+    typedef Variable::IVariable<ReserveParticipationMarginalCost<NextT>, NextT, VCardType> AncestorType;
 
     //! List of expected results
     typedef typename VCardType::ResultsType ResultsType;
@@ -82,11 +80,11 @@ public:
     };
 
 public:
-    ReserveParticipationBySTStorage() : pValuesForTheCurrentYear(NULL), pSize(0)
+    ReserveParticipationMarginalCost() : pValuesForTheCurrentYear(NULL), pSize(0)
     {
     }
 
-    ~ReserveParticipationBySTStorage()
+    ~ReserveParticipationMarginalCost()
     {
         for (unsigned int numSpace = 0; numSpace < pNbYearsParallel; numSpace++)
             delete[] pValuesForTheCurrentYear[numSpace];
@@ -105,14 +103,27 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the number of STStorage reserveParticipations
-        pSize = area->shortTermStorage.reserveParticipationsCount();
+        // Get the area
+        pSize = 0;
+        for (auto res : area->allCapacityReservations.areaCapacityReservationsUp)
+        {
+            pSize += 1;
+        }
+        for (auto res : area->allCapacityReservations.areaCapacityReservationsDown)
+        {
+            pSize += 1;
+        }
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
+
             for (unsigned int numSpace = 0; numSpace < pNbYearsParallel; numSpace++)
                 pValuesForTheCurrentYear[numSpace]
                   = new VCardType::IntermediateValuesDeepType[pSize];
+
+            // Minimum power values of the cluster for the whole year - from the solver in the
+            // accurate mode not to be displayed in the output \todo think of a better place like
+            // the DispatchableMarginForAllAreas done at the beginning of the year
 
             for (unsigned int numSpace = 0; numSpace < pNbYearsParallel; numSpace++)
                 for (unsigned int i = 0; i != pSize; ++i)
@@ -127,11 +138,11 @@ public:
         else
         {
             for (unsigned int numSpace = 0; numSpace < pNbYearsParallel; numSpace++)
+            {
                 pValuesForTheCurrentYear[numSpace] = nullptr;
-
+            }
             AncestorType::pResults.clear();
         }
-
         // Next
         NextType::initializeFromArea(study, area);
     }
@@ -219,17 +230,21 @@ public:
 
     void hourForEachArea(State& state, unsigned int numSpace)
     {
-        for (auto&  [clusterName, _] : state.reserveParticipationPerSTStorageClusterForYear[state.hourInTheYear])
+        auto& area = state.area;
+        int column = 0;
+
+        auto reserves = state.problemeHebdo->allReserves[area->index];
+        for (const auto& reserveUp : reserves.areaCapacityReservationsUp)
         {
-            for (const auto& [reserveName, reserveParticipation]:
-                 state.reserveParticipationPerSTStorageClusterForYear[state.hourInTheYear][clusterName])
-            {
-                pValuesForTheCurrentYear[numSpace]
-                                        [state.area->reserveParticipationSTStorageClustersIndexMap
-                                           .get(std::make_pair(reserveName, clusterName))]
-                                          .hour[state.hourInTheYear]
-                  = reserveParticipation;
-            }
+            pValuesForTheCurrentYear[numSpace][column++].hour[state.hourInTheYear]
+              += state.hourlyResults->Reserves[state.hourInTheWeek]
+                   .CoutsMarginauxHoraires[reserveUp.areaReserveIndex];
+        }
+        for (const auto& reserveDown : reserves.areaCapacityReservationsDown)
+        {
+            pValuesForTheCurrentYear[numSpace][column++].hour[state.hourInTheYear]
+              += state.hourlyResults->Reserves[state.hourInTheWeek]
+                   .CoutsMarginauxHoraires[reserveDown.areaReserveIndex];
         }
 
         // Next variable
@@ -254,25 +269,27 @@ public:
         if (AncestorType::isPrinted[0])
         {
             assert(NULL != results.data.area);
-            
+            const auto& thermal = results.data.area->thermal;
+            results.variableUnit = VCardType::Unit();
             // Write the data for the current year
-            for (uint i = 0; i < pSize; ++i)
+            int column = 0;
+            for (const auto& reserveUp : results.data.area->allCapacityReservations.areaCapacityReservationsUp)
             {
-                if (results.data.area->reserveParticipationSTStorageClustersIndexMap.size() == 0) //Bimap in empty
-                {
-                    logs.warning() << "Problem during the results export, the STS bimap is empty for area " << results.data.area->name;
-                    break;
-                }
-                else
-                {
-                    auto [clusterName, reserveName]
-                        = results.data.area->reserveParticipationSTStorageClustersIndexMap.get(i);
                     // Write the data for the current year
-                    results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
-                    results.variableUnit = VCardType::Unit();
-                    pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
+                    Yuni::String caption = reserveUp.first;
+                    caption << "_MRG.COST";
+                    results.variableCaption = caption; // VCardType::Caption();
+                    pValuesForTheCurrentYear[numSpace][column++].template buildAnnualSurveyReport<VCardType>(
                         results, fileLevel, precision);
-                }
+            }
+            for (const auto& reserveDown : results.data.area->allCapacityReservations.areaCapacityReservationsDown)
+            {
+                    // Write the data for the current year
+                    Yuni::String caption = reserveDown.first;
+                    caption << "_MRG.COST";
+                    results.variableCaption = caption; // VCardType::Caption();
+                    pValuesForTheCurrentYear[numSpace][column++].template buildAnnualSurveyReport<VCardType>(
+                        results, fileLevel, precision);
             }
         }
     }
@@ -283,11 +300,11 @@ private:
     size_t pSize;
     unsigned int pNbYearsParallel;
 
-}; // class ReserveParticipationBySTStorage
+}; // class ReserveParticipationMarginalCost
 
 } // namespace Economy
 } // namespace Variable
 } // namespace Solver
 } // namespace Antares
 
-#endif // __SOLVER_VARIABLE_ECONOMY_ReserveParticipationBySTStorage_H__
+#endif // __SOLVER_VARIABLE_ECONOMY_MarginalCost_H__

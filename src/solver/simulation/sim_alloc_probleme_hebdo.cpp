@@ -268,6 +268,17 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesSTStorageClusterPumpingCapacityThreasholds.assign(
             study.runtime.shortTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationDown.assign(study.runtime.shortTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTStockLevelReserveParticipationUp.assign(study.runtime.shortTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTStockEnergyLevelReserveParticipation.assign(study.runtime.shortTermStorageCount * study.runtime.capacityReservationCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationUp.assign(study.runtime.shortTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesSTGlobalStockEnergyLevelReserveParticipationDown.assign(study.runtime.shortTermStorageCount, -1);
+
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesLTStorageClusterMaxWithdrawParticipation.assign(
@@ -284,6 +295,19 @@ void SIM_AllocationProblemePasDeTemps(PROBLEME_HEBDO& problem,
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeContrainteDesContraintesLTStorageClusterPumpingCapacityThreasholds.assign(
             study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationDown.assign(study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+            .NumeroDeContrainteDesContraintesLTStockLevelReserveParticipationUp.assign(study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+          .NumeroDeContrainteDesContraintesLTStockEnergyLevelReserveParticipation
+          .assign(study.runtime.longTermStorageCount * study.runtime.capacityReservationCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+          .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationUp
+          .assign(study.runtime.longTermStorageCount, -1);
+        problem.CorrespondanceCntNativesCntOptim[k]
+          .NumeroDeContrainteDesContraintesLTGlobalStockEnergyLevelReserveParticipationDown
+          .assign(study.runtime.longTermStorageCount, -1);
 
         problem.CorrespondanceCntNativesCntOptim[k]
           .NumeroDeLaDeuxiemeContrainteDesContraintesDesGroupesQuiTombentEnPanne.assign(
@@ -518,6 +542,7 @@ void SIM_AllocateAreas(PROBLEME_HEBDO& problem,
               nbReserves, 0.);
             problem.ResultatsHoraires[k].Reserves[j].ValeursHorairesInternalExcessReserve.assign(
               nbReserves, 0.);
+            problem.ResultatsHoraires[k].Reserves[j].CoutsMarginauxHoraires.assign(nbReserves, 0.);
             problem.ResultatsHoraires[k].HydroUsage[j].reserveParticipationOfCluster.assign(
               nbLTStorageReserveParticipations, 0.);
         }

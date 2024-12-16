@@ -46,6 +46,7 @@
 #include "dtgMarginAfterCsr.h"
 #include "spilledEnergy.h"
 #include "reserveParticipationCost.h"
+#include "reserveParticipationMarginalCost.h"
 #include "reserveParticipationByThermalGroup.h"
 #include "reserveParticipationUnsuppliedSpilled.h"
 #include "hydroCost.h"
@@ -156,6 +157,7 @@ typedef          // Prices
                                                                     // by plant
                                          <ProfitByPlant
                                           <ReserveParticipationCost // Participation cost to the reserves
+                                           <ReserveParticipationMarginalCost
                                             <ReserveParticipationByDispatchableOnUnitsPlant // Participation per thermal cluster for on units
                                             <ReserveParticipationByDispatchableOffUnitsPlant // Participation per thermal cluster for off units
                                               <ReserveParticipationByThermalGroup // Participation per thermal group
@@ -165,7 +167,7 @@ typedef          // Prices
                                                   <ReserveParticipationUnsuppliedSpilled 
                                           // Links
                                           <Variable::Economy::Links // All links
-                                           >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                           >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     VariablesPerArea;
 
 /*!

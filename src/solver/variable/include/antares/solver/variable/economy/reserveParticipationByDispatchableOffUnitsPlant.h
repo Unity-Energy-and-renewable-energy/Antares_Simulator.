@@ -106,7 +106,7 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the area
+        // Get the number of Onthermal reserveParticipations
         pSize = area->thermal.list.reserveParticipationsCount();
 
         if (pSize)
@@ -266,12 +266,20 @@ public:
             // Write the data for the current year
             for (uint i = 0; i < pSize; ++i)
             {
-                auto [clusterName, reserveName]
-                  = results.data.area->reserveParticipationThermalClustersIndexMap.get(i);
-                results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
-                results.variableUnit = VCardType::Unit();
-                pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
-                  results, fileLevel, precision);
+                if (results.data.area->reserveParticipationThermalClustersIndexMap.size() == 0) //Bimap is empty
+                {
+                    logs.warning() << "Problem during the results export, the thermal bimap is empty for area " << results.data.area->name;
+                    break;
+                }
+                else
+                {
+                    auto [clusterName, reserveName]
+                        = results.data.area->reserveParticipationThermalClustersIndexMap.get(i);
+                    results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
+                    results.variableUnit = VCardType::Unit();
+                    pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
+                        results, fileLevel, precision);
+                }
             }
         }
     }

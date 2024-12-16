@@ -85,7 +85,7 @@ public:
     }
 
     // Function to return the size of the bimap
-    int size()
+    int size() const
     {
         return key_to_value.size();
     }
