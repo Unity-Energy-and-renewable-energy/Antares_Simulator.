@@ -24,13 +24,13 @@ void POutBounds::add(int pays, int cluster, int pdt)
             for (const auto& capacityReservation :
                  data.areaReserves[pays].areaCapacityReservationsDown)
             {
-                for (const auto& [clusterId, reserveParticipations] :
-                     capacityReservation.AllThermalReservesParticipation)
+                if (capacityReservation.AllThermalReservesParticipation.contains(cluster))
                 {
-                    if (cluster == clusterId)
-                        builder.RunningThermalClusterReserveParticipation(
-                          reserveParticipations.globalIndexClusterParticipation,
-                          1);
+                    auto& reserveParticipation = capacityReservation.AllThermalReservesParticipation
+                                                   .at(cluster);
+                    builder.RunningThermalClusterReserveParticipation(
+                      reserveParticipation.globalIndexClusterParticipation,
+                      1);
                 }
             }
 
@@ -60,13 +60,13 @@ void POutBounds::add(int pays, int cluster, int pdt)
             for (const auto& capacityReservation :
                  data.areaReserves[pays].areaCapacityReservationsUp)
             {
-                for (const auto& [clusterId, reserveParticipations] :
-                     capacityReservation.AllThermalReservesParticipation)
+                if (capacityReservation.AllThermalReservesParticipation.contains(cluster))
                 {
-                    if (cluster == clusterId)
-                        builder.RunningThermalClusterReserveParticipation(
-                          reserveParticipations.globalIndexClusterParticipation,
-                          1);
+                    auto& reserveParticipation = capacityReservation.AllThermalReservesParticipation
+                                                   .at(cluster);
+                    builder.RunningThermalClusterReserveParticipation(
+                      reserveParticipation.globalIndexClusterParticipation,
+                      1);
                 }
             }
 
