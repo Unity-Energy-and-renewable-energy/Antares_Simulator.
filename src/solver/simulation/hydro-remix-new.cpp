@@ -85,6 +85,23 @@ static void checkInputCorrectness(const std::vector<double>& G,
     {
         throw std::invalid_argument(msg_prefix + "all arrays of sizes 0");
     }
+
+    // Hydro production < Pmax
+    for (int h = 0; h < H.size(); h++)
+    {
+        if (H[h] > P_max[h])
+        {
+            throw std::invalid_argument(msg_prefix + "H not smaller than Pmax everywhere");
+        }
+    }
+
+    for (int h = 0; h < H.size(); h++)
+    {
+        if (H[h] < P_min[h])
+        {
+            throw std::invalid_argument(msg_prefix + "H not greater than Pmin everywhere");
+        }
+    }
 }
 
 std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
