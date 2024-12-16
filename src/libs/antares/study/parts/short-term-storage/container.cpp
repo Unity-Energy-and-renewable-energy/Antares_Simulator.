@@ -62,7 +62,7 @@ bool STStorageInput::createSTStorageClustersFromIniFile(const fs::path& path)
         {
             return false;
         }
-
+        cluster.properties.clusterGlobalIndex = storagesByIndex.size();
         storagesByIndex.push_back(cluster);
     }
 

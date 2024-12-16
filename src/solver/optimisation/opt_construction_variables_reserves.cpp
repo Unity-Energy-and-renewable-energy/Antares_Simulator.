@@ -19,30 +19,380 @@
 ** along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
 */
 
-#include "antares/solver/optimisation/opt_structure_probleme_a_resoudre.h"
+#include <spx_constantes_externes.h>
 
 #include "antares/solver/optimisation/opt_fonctions.h"
 #include "antares/solver/optimisation/opt_rename_problem.h"
-
-#include <spx_constantes_externes.h>
+#include "antares/solver/optimisation/opt_structure_probleme_a_resoudre.h"
 
 void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
   PROBLEME_HEBDO* problemeHebdo,
   bool Simulation)
 {
-    const auto& ProblemeAResoudre = problemeHebdo->ProblemeAResoudre;
+    VariableNamer variableNamer(problemeHebdo->ProblemeAResoudre->NomDesVariables);
+    int NombreDePasDeTempsPourUneOptimisation = problemeHebdo
+                                                  ->NombreDePasDeTempsPourUneOptimisation;
 
-    int NombreDePasDeTempsPourUneOptimisation
-      = problemeHebdo->NombreDePasDeTempsPourUneOptimisation;
-    int& NombreDeVariables = ProblemeAResoudre->NombreDeVariables;
-    VariableNamer variableNamer(ProblemeAResoudre->NomDesVariables);
-    auto variableManager = VariableManagerFromProblemHebdo(problemeHebdo);
+    struct ReserveVariablesInitializer
+    {
+        PROBLEME_HEBDO* problemeHebdo;
+        bool Simulation;
+        const std::unique_ptr<PROBLEME_ANTARES_A_RESOUDRE>& ProblemeAResoudre;
+        int& NombreDeVariables;
+        VariableNamer& variableNamer;
+        VariableManagement::VariableManager variableManager;
 
+        ReserveVariablesInitializer(PROBLEME_HEBDO* hebdo, bool sim, VariableNamer& namer):
+            problemeHebdo(hebdo),
+            Simulation(sim),
+            ProblemeAResoudre(hebdo->ProblemeAResoudre),
+            NombreDeVariables(ProblemeAResoudre->NombreDeVariables),
+            variableNamer(namer),
+            variableManager(VariableManagerFromProblemHebdo(hebdo))
+        {
+        }
+
+        // Init variables for a reserve
+        void initReserve(int pdt, const int reserveIndex, const std::string& reserveName)
+        {
+            if (Simulation)
+            {
+                NombreDeVariables += 2;
+            }
+            else
+            {
+                // For Unsatisfied Reserves
+                variableManager.InternalUnsatisfiedReserve(reserveIndex, pdt) = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.InternalUnsatisfiedReserve(NombreDeVariables, reserveName);
+                NombreDeVariables++;
+
+                // For Excess Reserves
+                variableManager.InternalExcessReserve(reserveIndex, pdt) = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.InternalExcessReserve(NombreDeVariables, reserveName);
+                NombreDeVariables++;
+            }
+        }
+
+        // Init variables for a Thermal cluster participation to a reserve up
+        void initThermalReserveUpParticipation(
+          int pdt,
+          const RESERVE_PARTICIPATION_THERMAL& clusterReserveParticipation,
+          const std::string& reserveName)
+        {
+            const auto& clusterName = clusterReserveParticipation.clusterName;
+            if (Simulation)
+            {
+                NombreDeVariables += 4;
+            }
+            else
+            {
+                // For running units in cluster
+                variableManager.RunningThermalClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfRunningUnitsToReserve(NombreDeVariables,
+                                                                   clusterName,
+                                                                   reserveName);
+                NombreDeVariables++;
+
+                // For off units in cluster
+                variableManager.OffThermalClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfOffUnitsToReserve(NombreDeVariables,
+                                                               clusterName,
+                                                               reserveName);
+                NombreDeVariables++;
+
+                variableManager.NumberOfOffUnitsParticipatingToReserve(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                ProblemeAResoudre->VariablesEntieres[NombreDeVariables]
+                  = problemeHebdo->OptimisationAvecVariablesEntieres;
+                variableNamer.NumberOfOffUnitsParticipatingToReserve(NombreDeVariables,
+                                                                     clusterName,
+                                                                     reserveName);
+                NombreDeVariables++;
+
+                // For all units in cluster
+                variableManager.ThermalClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ThermalClusterReserveParticipation(NombreDeVariables,
+                                                                 clusterName,
+                                                                 reserveName);
+                NombreDeVariables++;
+            }
+        }
+
+        // Init variables for a Thermal cluster participation to a reserve down
+        void initThermalReserveDownParticipation(
+          int pdt,
+          const RESERVE_PARTICIPATION_THERMAL& clusterReserveParticipation,
+          const std::string& reserveName)
+        {
+            const auto& clusterName = clusterReserveParticipation.clusterName;
+            if (Simulation)
+            {
+                NombreDeVariables += 2;
+            }
+            else
+            {
+                // For running units in cluster
+                variableManager.RunningThermalClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfRunningUnitsToReserve(NombreDeVariables,
+                                                                   clusterName,
+                                                                   reserveName);
+                NombreDeVariables++;
+
+                // For all units in cluster (off units can not participate to down reserves)
+                variableManager.ThermalClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ThermalClusterReserveParticipation(NombreDeVariables,
+                                                                 clusterName,
+                                                                 reserveName);
+                NombreDeVariables++;
+            }
+        }
+
+        // Init variables for a ShortTerm cluster participation to a reserve up
+        void initSTStorageReserveUpParticipation(
+          int pdt,
+          const RESERVE_PARTICIPATION_STSTORAGE& clusterReserveParticipation,
+          const std::string& reserveName)
+        {
+            const auto& clusterName = clusterReserveParticipation.clusterName;
+            if (Simulation)
+            {
+                NombreDeVariables += 3;
+            }
+            else
+            {
+                // For Turbining participation to the reserves
+                variableManager.STStorageTurbiningClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfSTStorageTurbiningToReserve(NombreDeVariables,
+                                                                         clusterName,
+                                                                         reserveName);
+                NombreDeVariables++;
+
+                // For Pumping participation to the reserves
+                variableManager.STStoragePumpingClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfSTStoragePumpingToReserve(NombreDeVariables,
+                                                                       clusterName,
+                                                                       reserveName);
+                NombreDeVariables++;
+
+                // For Short Term Storage participation to the up reserves
+                variableManager.STStorageClusterReserveUpParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfSTStorageToUpReserve(NombreDeVariables,
+                                                                  clusterName,
+                                                                  reserveName);
+                NombreDeVariables++;
+            }
+        }
+
+        // Init variables for a ShortTerm cluster participation to a reserve down
+        void initSTStorageReserveDownParticipation(
+          int pdt,
+          const RESERVE_PARTICIPATION_STSTORAGE& clusterReserveParticipation,
+          const std::string& reserveName)
+        {
+            const auto& clusterName = clusterReserveParticipation.clusterName;
+            if (Simulation)
+            {
+                NombreDeVariables += 3;
+            }
+            else
+            {
+                // For Turbining participation to the reserves
+                variableManager.STStorageTurbiningClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfSTStorageTurbiningToReserve(NombreDeVariables,
+                                                                         clusterName,
+                                                                         reserveName);
+                NombreDeVariables++;
+
+                // For Pumping participation to the reserves
+                variableManager.STStoragePumpingClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfSTStoragePumpingToReserve(NombreDeVariables,
+                                                                       clusterName,
+                                                                       reserveName);
+                NombreDeVariables++;
+
+                // For Short Term Storage participation to the Down reserves
+                variableManager.STStorageClusterReserveDownParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfSTStorageToDownReserve(NombreDeVariables,
+                                                                    clusterName,
+                                                                    reserveName);
+                NombreDeVariables++;
+            }
+        }
+
+        // Init variables for a LongTerm cluster participation to a reserve up
+        void initLTStorageReserveUpParticipation(
+          int pdt,
+          const RESERVE_PARTICIPATION_LTSTORAGE& clusterReserveParticipation,
+          const std::string& reserveName)
+        {
+            const auto& clusterName = clusterReserveParticipation.clusterName;
+            if (Simulation)
+            {
+                NombreDeVariables += 3;
+            }
+            else
+            {
+                // For Turbining participation to the reserves
+                variableManager.LTStorageTurbiningClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfLTStorageTurbiningToReserve(NombreDeVariables,
+                                                                         clusterName,
+                                                                         reserveName);
+                NombreDeVariables++;
+
+                // For Pumping participation to the reserves
+                variableManager.LTStoragePumpingClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfLTStoragePumpingToReserve(NombreDeVariables,
+                                                                       clusterName,
+                                                                       reserveName);
+                NombreDeVariables++;
+
+                // For Long Term Storage participation to the up reserves
+                variableManager.LTStorageClusterReserveUpParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfLTStorageToUpReserve(NombreDeVariables,
+                                                                  clusterName,
+                                                                  reserveName);
+                NombreDeVariables++;
+            }
+        }
+
+        // Init variables for a LongTerm cluster participation to a reserve down
+        void initLTStorageReserveDownParticipation(
+          int pdt,
+          const RESERVE_PARTICIPATION_LTSTORAGE& clusterReserveParticipation,
+          const std::string& reserveName)
+        {
+            const auto& clusterName = clusterReserveParticipation.clusterName;
+            if (Simulation)
+            {
+                NombreDeVariables += 3;
+            }
+            else
+            {
+                // For Turbining participation to the reserves
+                variableManager.LTStorageTurbiningClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfLTStorageTurbiningToReserve(NombreDeVariables,
+                                                                         clusterName,
+                                                                         reserveName);
+                NombreDeVariables++;
+
+                // For Pumping participation to the reserves
+                variableManager.LTStoragePumpingClusterReserveParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfLTStoragePumpingToReserve(NombreDeVariables,
+                                                                       clusterName,
+                                                                       reserveName);
+                NombreDeVariables++;
+
+                // For Long Term Storage participation to the Down reserves
+                variableManager.LTStorageClusterReserveDownParticipation(
+                  clusterReserveParticipation.globalIndexClusterParticipation,
+                  pdt)
+                  = NombreDeVariables;
+                ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
+                  = VARIABLE_BORNEE_DES_DEUX_COTES;
+                variableNamer.ParticipationOfLTStorageToDownReserve(NombreDeVariables,
+                                                                    clusterName,
+                                                                    reserveName);
+                NombreDeVariables++;
+            }
+        }
+    };
+
+    ReserveVariablesInitializer reserveVariablesInitializer(problemeHebdo,
+                                                            Simulation,
+                                                            variableNamer);
     for (int pdt = 0; pdt < NombreDePasDeTempsPourUneOptimisation; pdt++)
     {
         variableNamer.UpdateTimeStep(problemeHebdo->weekInTheYear * 168 + pdt);
-        auto& CorrespondanceVarNativesVarOptim
-          = problemeHebdo->CorrespondanceVarNativesVarOptim[pdt];
+        auto& CorrespondanceVarNativesVarOptim = problemeHebdo
+                                                   ->CorrespondanceVarNativesVarOptim[pdt];
 
         for (uint32_t pays = 0; pays < problemeHebdo->NombreDePays; pays++)
         {
@@ -52,439 +402,78 @@ void OPT_ConstruireLaListeDesVariablesOptimiseesDuProblemeLineaireReserves(
             int reserveIndex = 0;
 
             // For Up Reserves
-            for (auto& areaReserveUp : areaReserves.areaCapacityReservationsUp)
+            for (auto& areaReserveUp: areaReserves.areaCapacityReservationsUp)
             {
-                reserveIndex = areaReserveUp.globalReserveIndex;
-                if (Simulation)
-                {
-                    NombreDeVariables += 2;
-                }
-                else
-                {
-                    // For Unsatisfied Reserves
-                    variableManager.InternalUnsatisfiedReserve(reserveIndex, pdt)
-                      = NombreDeVariables;
-                    ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                      = VARIABLE_BORNEE_DES_DEUX_COTES;
-                    variableNamer.InternalUnsatisfiedReserve(NombreDeVariables,
-                                                             areaReserveUp.reserveName);
-                    NombreDeVariables++;
-
-                    // For Excess Reserves
-                    variableManager.InternalExcessReserve(reserveIndex, pdt) = NombreDeVariables;
-                    ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                      = VARIABLE_BORNEE_DES_DEUX_COTES;
-                    variableNamer.InternalExcessReserve(NombreDeVariables,
+                reserveVariablesInitializer.initReserve(pdt,
+                                                        areaReserveUp.globalReserveIndex,
                                                         areaReserveUp.reserveName);
-                    NombreDeVariables++;
-                }
 
                 // Thermal Clusters
-                for (auto& [clusterId, clusterReserveParticipation] :
+                for (auto& [clusterId, clusterReserveParticipation]:
                      areaReserveUp.AllThermalReservesParticipation)
                 {
-                    const auto& clusterName = clusterReserveParticipation.clusterName;
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For running units in cluster
-                        variableManager.RunningThermalClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfRunningUnitsToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
-                    if (Simulation)
-                    {
-                        NombreDeVariables += 2;
-                    }
-                    else
-                    {
-                        // For off units in cluster
-                        variableManager.OffThermalClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfOffUnitsToReserve(NombreDeVariables,
-                                                                       clusterName,
-                                                                       areaReserveUp.reserveName);
-                        NombreDeVariables++;
-
-                        variableManager.NumberOfOffUnitsParticipatingToReserve(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        ProblemeAResoudre->VariablesEntieres[NombreDeVariables]
-                          = problemeHebdo->OptimisationAvecVariablesEntieres;
-                        variableNamer.NumberOfOffUnitsParticipatingToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For all units in cluster
-                        variableManager.ThermalClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ThermalClusterReserveParticipation(NombreDeVariables,
-                                                                    clusterName,
-                                                                    areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
+                    reserveVariablesInitializer.initThermalReserveUpParticipation(
+                      pdt,
+                      clusterReserveParticipation,
+                      areaReserveUp.reserveName);
                 }
 
                 // Short Term Storage Clusters
-                for (auto& [clusterId, clusterReserveParticipation] :
-                    areaReserveUp.AllSTStorageReservesParticipation)
+                for (auto& [clusterId, clusterReserveParticipation]:
+                     areaReserveUp.AllSTStorageReservesParticipation)
                 {
-                    const auto& clusterName = clusterReserveParticipation.clusterName;
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Turbining participation to the reserves
-                        variableManager.STStorageTurbiningClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfSTStorageTurbiningToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Pumping participation to the reserves
-                        variableManager.STStoragePumpingClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfSTStoragePumpingToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Short Term Storage participation to the up reserves
-                        variableManager.STStorageClusterReserveUpParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfSTStorageToUpReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
+                    reserveVariablesInitializer.initSTStorageReserveUpParticipation(
+                      pdt,
+                      clusterReserveParticipation,
+                      areaReserveUp.reserveName);
                 }
 
-                //Long Term Storage Clusters
-                for (auto& clusterReserveParticipation :
-                        areaReserveUp.AllLTStorageReservesParticipation)
+                // Long Term Storage Clusters
+                for (auto& clusterReserveParticipation:
+                     areaReserveUp.AllLTStorageReservesParticipation)
                 {
-                    const auto& clusterName = clusterReserveParticipation.clusterName;
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Turbining participation to the reserves
-                        variableManager.LTStorageTurbiningClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfLTStorageTurbiningToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Pumping participation to the reserves
-                        variableManager.LTStoragePumpingClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfLTStoragePumpingToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Long Term Storage participation to the up reserves
-                        variableManager.LTStorageClusterReserveUpParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfLTStorageToUpReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveUp.reserveName);
-                        NombreDeVariables++;
-                    }
+                    reserveVariablesInitializer.initLTStorageReserveUpParticipation(
+                      pdt,
+                      clusterReserveParticipation,
+                      areaReserveUp.reserveName);
                 }
             }
 
             // For Down Reserves
-            for (auto& areaReserveDown : areaReserves.areaCapacityReservationsDown)
+            for (auto& areaReserveDown: areaReserves.areaCapacityReservationsDown)
             {
-                reserveIndex = areaReserveDown.globalReserveIndex;
-                if (Simulation)
-                {
-                    NombreDeVariables += 2;
-                }
-                else
-                {
-                    // For Unsatisfied Reserves
-                    variableManager.InternalUnsatisfiedReserve(reserveIndex, pdt)
-                      = NombreDeVariables;
-                    ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                      = VARIABLE_BORNEE_DES_DEUX_COTES;
-                    variableNamer.InternalUnsatisfiedReserve(NombreDeVariables,
-                                                             areaReserveDown.reserveName);
-                    NombreDeVariables++;
-
-                    // For Excess Reserves
-                    variableManager.InternalExcessReserve(reserveIndex, pdt) = NombreDeVariables;
-                    ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                      = VARIABLE_BORNEE_DES_DEUX_COTES;
-                    variableNamer.InternalExcessReserve(NombreDeVariables,
+                reserveVariablesInitializer.initReserve(pdt,
+                                                        areaReserveDown.globalReserveIndex,
                                                         areaReserveDown.reserveName);
-                    NombreDeVariables++;
-                }
 
                 // Thermal Clusters
-                for (auto& [clusterId, clusterReserveParticipation] :
+                for (auto& [clusterId, clusterReserveParticipation]:
                      areaReserveDown.AllThermalReservesParticipation)
                 {
-                    const auto& clusterName = clusterReserveParticipation.clusterName;
-                    if (Simulation)
-                    {
-                        NombreDeVariables += 2;
-                    }
-                    else
-                    {
-                        // For running units in cluster
-                        variableManager.RunningThermalClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfRunningUnitsToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-
-                        // For all units in cluster (off units can not participate to down
-                        // reserves)
-                        variableManager.ThermalClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ThermalClusterReserveParticipation(NombreDeVariables,
-                                                                    clusterName,
-                                                                    areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
+                    reserveVariablesInitializer.initThermalReserveDownParticipation(
+                      pdt,
+                      clusterReserveParticipation,
+                      areaReserveDown.reserveName);
                 }
 
                 // Short Term Storage Clusters
-                for (auto& [clusterId, clusterReserveParticipation] :
+                for (auto& [clusterId, clusterReserveParticipation]:
                      areaReserveDown.AllSTStorageReservesParticipation)
                 {
-                    const auto& clusterName = clusterReserveParticipation.clusterName;
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Turbining participation to the reserves
-                        variableManager.STStorageTurbiningClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfSTStorageTurbiningToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Pumping participation to the reserves
-                        variableManager.STStoragePumpingClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfSTStoragePumpingToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Short Term Storage participation to the Down reserves
-                        variableManager.STStorageClusterReserveDownParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfSTStorageToDownReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
+                    reserveVariablesInitializer.initSTStorageReserveDownParticipation(
+                      pdt,
+                      clusterReserveParticipation,
+                      areaReserveDown.reserveName);
                 }
 
                 // Long Term Storage Clusters
-                for (auto& clusterReserveParticipation :
+                for (auto& clusterReserveParticipation:
                      areaReserveDown.AllLTStorageReservesParticipation)
                 {
-                    const auto& clusterName = clusterReserveParticipation.clusterName;
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Turbining participation to the reserves
-                        variableManager.LTStorageTurbiningClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfLTStorageTurbiningToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Pumping participation to the reserves
-                        variableManager.LTStoragePumpingClusterReserveParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfLTStoragePumpingToReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
-
-                    if (Simulation)
-                    {
-                        NombreDeVariables++;
-                    }
-                    else
-                    {
-                        // For Long Term Storage participation to the Down reserves
-                        variableManager.LTStorageClusterReserveDownParticipation(
-                          clusterReserveParticipation.globalIndexClusterParticipation,
-                          pdt)
-                          = NombreDeVariables;
-                        ProblemeAResoudre->TypeDeVariable[NombreDeVariables]
-                          = VARIABLE_BORNEE_DES_DEUX_COTES;
-                        variableNamer.ParticipationOfLTStorageToDownReserve(
-                          NombreDeVariables,
-                          clusterName,
-                          areaReserveDown.reserveName);
-                        NombreDeVariables++;
-                    }
+                    reserveVariablesInitializer.initLTStorageReserveDownParticipation(
+                      pdt,
+                      clusterReserveParticipation,
+                      areaReserveDown.reserveName);
                 }
             }
         }

@@ -172,13 +172,13 @@ public:
 
     std::optional<Data::ReserveName> reserveParticipationAt(const Area* area, unsigned int index) const;
 
-    //! \brief Returns max turbining power for a reserve if participating, -1 otherwise
+    //! Returns max turbining power for a reserve if participating, -1 otherwise
     float reserveMaxTurbining(Data::ReserveName name);
 
-    //! \brief Returns max pumping power for a reserve if participating, -1 otherwise
+    //! Returns max pumping power for a reserve if participating, -1 otherwise
     float reserveMaxPumping(Data::ReserveName name);
 
-    //! \brief Returns participating cost for a reserve if participating, -1 otherwise
+    //! Returns participating cost for a reserve if participating, -1 otherwise
     float reserveCost(Data::ReserveName name);
 
 

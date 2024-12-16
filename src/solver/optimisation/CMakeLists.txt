@@ -30,7 +30,7 @@ set(RTESOLVER_OPT
 		opt_gestion_des_couts_cas_quadratique.cpp
         opt_construction_variables_couts_demarrages.cpp
         opt_gestion_des_bornes_couts_demarrage.cpp
-        opt_gestion_des_bornes_reserves_thermiques.cpp
+        opt_gestion_des_bornes_reserves.cpp
         opt_gestion_des_couts_couts_demarrage.cpp
         opt_gestion_des_couts_reserves.cpp
         opt_gestion_second_membre_couts_demarrage.cpp

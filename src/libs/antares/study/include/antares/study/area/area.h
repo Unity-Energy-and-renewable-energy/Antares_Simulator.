@@ -43,10 +43,9 @@
 template<typename T>
 class BiMap
 {
-private:
     // Maps for both directions: key-to-value and value-to-key
-    std::map<int, T> key_to_value; // Map from key (int) to value (T)
-    std::map<T, int> value_to_key; // Map from value (T) to key (int)
+    std::map<int, T> key_to_value; //!< Map from key (int) to value (T)
+    std::map<T, int> value_to_key; //!< Map from value (T) to key (int)
 
 public:
     // Function to insert a key-value pair
@@ -65,12 +64,11 @@ public:
     }
 
     // Function to get the value from the key
-    T get(int key) const
+    const T& get(int key) const
     {
-        auto it = key_to_value.find(key);
-        if (it != key_to_value.end())
+        if (key_to_value.count(key))
         {
-            return it->second; // Return the associated value if the key exists
+            return key_to_value.at(key); // Return the associated value if the key exists
         }
         throw std::out_of_range("This index is not in the BiMap");
     }
