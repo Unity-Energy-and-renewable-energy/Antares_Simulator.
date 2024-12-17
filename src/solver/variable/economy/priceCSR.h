@@ -232,24 +232,8 @@ public:
 
     void hourForEachArea(State& state, unsigned int numSpace)
     {
-        // IF UNSP. ENR CSR == 0, MRG. PRICE CSR = MRG. PRICE
-        // ELSE, MRG. PRICE CSR = “Unsupplied Energy Cost”
-
-        auto isLow = [](double x) { return ::fabs(x) < 1; };
-
-        if (isLow(
-              state.hourlyResults->ValeursHorairesDeDefaillancePositiveCSR[state.hourInTheWeek]))
-        {
-            // Note: The marginal price provided by the solver is negative
-            // (naming convention).
-            pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
-              = -state.hourlyResults->CoutsMarginauxHoraires[state.hourInTheWeek];
-        }
-        else
-        {
-            pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
-              = state.area->thermal.unsuppliedEnergyCost;
-        }
+        pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
+          = -state.hourlyResults->CoutsMarginauxHorairesCSR[state.hourInTheWeek];
         // Next variable
         NextType::hourForEachArea(state, numSpace);
     }
