@@ -107,7 +107,7 @@ static void checkInputCorrectness(const std::vector<double>& G,
             throw std::invalid_argument(msg_prefix + "H not smaller than Pmax everywhere");
         }
     }
-
+    // Hydro production > Pmin
     for (int h = 0; h < H.size(); h++)
     {
         if (H[h] < P_min[h])

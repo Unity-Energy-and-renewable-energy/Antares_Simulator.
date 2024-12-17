@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(input_is_acceptable__no_exception_raised)
       new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows, ovf, pump, S, DTG_MRG));
 }
 
-BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_smoothed_to_mean_H_20mwh)
+BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh)
 {
     std::vector<double> P_max(5, 40.);
     std::vector<double> P_min(5, 0.);
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(Pmax_does_not_impact_results_when_greater_than_40mwh)
     BOOST_CHECK(new_D == expected_D);
 }
 
-BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_smoothed_to_mean_H_20mwh)
+BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh)
 {
     std::vector<double> P_max(5, 40.);
     std::vector<double> P_min(5, 0.);
@@ -321,9 +321,78 @@ BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
     BOOST_CHECK(new_D2 == expected_D2);
 }
 
+BOOST_AUTO_TEST_CASE(H_is_already_flat___remix_is_useless__level_easily_computed)
+{
+    // Not important
+    std::vector<double> P_max(5, 25.), P_min(5, 0.), G(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
+    std::vector<double> D(5, 10.);
+    double capa = 1000.;
+
+    // Used for level computations
+    double initial_level = 500.;
+    std::vector<double> ovf(5, 25.), H(5, 20.);        // Cause levels to lower
+    std::vector<double> inflows(5, 15.), pump(5, 10.); // Cause levels to raise
+
+    auto [new_H, new_D, levels] = new_remix_hydro(G,
+                                                  H,
+                                                  D,
+                                                  P_max,
+                                                  P_min,
+                                                  initial_level,
+                                                  capa,
+                                                  inflows,
+                                                  ovf,
+                                                  pump,
+                                                  S,
+                                                  DTG_MRG);
+
+    std::vector<double> expected_levels = {480., 460., 440., 420., 400.};
+    BOOST_TEST(levels == expected_levels, boost::test_tools::per_element());
+}
+
+BOOST_AUTO_TEST_CASE(what_if_levels_are_up_bounded_by_capacity)
+{
+    // Not important
+    std::vector<double> P_max(5, 25.), P_min(5, 0.), G(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
+    std::vector<double> D(5, 10.);
+
+    // Used for level computations
+    double initial_level = 500.;
+    double capacity = 550.;
+    std::vector<double> ovf(5, 15.), H(5, 10.);        // Cause levels to lower
+    std::vector<double> inflows(5, 25.), pump(5, 20.); // Cause levels to raise
+
+    auto [new_H, new_D, levels] = new_remix_hydro(G,
+                                                  H,
+                                                  D,
+                                                  P_max,
+                                                  P_min,
+                                                  initial_level,
+                                                  capacity,
+                                                  inflows,
+                                                  ovf,
+                                                  pump,
+                                                  S,
+                                                  DTG_MRG);
+
+    // Bad ! Levels not limited by capacity.
+    std::vector<double> expected_levels = {520., 540., 560., 580., 600.};
+    BOOST_TEST(levels == expected_levels, boost::test_tools::per_element());
+}
+
 // Ideas for building further tests :
 // ================================
 // - Remix hydro algorithm seems symmetrical (if we have input vectors and corresponding output
 //   vectors, run the algo on reversed vectors gives reversed output result vectors)
 // - After running remix hydro algo, sum(H), sum(H + D) must remain the same.
 // - influence of D : low values of G + H are searched where D > 0 (not where D == 0)
+
+// Possible simplifications / clarifications of the algorithm itself :
+// - remove french from variable names
+// - the algo is flat, it's C (not C++), it should be divided in a small number of steps
+// - max_pic is a up hydro production margin (H_up_mrg)
+// - max_creux is a down hydro production margin (H_down_mrg)
+// - an iter updates new_H : it's its main job. So new_D could be updated from new_H at the
+//   end of an iteration, separately.
+// - they are 3 while loops. 2 loops should be enough (the iteration loop and
+//   another one simply updating new_H and new_D)
