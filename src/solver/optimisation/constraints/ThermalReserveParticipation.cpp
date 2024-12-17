@@ -50,7 +50,6 @@ void ThermalReserveParticipation::add(int pays, int reserve, int cluster, int pd
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves += offUnitParticipating ? 3 : 2;
         builder.data.nombreDeContraintes++;
     }
 }

@@ -107,11 +107,11 @@ public:
         pSize = 0;
         for (auto res : area->allCapacityReservations.areaCapacityReservationsUp)
         {
-            pSize += Antares::Data::groupMax;
+            pSize += Antares::Data::ThermalCluster::groupMax;
         }
         for (auto res : area->allCapacityReservations.areaCapacityReservationsDown)
         {
-            pSize += Antares::Data::groupMax;
+            pSize += Antares::Data::ThermalCluster::groupMax;
         }
         if (pSize)
         {
@@ -235,22 +235,22 @@ public:
         int column = 0;
         for (auto  [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
         {
-            for (int indexGroup = 0; indexGroup < Antares::Data::groupMax; indexGroup++)
+            for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
             {
                 pValuesForTheCurrentYear[numSpace][column].hour[state.hourInTheYear]
                   += state.reserveParticipationPerGroupForYear[state.hourInTheYear]
-                       .thermalGroupsReserveParticipation[static_cast<Data::ThermalDispatchableGroup>(indexGroup)]
+                       .thermalGroupsReserveParticipation[static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup)]
                                      [reserveName];
                 column++;
             }
         }
         for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
         {
-            for (int indexGroup = 0; indexGroup < Antares::Data::groupMax; indexGroup++)
+            for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
             {
                 pValuesForTheCurrentYear[numSpace][column].hour[state.hourInTheYear]
                   += state.reserveParticipationPerGroupForYear[state.hourInTheYear]
-                       .thermalGroupsReserveParticipation[static_cast<Data::ThermalDispatchableGroup>(indexGroup)]
+                       .thermalGroupsReserveParticipation[static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup)]
                                      [reserveName];
                 column++;
             }
@@ -283,11 +283,11 @@ public:
             int column = 0;
             for (auto res : results.data.area->allCapacityReservations.areaCapacityReservationsUp)
             {
-                for (int indexGroup = 0; indexGroup < Antares::Data::groupMax; indexGroup++)
+                for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
                 {
                     // Write the data for the current year
                     Yuni::String caption = res.first;
-                    caption << "_" << Data::ThermalCluster::GroupName(static_cast<Data::ThermalDispatchableGroup>(indexGroup));
+                    caption << "_" << Data::ThermalCluster::GroupName(static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup));
                     results.variableCaption = caption; // VCardType::Caption();
                     results.variableUnit = VCardType::Unit();
                     pValuesForTheCurrentYear[numSpace][column].template buildAnnualSurveyReport<VCardType>(
@@ -297,11 +297,11 @@ public:
             }
             for (auto res : results.data.area->allCapacityReservations.areaCapacityReservationsDown)
             {
-                for (int indexGroup = 0; indexGroup < Antares::Data::groupMax; indexGroup++)
+                for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
                 {
                     // Write the data for the current year
                     Yuni::String caption = res.first;
-                    caption << "_" << Data::ThermalCluster::GroupName(static_cast<Data::ThermalDispatchableGroup>(indexGroup));
+                    caption << "_" << Data::ThermalCluster::GroupName(static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup));
                     results.variableCaption = caption; // VCardType::Caption();
                     results.variableUnit = VCardType::Unit();
                     pValuesForTheCurrentYear[numSpace][column].template buildAnnualSurveyReport<VCardType>(

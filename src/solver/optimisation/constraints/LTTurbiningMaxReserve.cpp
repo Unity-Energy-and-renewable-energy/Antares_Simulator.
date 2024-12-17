@@ -37,7 +37,6 @@ void LTTurbiningMaxReserve::add(int pays, int reserve, int cluster, int pdt, boo
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves++;
         builder.data.nombreDeContraintes++;
     }
 }

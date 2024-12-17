@@ -240,7 +240,7 @@ std::pair<Data::ShortTermStorage::Group, Data::ReserveName>
     int column = 0;
     for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
     {
-        for (int indexGroup = 0; indexGroup < Data::groupMax; indexGroup++)
+        for (int indexGroup = 0; indexGroup < Data::ThermalCluster::groupMax; indexGroup++)
         {
             if (column == index)
                 return {static_cast<Data::ShortTermStorage::Group>(indexGroup), reserveName};
@@ -249,7 +249,7 @@ std::pair<Data::ShortTermStorage::Group, Data::ReserveName>
     }
     for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
     {
-        for (int indexGroup = 0; indexGroup < Data::groupMax; indexGroup++)
+        for (int indexGroup = 0; indexGroup < Data::ThermalCluster::groupMax; indexGroup++)
         {
             if (column == index)
                 return {static_cast<Data::ShortTermStorage::Group>(indexGroup), reserveName};

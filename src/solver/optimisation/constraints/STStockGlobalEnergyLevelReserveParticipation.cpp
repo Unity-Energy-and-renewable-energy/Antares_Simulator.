@@ -118,7 +118,6 @@ void STStockGlobalEnergyLevelReserveParticipation::add(int pays, int cluster, in
         int nbTermsUp = countReservesParticipations(data.areaReserves[pays].areaCapacityReservationsUp, data.areaReserves[pays].maxGlobalActivationDurationUp);
         int nbTermsDown = countReservesParticipations(data.areaReserves[pays].areaCapacityReservationsDown, data.areaReserves[pays].maxGlobalActivationDurationDown);
 
-        builder.data.NbTermesContraintesPourLesReserves += (nbTermsUp + data.areaReserves[pays].maxGlobalActivationDurationUp) * (nbTermsUp > 0) + (nbTermsDown + data.areaReserves[pays].maxGlobalActivationDurationDown) * (nbTermsDown > 0);
         builder.data.nombreDeContraintes += (nbTermsUp > 0) + (nbTermsDown > 0);
     }
 }

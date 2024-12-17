@@ -357,6 +357,18 @@ void VariableNamer::ShortTermStorageLevel(unsigned int variable,
     SetShortTermStorageVariableName(variable, "Level", shortTermStorageName);
 }
 
+void VariableNamer::ShortTermStorageCostVariationInjection(unsigned int variable,
+                                                           const std::string& shortTermStorageName)
+{
+    SetShortTermStorageVariableName(variable, "CostVariationInjection", shortTermStorageName);
+}
+
+void VariableNamer::ShortTermStorageCostVariationWithdrawal(unsigned int variable,
+                                                            const std::string& shortTermStorageName)
+{
+    SetShortTermStorageVariableName(variable, "CostVariationWithdrawal", shortTermStorageName);
+}
+
 void VariableNamer::HydProd(unsigned int variable)
 {
     SetAreaElementNameHour(variable, "HydProd");
@@ -793,4 +805,16 @@ void ConstraintNamer::BindingConstraintDay(unsigned int constraint, const std::s
 void ConstraintNamer::BindingConstraintWeek(unsigned int constraint, const std::string& name)
 {
     nameWithTimeGranularity(constraint, name, WEEK);
+}
+
+void ConstraintNamer::ShortTermStorageCostVariation(const std::string& constraint_name,
+                                                    unsigned int constraint,
+                                                    const std::string& short_term_name)
+{
+    targetUpdater_.UpdateTargetAtIndex(BuildName(constraint_name,
+                                                 LocationIdentifier(area_, AREA) + SEPARATOR
+                                                   + "ShortTermStorage" + "<" + short_term_name
+                                                   + ">",
+                                                 TimeIdentifier(timeStep_, HOUR)),
+                                       constraint);
 }

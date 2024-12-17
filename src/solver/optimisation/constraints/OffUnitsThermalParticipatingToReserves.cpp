@@ -42,7 +42,6 @@ void OffUnitsThermalParticipatingToReserves::add(int pays, int reserve, int clus
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves += 2;
         builder.data.nombreDeContraintes++;
     }
 }

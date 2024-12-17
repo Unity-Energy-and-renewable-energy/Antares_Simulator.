@@ -71,7 +71,7 @@ struct ReserveParticipationPerGroupForYear
 {
     //! Reserve Participation for all thermal group types (nuclear / coal / ...) for the whole
     //! year per reserve
-    std::map<Data::ThermalDispatchableGroup, std::map<Data::ReserveName, double>>
+    std::map<Data::ThermalCluster::ThermalDispatchableGroup, std::map<Data::ReserveName, double>>
       thermalGroupsReserveParticipation;
 
     //! Reserve Participation for all thermal Short Term storages types (PSP / Battery / ...)

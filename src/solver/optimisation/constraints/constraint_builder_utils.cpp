@@ -25,14 +25,13 @@ ConstraintBuilderData NewGetConstraintBuilderFromProblemHebdoAndProblemAResoudre
   PROBLEME_HEBDO* problemeHebdo,
   PROBLEME_ANTARES_A_RESOUDRE& ProblemeAResoudre)
 {
-    return {ProblemeAResoudre.Pi,
+    return { ProblemeAResoudre.Pi,
             ProblemeAResoudre.Colonne,
             ProblemeAResoudre.NombreDeContraintes,
             ProblemeAResoudre.NombreDeTermesDansLaMatriceDesContraintes,
             ProblemeAResoudre.IndicesDebutDeLigne,
             ProblemeAResoudre.CoefficientsDeLaMatriceDesContraintes,
             ProblemeAResoudre.IndicesColonnes,
-            ProblemeAResoudre.NombreDeTermesAllouesDansLaMatriceDesContraintes,
             ProblemeAResoudre.NombreDeTermesDesLignes,
             ProblemeAResoudre.Sens,
             ProblemeAResoudre.IncrementDAllocationMatriceDesContraintes,
@@ -44,7 +43,5 @@ ConstraintBuilderData NewGetConstraintBuilderFromProblemHebdoAndProblemAResoudre
             problemeHebdo->NamedProblems,
             problemeHebdo->NomsDesPays,
             problemeHebdo->weekInTheYear,
-            problemeHebdo->NombreDePasDeTemps,
-            problemeHebdo->NbTermesContraintesPourLesCoutsDeDemarrage,
-            problemeHebdo->NbTermesContraintesPourLesReserves};
+            problemeHebdo->NombreDePasDeTemps };
 }

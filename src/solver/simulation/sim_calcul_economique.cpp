@@ -132,6 +132,8 @@ static void importShortTermStorages(
             toInsert.withdrawalNominalCapacity = st.properties.withdrawalNominalCapacity.value();
             toInsert.initialLevel = st.properties.initialLevel;
             toInsert.initialLevelOptim = st.properties.initialLevelOptim;
+            toInsert.penalizeVariationInjection = st.properties.penalizeVariationInjection;
+            toInsert.penalizeVariationWithdrawal = st.properties.penalizeVariationWithdrawal;
             toInsert.name = st.properties.name;
             toInsert.clusterGlobalIndex = clusterGlobalIndex;
 

@@ -63,7 +63,6 @@ void POffUnits::add(int pays, int reserve, int cluster, int pdt)
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves += 4;
         builder.data.nombreDeContraintes += 2;
     }
 }

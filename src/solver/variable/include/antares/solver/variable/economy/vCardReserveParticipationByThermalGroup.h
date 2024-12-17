@@ -96,7 +96,7 @@ struct VCardReserveParticipationByThermalGroup
 
 }; // class VCard
 
-static std::string thermalDispatchableGroupToString(Data::ThermalDispatchableGroup idx)
+static std::string thermalDispatchableGroupToString(Data::ThermalCluster::ThermalDispatchableGroup idx)
 {
     switch (idx)
     {

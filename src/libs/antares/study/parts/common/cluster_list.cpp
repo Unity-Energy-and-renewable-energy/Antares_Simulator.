@@ -28,6 +28,7 @@
 #include <antares/utils/utils.h>
 #include "antares/study/study.h"
 
+namespace fs = std::filesystem;
 using namespace Yuni;
 
 namespace Antares::Data
@@ -90,25 +91,25 @@ std::pair<Data::ClusterName, Data::ReserveName>
 }
 
 template<class ClusterT>
-std::pair<Data::ThermalDispatchableGroup, Data::ReserveName>
+std::pair<Data::ThermalCluster::ThermalDispatchableGroup, Data::ReserveName>
   ClusterList<ClusterT>::reserveParticipationGroupAt(const Area* area, unsigned int index) const
 {
     int column = 0;
     for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
     {
-        for (int indexGroup = 0; indexGroup < Data::groupMax; indexGroup++)
+        for (int indexGroup = 0; indexGroup < Data::ThermalCluster::groupMax; indexGroup++)
         {
             if (column == index)
-                return {static_cast<Data::ThermalDispatchableGroup>(indexGroup), reserveName};
+                return {static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup), reserveName};
             column++;
         }
     }
     for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
     {
-        for (int indexGroup = 0; indexGroup < Data::groupMax; indexGroup++)
+        for (int indexGroup = 0; indexGroup < Data::ThermalCluster::groupMax; indexGroup++)
         {
             if (column == index)
-                return {static_cast<Data::ThermalDispatchableGroup>(indexGroup), reserveName};
+                return {static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup), reserveName};
             column++;
         }
     }
@@ -117,25 +118,25 @@ std::pair<Data::ThermalDispatchableGroup, Data::ReserveName>
 }
 
 template<class ClusterT>
-std::pair<Data::UnsuppliedSpilled, Data::ReserveName>
+std::pair<Data::ThermalCluster::UnsuppliedSpilled, Data::ReserveName>
 ClusterList<ClusterT>::reserveParticipationUnsuppliedSpilledAt(const Area* area, unsigned int index) const
 {
     int column = 0;
     for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
     {
-        for (int indexUnsuppliedSpilled = 0; indexUnsuppliedSpilled < Data::unsuppliedSpilledMax; indexUnsuppliedSpilled++)
+        for (int indexUnsuppliedSpilled = 0; indexUnsuppliedSpilled < Data::ThermalCluster::UnsuppliedSpilledMax; indexUnsuppliedSpilled++)
         {
             if (column == index)
-                return { static_cast<Data::UnsuppliedSpilled>(indexUnsuppliedSpilled), reserveName };
+                return { static_cast<Data::ThermalCluster::UnsuppliedSpilled>(indexUnsuppliedSpilled), reserveName };
             column++;
         }
     }
     for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
     {
-        for (int indexUnsuppliedSpilled = 0; indexUnsuppliedSpilled < Data::unsuppliedSpilledMax; indexUnsuppliedSpilled++)
+        for (int indexUnsuppliedSpilled = 0; indexUnsuppliedSpilled < Data::ThermalCluster::UnsuppliedSpilledMax; indexUnsuppliedSpilled++)
         {
             if (column == index)
-                return { static_cast<Data::UnsuppliedSpilled>(indexUnsuppliedSpilled), reserveName };
+                return { static_cast<Data::ThermalCluster::UnsuppliedSpilled>(indexUnsuppliedSpilled), reserveName };
             column++;
         }
     }
@@ -184,21 +185,20 @@ void ClusterList<ClusterT>::resizeAllTimeseriesNumbers(uint n) const
     }
 }
 
-#define SEP IO::Separator
-
 template<class ClusterT>
 void ClusterList<ClusterT>::storeTimeseriesNumbers(Solver::IResultWriter& writer) const
 {
-    Clob path;
     std::string ts_content;
+    fs::path basePath = fs::path("ts-numbers") / typeID();
 
     for (auto& cluster: each_enabled())
     {
-        path.clear() << "ts-numbers" << SEP << typeID() << SEP << cluster->parentArea->id << SEP
-                     << cluster->id() << ".txt";
+        fs::path path = basePath / cluster->parentArea->id.c_str()
+                        / std::string(cluster->id() + ".txt");
+
         ts_content.clear(); // We must clear ts_content here, since saveToBuffer does not do it.
         cluster->series.timeseriesNumbers.saveToBuffer(ts_content);
-        writer.addEntryFromBuffer(path.c_str(), ts_content);
+        writer.addEntryFromBuffer(path, ts_content);
     }
 }
 

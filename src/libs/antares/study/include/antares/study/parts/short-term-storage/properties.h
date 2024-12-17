@@ -77,6 +77,9 @@ public:
     /// cluster name
     std::string name;
 
+    bool penalizeVariationWithdrawal = false;
+    bool penalizeVariationInjection = false;
+
     /// Cluster gloval index (across areas)
     int clusterGlobalIndex;
 

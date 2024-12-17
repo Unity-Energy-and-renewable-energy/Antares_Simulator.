@@ -65,7 +65,6 @@ void STStockEnergyLevelReserveParticipation::add(int pays, int cluster, int rese
         }
         else
         {
-            builder.data.NbTermesContraintesPourLesReserves += 2 * capacityReservation.maxActivationDuration;
             builder.data.nombreDeContraintes += 1;
         }
     }

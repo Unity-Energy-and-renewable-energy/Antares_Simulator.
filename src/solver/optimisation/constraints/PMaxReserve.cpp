@@ -37,7 +37,6 @@ void PMaxReserve::add(int pays, int reserve, int cluster, int pdt, bool isUpRese
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves += 2;
         builder.data.nombreDeContraintes++;
     }
 }

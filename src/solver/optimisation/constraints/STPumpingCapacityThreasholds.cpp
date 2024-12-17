@@ -96,9 +96,6 @@ void STPumpingCapacityThreasholds::add(int pays, int cluster, int pdt)
         int nbTermsDown = countReservesParticipations(
           data.areaReserves[pays].areaCapacityReservationsDown);
 
-        builder.data.NbTermesContraintesPourLesReserves
-          += (nbTermsUp + 1) * (nbTermsUp > 0) + (nbTermsDown + 1) * (nbTermsDown > 0);
-
         builder.data.nombreDeContraintes += (nbTermsUp > 0) + (nbTermsDown > 0);
     }
 }

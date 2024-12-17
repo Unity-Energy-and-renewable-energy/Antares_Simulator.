@@ -49,12 +49,16 @@ jobs:
         run: |
           echo "DOCKERFILE=$(pwd)/docker/Dockerfile" >> $GITHUB_ENV
           echo "DOCKERDIR=$(pwd)/docker" >> $GITHUB_ENV
+
+
+
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v45
         with:
           files: |
             docker/AntaresDeps        
+
       - name: Docker file push
         id: docker_push
 
@@ -73,6 +77,8 @@ jobs:
         run: |
           echo "VCPKG_CACHE_DIR=$GITHUB_WORKSPACE/vcpkg_cache" >> $GITHUB_ENV
           mkdir -p ${{ github.workspace }}/vcpkg_cache
+
+
       - name: Restore vcpkg binary dir from cache
         id: cache-vcpkg-binary
         uses: actions/cache/restore@v4
@@ -99,6 +105,8 @@ jobs:
           --build-arg CCACHE_DIR=./.ccache \
           --build-arg CCACHE_KEY=centos7-on-${{ runner.os }} \
           -f ${{ env.DOCKERFILE }} . 
+
+
       - name: create a container without starting it && retrieve the .tgz
         run: |
           container_id=$(docker create antares:centos7)
@@ -107,6 +115,8 @@ jobs:
           docker cp $container_id:/workspace/.ccache/. .ccache
           ls -la .ccache
           docker rm $container_id
+
+
       - name: Publish assets
         if: ${{ env.IS_RELEASE == 'true' }}
         env:
@@ -115,7 +125,7 @@ jobs:
         run: |
           gh release upload "$tag" archive/*.tar.gz archive/*.rpm
       
-
+      
       - name: Upload .tar.gz
         uses: actions/upload-artifact@v4
         with:
@@ -130,3 +140,4 @@ jobs:
         with:
           path: ${{ github.workspace }}/vcpkg_cache
           key: vcpkg-cache-centos7-${{ hashFiles('src/vcpkg.json', '.git/modules/vcpkg/HEAD') }}
+

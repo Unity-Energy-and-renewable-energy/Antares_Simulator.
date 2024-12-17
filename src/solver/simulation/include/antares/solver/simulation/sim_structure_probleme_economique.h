@@ -85,6 +85,8 @@ struct CORRESPONDANCES_DES_VARIABLES
         std::vector<int> InjectionVariable;
         std::vector<int> WithdrawalVariable;
         std::vector<int> LevelVariable;
+        std::vector<int> CostVariationInjection;
+        std::vector<int> CostVariationWithdrawal;
     } SIM_ShortTermStorage;
 };
 
@@ -142,6 +144,10 @@ struct CORRESPONDANCES_DES_CONTRAINTES
     std::vector<int> NumeroDeContrainteDesNiveauxPays;
 
     std::vector<int> ShortTermStorageLevelConstraint;
+    std::vector<int> ShortTermStorageCostVariationInjectionForward;
+    std::vector<int> ShortTermStorageCostVariationInjectionBackward;
+    std::vector<int> ShortTermStorageCostVariationWithdrawalForward;
+    std::vector<int> ShortTermStorageCostVariationWithdrawalBackward;
 };
 
 struct CORRESPONDANCES_DES_CONTRAINTES_JOURNALIERES
@@ -219,6 +225,8 @@ struct PROPERTIES
     double withdrawalEfficiency;
     double initialLevel;
     bool initialLevelOptim;
+    bool penalizeVariationWithdrawal;
+    bool penalizeVariationInjection;
 
     std::shared_ptr<Antares::Data::ShortTermStorage::Series> series;
 
@@ -629,8 +637,6 @@ struct PROBLEME_HEBDO
     uint32_t NumberOfLongTermStorages = 0;
 
     /* Optimization problem */
-    uint32_t NbTermesContraintesPourLesCoutsDeDemarrage = 0;
-    uint32_t NbTermesContraintesPourLesReserves = 0;
     std::vector<bool> DefaillanceNegativeUtiliserPMinThermique;
     std::vector<bool> DefaillanceNegativeUtiliserHydro;
     std::vector<bool> DefaillanceNegativeUtiliserConsoAbattue;

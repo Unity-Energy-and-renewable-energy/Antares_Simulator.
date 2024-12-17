@@ -124,7 +124,7 @@ public:
     ** @param index Global index of the reserveParicipation
     ** @return the group and reserve names
     */
-    std::pair<Data::ThermalDispatchableGroup, Data::ReserveName> reserveParticipationGroupAt(
+    std::pair<Data::ThermalCluster::ThermalDispatchableGroup, Data::ReserveName> reserveParticipationGroupAt(
       const Area* area,
       unsigned int index) const;
 
@@ -134,7 +134,7 @@ public:
 ** @param index Global index of the reserveParicipation
 ** @return the status and reserve names
 */
-    std::pair<Data::UnsuppliedSpilled, Data::ReserveName> reserveParticipationUnsuppliedSpilledAt(
+    std::pair<Data::ThermalCluster::UnsuppliedSpilled, Data::ReserveName> reserveParticipationUnsuppliedSpilledAt(
         const Area* area,
         unsigned int index) const;
 
@@ -158,12 +158,6 @@ public:
     ** \brief Mark the clusters as modified
     */
     void markAsModified() const;
-
-    /*!
-    ** \brief Get the size (bytes) occupied in memory by a `ClusterList` structure
-    ** \return A size (in bytes)
-    */
-    virtual uint64_t memoryUsage() const = 0;
 
     /// \name IO functions
     /// @{

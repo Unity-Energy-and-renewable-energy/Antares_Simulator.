@@ -42,15 +42,14 @@ namespace Antares::Data
 {
 
 static bool loadTSfromFile(Matrix<double>& ts,
-                           const AreaName& areaID,
+                           const std::string& areaID,
                            const fs::path& folder,
                            const std::string& filename,
                            unsigned int height)
 {
-    YString filePath;
+    fs::path filePath = folder / areaID / filename;
     Matrix<>::BufferType fileContent;
-    filePath.clear() << folder << SEP << areaID << SEP << filename;
-    return ts.loadFromCSVFile(filePath, 1, height, &fileContent);
+    return ts.loadFromCSVFile(filePath.string(), 1, height, &fileContent);
 }
 
 static void ConvertDailyTSintoHourlyTS(const Matrix<double>::ColumnType& dailyColumn,
@@ -159,18 +158,23 @@ bool DataSeriesHydro::loadGenerationTS(const AreaName& areaID,
     return ret;
 }
 
-bool DataSeriesHydro::LoadMaxPower(const AreaName& areaID, const fs::path& folder)
+bool DataSeriesHydro::LoadMaxPower(const std::string& areaID, const fs::path& folder)
 {
     bool ret = true;
-    YString filepath;
     Matrix<>::BufferType fileContent;
 
-    filepath.clear() << folder << SEP << areaID << SEP << "maxHourlyGenPower.txt";
-    ret = maxHourlyGenPower.timeSeries.loadFromCSVFile(filepath, 1, HOURS_PER_YEAR, &fileContent)
+    fs::path filePath = folder / areaID / "maxHourlyGenPower.txt";
+    ret = maxHourlyGenPower.timeSeries.loadFromCSVFile(filePath.string(),
+                                                       1,
+                                                       HOURS_PER_YEAR,
+                                                       &fileContent)
           && ret;
 
-    filepath.clear() << folder << SEP << areaID << SEP << "maxHourlyPumpPower.txt";
-    ret = maxHourlyPumpPower.timeSeries.loadFromCSVFile(filepath, 1, HOURS_PER_YEAR, &fileContent)
+    filePath = folder / areaID / "maxHourlyPumpPower.txt";
+    ret = maxHourlyPumpPower.timeSeries.loadFromCSVFile(filePath.string(),
+                                                        1,
+                                                        HOURS_PER_YEAR,
+                                                        &fileContent)
           && ret;
 
     return ret;
@@ -215,12 +219,6 @@ bool DataSeriesHydro::saveToFolder(const AreaName& areaID, const AnyString& fold
     return false;
 }
 
-uint64_t DataSeriesHydro::memoryUsage() const
-{
-    return sizeof(double) + ror.memoryUsage() + storage.memoryUsage() + mingen.memoryUsage()
-           + maxHourlyGenPower.memoryUsage() + maxHourlyPumpPower.memoryUsage();
-}
-
 uint DataSeriesHydro::TScount() const
 {
     const std::vector<uint32_t> nbColumns({storage.numberOfColumns(),
@@ -234,6 +232,7 @@ uint DataSeriesHydro::TScount() const
 
 void DataSeriesHydro::resizeTSinDeratedMode(bool derated,
                                             StudyVersion studyVersion,
+                                            Parameters::Compatibility::HydroPmax hydroPmax,
                                             bool usedBySolver)
 {
     if (!(derated && usedBySolver))
@@ -247,7 +246,7 @@ void DataSeriesHydro::resizeTSinDeratedMode(bool derated,
     {
         mingen.averageTimeseries();
 
-        if (studyVersion >= StudyVersion(9, 1))
+        if (hydroPmax == Parameters::Compatibility::HydroPmax::Hourly)
         {
             maxHourlyGenPower.averageTimeseries();
             maxHourlyPumpPower.averageTimeseries();

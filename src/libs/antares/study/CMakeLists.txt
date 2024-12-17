@@ -72,8 +72,11 @@ set(SRC_STUDY_PART_THERMAL
         include/antares/study/parts/thermal/ecoInput.h
         parts/thermal/ecoInput.cpp
         include/antares/study/parts/thermal/cluster.h
+        include/antares/study/parts/thermal/cost_provider.h
         include/antares/study/parts/thermal/cluster.hxx
         parts/thermal/cluster.cpp
+	parts/thermal/scenarized_cost_provider.cpp
+	parts/thermal/constant_cost_provider.cpp
         include/antares/study/parts/thermal/cluster_list.h
         parts/thermal/cluster_list.cpp
         include/antares/study/parts/thermal/pollutant.h
@@ -180,7 +183,6 @@ source_group("study\\constraint" FILES ${SRC_STUDY_BINDING_CONSTRAINT})
 set(SRC_XCAST
         include/antares/study/xcast.h
         include/antares/study/xcast/xcast.h
-        include/antares/study/xcast/xcast.hxx
         xcast/xcast.cpp
 )
 source_group("study\\xcast" FILES ${SRC_XCAST})

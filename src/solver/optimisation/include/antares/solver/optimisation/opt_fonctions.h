@@ -81,7 +81,7 @@ bool OPT_AppelDuSimplexe(const OptimizationOptions& options,
                          const int,
                          const OptPeriodStringGenerator&,
                          Antares::Solver::IResultWriter& writer);
-void OPT_LiberationProblemesSimplexe(const OptimizationOptions& options, const PROBLEME_HEBDO*);
+void OPT_LiberationProblemesSimplexe(const PROBLEME_HEBDO*);
 
 bool OPT_OptimisationLineaire(const OptimizationOptions& options,
                               PROBLEME_HEBDO* problemeHebdo,
@@ -95,11 +95,9 @@ double OPT_CalculerAireMaxPminJour(int, int, int, int, std::vector<int>&, std::v
 
 void OPT_ChainagesDesIntercoPartantDUnNoeud(PROBLEME_HEBDO*);
 
-void OPT_AllocateFromNumberOfVariableConstraints(PROBLEME_ANTARES_A_RESOUDRE* ProblemeAResoudre,
-                                                 int);
+void OPT_AllocateFromNumberOfVariableConstraints(PROBLEME_ANTARES_A_RESOUDRE* ProblemeAResoudre);
 void OPT_AllocDuProblemeAOptimiser(PROBLEME_HEBDO*);
 int OPT_DecompteDesVariablesEtDesContraintesDuProblemeAOptimiser(PROBLEME_HEBDO*);
-void OPT_AugmenterLaTailleDeLaMatriceDesContraintes(PROBLEME_ANTARES_A_RESOUDRE*);
 
 /*------------------------------*/
 

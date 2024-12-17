@@ -39,7 +39,6 @@ void STReserveUpParticipation::add(int pays, int reserve, int cluster, int pdt)
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves += 3;
         builder.data.nombreDeContraintes++;
     }
 }

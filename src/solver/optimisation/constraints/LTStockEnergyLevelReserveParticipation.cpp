@@ -76,9 +76,6 @@ void LTStockEnergyLevelReserveParticipation::add(int pays,
         }
         else
         {
-            builder.data.NbTermesContraintesPourLesReserves += 2
-                                                               * capacityReservation
-                                                                   .maxActivationDuration;
             builder.data.nombreDeContraintes += 1;
         }
     }

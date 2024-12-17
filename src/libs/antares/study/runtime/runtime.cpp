@@ -381,7 +381,6 @@ bool StudyRuntimeInfos::loadFromStudy(Study& study)
     logs.info() << "     reserve participations: " << reserveParticipationCount;
     logs.info() << "     binding constraints: " << study.bindingConstraints.activeConstraints().size();
     logs.info() << "     geographic trimming:" << (gd.geographicTrimming ? "true" : "false");
-    logs.info() << "     memory : " << ((study.memoryUsage()) / 1024 / 1024) << "Mo";
     logs.info();
 
     return true;

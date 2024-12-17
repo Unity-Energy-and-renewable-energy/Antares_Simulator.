@@ -187,26 +187,6 @@ void Study::reduceMemoryUsage()
     ClearAndShrink(bufferLoadingTS);
 }
 
-// TODO remove with GUI
-uint64_t Study::memoryUsage() const
-{
-    return buffer.capacity() // Folders paths
-           + dataBuffer.capacity()
-           + bufferLoadingTS.capacity()
-           // Simulation
-           + simulationComments.memoryUsage()
-           // parameters
-           + parameters.memoryUsage()
-           // Areas
-           + areas.memoryUsage()
-           // Binding constraints
-           + bindingConstraints.memoryUsage()
-           // Correlations matrices
-           + preproLoadCorrelation.memoryUsage() + preproSolarCorrelation.memoryUsage()
-           + preproHydroCorrelation.memoryUsage() + preproWindCorrelation.memoryUsage()
-           + (uiinfo ? uiinfo->memoryUsage() : 0);
-}
-
 unsigned Study::getNumberOfCoresPerMode(unsigned nbLogicalCores, int ncMode)
 {
     if (!nbLogicalCores)
@@ -510,6 +490,8 @@ fs::path StudyCreateOutputPath(SimulationMode mode,
 
 void Study::prepareOutput()
 {
+    pStartTime = DateTime::Now();
+
     if (parameters.noOutput || !usedByTheSolver)
     {
         return;
@@ -655,6 +637,7 @@ Area* Study::areaAdd(const AreaName& name, bool updateMode)
     return area;
 }
 
+// TODO VP: delete with GUI
 bool Study::areaDelete(Area* area)
 {
     if (not area)
@@ -702,6 +685,7 @@ bool Study::areaDelete(Area* area)
     return true;
 }
 
+// TODO VP: delete with GUI
 void Study::areaDelete(Area::Vector& arealist)
 {
     if (arealist.empty())
@@ -764,6 +748,7 @@ void Study::areaDelete(Area::Vector& arealist)
     }
 }
 
+// TODO VP: delete with GUI
 bool Study::linkDelete(AreaLink* lnk)
 {
     // Impossible to find the attached area
@@ -789,6 +774,7 @@ bool Study::linkDelete(AreaLink* lnk)
     return true;
 }
 
+// TODO VP: delete with GUI
 bool Study::areaRename(Area* area, AreaName newName)
 {
     // A name must not be empty
@@ -871,6 +857,7 @@ bool Study::areaRename(Area* area, AreaName newName)
     return ret;
 }
 
+// TODO VP: delete with GUI
 bool Study::clusterRename(Cluster* cluster, ClusterName newName)
 {
     // A name must not be empty

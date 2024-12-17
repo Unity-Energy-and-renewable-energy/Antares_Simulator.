@@ -39,7 +39,6 @@ void STPumpingMaxReserve::add(int pays, int reserve, int cluster, int pdt, bool 
     }
     else
     {
-        builder.data.NbTermesContraintesPourLesReserves++;
         builder.data.nombreDeContraintes++;
     }
 }

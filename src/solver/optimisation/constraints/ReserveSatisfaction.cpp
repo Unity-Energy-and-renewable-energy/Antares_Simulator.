@@ -84,7 +84,6 @@ void ReserveSatisfaction::add(int pays, int reserve, int pdt, bool isUpReserve)
         }
         else
         {
-            builder.data.NbTermesContraintesPourLesReserves += 2 + nbTermes;
             builder.data.nombreDeContraintes += 1;
         }
     }

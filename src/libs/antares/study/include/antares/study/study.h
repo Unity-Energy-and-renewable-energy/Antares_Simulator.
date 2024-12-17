@@ -428,11 +428,6 @@ public:
     */
     void ensureDataAreLoadedForAllBindingConstraints();
 
-    /*!
-    ** \brief Get the amound of memory consummed by the study (in bytes)
-    */
-    uint64_t memoryUsage() const;
-
     //! \name Logs
     //@{
     /*!
@@ -467,6 +462,7 @@ public:
     //! \name Simulation
     //@{
     //! The current Simulation
+    // TODO VP: remove with GUI
     SimulationComments simulationComments;
 
     int64_t pStartTime;

@@ -104,9 +104,6 @@ void LTPumpingCapacityThreasholds::add(int pays, int cluster, int pdt)
 
         int hydroPump = data.longTermStorageOfArea[pays].PresenceDePompageModulable;
 
-        builder.data.NbTermesContraintesPourLesReserves
-          += (nbTermsUp + hydroPump) * (nbTermsUp > 0) + (nbTermsDown + hydroPump) * (nbTermsDown > 0);
-
         builder.data.nombreDeContraintes += (nbTermsUp > 0) + (nbTermsDown > 0);
     }
 }
