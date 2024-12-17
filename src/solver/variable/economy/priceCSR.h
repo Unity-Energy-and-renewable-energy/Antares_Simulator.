@@ -232,20 +232,16 @@ public:
 
     void hourForEachArea(State& state, unsigned int numSpace)
     {
-        // Marginal Price
-        // Note: The marginal price provided by the solver is negative
-        // (naming convention).
+        // IF UNSP. ENR CSR == 0, MRG. PRICE CSR = MRG. PRICE
+        // ELSE, MRG. PRICE CSR = “Unsupplied Energy Cost”
 
-        //     MRG. PRICE CSR = “Unsupplied Energy Cost” ( “Unsupplied Energy Cost’ in Antares IF
-
-        //     after adq patch and DTG MRG netting UNSP. ENR CSR  =/=0  ) MRG. PRICE CSR = MRG.
-        //     PRICE_org (== “MRG. PRICE” before any adq patch  IF after adq patch AND DTG MRG
-        //     netting  UNSP. ENR CSR  = 0    )
         auto isLow = [](double x) { return ::fabs(x) < 1; };
 
         if (isLow(
               state.hourlyResults->ValeursHorairesDeDefaillancePositiveCSR[state.hourInTheWeek]))
         {
+            // Note: The marginal price provided by the solver is negative
+            // (naming convention).
             pValuesForTheCurrentYear[numSpace][state.hourInTheYear]
               = -state.hourlyResults->CoutsMarginauxHoraires[state.hourInTheWeek];
         }
