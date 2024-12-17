@@ -129,7 +129,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: archive/*.tar.gz
-          name: antares-9.2.0-rc4-CentOS-7.9.2009.tar.gz
+          name: antares-9.2.0-rc7-debug-CentOS-7.9.2009.tar.gz
 
 
       - name: Cache vcpkg binary dir

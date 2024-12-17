@@ -73,17 +73,17 @@ RUN  source /opt/rh/devtoolset-11/enable && \
 RUN cd _build && \
     cpack -G RPM
 
-#Solver archive creation
-RUN cd _build && \
-     cpack -G RPM
+# #Solver archive creation
+# RUN cd _build && \
+#      cpack -G RPM
 
-RUN cd _build && \
-    cmake --install . --prefix install && \
-    pushd . && \
-    cd install/bin && \
-    tar czf ../../antares-solver_centos7.tar.gz antares-solver libsirius_solver.so && \
-    popd && \
-    rm -rf install
+# RUN cd _build && \
+#     cmake --install . --prefix install && \
+#     pushd . && \
+#     cd install/bin && \
+#     tar czf ../../antares-solver_centos7.tar.gz antares-solver libsirius_solver.so && \
+#     popd && \
+#     rm -rf install
 
 #.tar.gz creation
 RUN cd _build && \
