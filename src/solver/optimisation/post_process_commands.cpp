@@ -150,7 +150,7 @@ void UpdateMrgPriceAfterCSRcmd::execute(const optRuntimeData&)
             else
             {
                 hourlyResults.CoutsMarginauxHorairesCSR[hour]
-                  = hourlyResults.CoutsMarginauxHorairesCSR[hour];
+                  = hourlyResults.CoutsMarginauxHoraires[hour];
             }
 
             if (isHourTriggeredByCsr
