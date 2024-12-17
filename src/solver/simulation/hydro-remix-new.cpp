@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <ranges>
 #include <stdexcept>
 #include <vector>
@@ -11,13 +12,14 @@ int find_min_index(const std::vector<double>& G_plus_H,
                    const std::vector<double>& new_H,
                    const std::vector<int>& tried_creux,
                    const std::vector<double>& P_max,
+                   const std::vector<bool>& filter_hours_remix,
                    double top)
 {
     double min_val = top;
     int min_idx = -1;
     for (int i = 0; i < G_plus_H.size(); ++i)
     {
-        if (new_D[i] > 0 && new_H[i] < P_max[i] && tried_creux[i] == 0)
+        if (new_D[i] > 0 && new_H[i] < P_max[i] && tried_creux[i] == 0 && filter_hours_remix[i])
         {
             if (G_plus_H[i] < min_val)
             {
@@ -33,6 +35,7 @@ int find_max_index(const std::vector<double>& G_plus_H,
                    const std::vector<double>& new_H,
                    const std::vector<int>& tried_pic,
                    const std::vector<double>& P_min,
+                   const std::vector<bool>& filter_hours_remix,
                    double ref_value,
                    double eps)
 {
@@ -40,7 +43,8 @@ int find_max_index(const std::vector<double>& G_plus_H,
     int max_idx = -1;
     for (int i = 0; i < G_plus_H.size(); ++i)
     {
-        if (new_H[i] > P_min[i] && G_plus_H[i] >= ref_value + eps && tried_pic[i] == 0)
+        if (new_H[i] > P_min[i] && G_plus_H[i] >= ref_value + eps && tried_pic[i] == 0
+            && filter_hours_remix[i])
         {
             if (G_plus_H[i] > max_val)
             {
@@ -59,7 +63,11 @@ static void checkInputCorrectness(const std::vector<double>& G,
                                   const std::vector<double>& P_min,
                                   double initial_level,
                                   double capa,
-                                  const std::vector<double>& inflows)
+                                  const std::vector<double>& inflows,
+                                  const std::vector<double>& overflow,
+                                  const std::vector<double>& pump,
+                                  const std::vector<double>& S,
+                                  const std::vector<double>& DTG_MRG)
 {
     std::string msg_prefix = "Remix hydro input : ";
 
@@ -74,7 +82,12 @@ static void checkInputCorrectness(const std::vector<double>& G,
                                  D.size(),
                                  P_max.size(),
                                  P_min.size(),
-                                 inflows.size()};
+                                 inflows.size(),
+                                 overflow.size(),
+                                 pump.size(),
+                                 S.size(),
+                                 DTG_MRG.size()};
+
     if (std::ranges::adjacent_find(sizes, std::not_equal_to()) != sizes.end())
     {
         throw std::invalid_argument(msg_prefix + "arrays of different sizes");
@@ -104,17 +117,38 @@ static void checkInputCorrectness(const std::vector<double>& G,
     }
 }
 
-std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
-  const std::vector<double>& G,
-  const std::vector<double>& H,
-  const std::vector<double>& D,
-  const std::vector<double>& P_max,
-  const std::vector<double>& P_min,
-  double initial_level,
-  double capa,
-  const std::vector<double>& inflows)
+struct RemixHydroOutput
 {
-    checkInputCorrectness(G, H, D, P_max, P_min, initial_level, capa, inflows);
+    std::vector<double> new_H;
+    std::vector<double> new_D;
+    std::vector<double> levels;
+};
+
+RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
+                                 const std::vector<double>& H,
+                                 const std::vector<double>& D,
+                                 const std::vector<double>& P_max,
+                                 const std::vector<double>& P_min,
+                                 double initial_level,
+                                 double capa,
+                                 const std::vector<double>& inflows,
+                                 const std::vector<double>& overflow,
+                                 const std::vector<double>& pump,
+                                 const std::vector<double>& S,
+                                 const std::vector<double>& DTG_MRG)
+{
+    checkInputCorrectness(G,
+                          H,
+                          D,
+                          P_max,
+                          P_min,
+                          initial_level,
+                          capa,
+                          inflows,
+                          overflow,
+                          pump,
+                          S,
+                          DTG_MRG);
 
     std::vector<double> new_H = H;
     std::vector<double> new_D = D;
@@ -124,14 +158,23 @@ std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
     double top = *std::max_element(G.begin(), G.end()) + *std::max_element(H.begin(), H.end())
                  + *std::max_element(D.begin(), D.end()) + 1;
 
+    std::vector<bool> filter_hours_remix(G.size(), false);
+    for (unsigned int h = 0; h < filter_hours_remix.size(); h++)
+    {
+        if (S[h] + DTG_MRG[h] == 0. && H[h] + D[h] > 0.)
+        {
+            filter_hours_remix[h] = true;
+        }
+    }
+
     std::vector<double> G_plus_H(G.size());
     std::transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), std::plus<>());
 
-    std::vector<double> level(G.size());
-    level[0] = initial_level + inflows[0] - new_H[0];
-    for (size_t i = 1; i < level.size(); ++i)
+    std::vector<double> levels(G.size());
+    levels[0] = initial_level + inflows[0] - overflow[0] + pump[0] - new_H[0];
+    for (size_t i = 1; i < levels.size(); ++i)
     {
-        level[i] = level[i - 1] + inflows[i] - new_H[i];
+        levels[i] = levels[i - 1] + inflows[i] - overflow[i] + pump[i] - new_H[i];
     }
 
     while (loop-- > 0)
@@ -141,7 +184,13 @@ std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
 
         while (true)
         {
-            int idx_creux = find_min_index(G_plus_H, new_D, new_H, tried_creux, P_max, top);
+            int idx_creux = find_min_index(G_plus_H,
+                                           new_D,
+                                           new_H,
+                                           tried_creux,
+                                           P_max,
+                                           filter_hours_remix,
+                                           top);
             if (idx_creux == -1)
             {
                 break;
@@ -154,6 +203,7 @@ std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
                                              new_H,
                                              tried_pic,
                                              P_min,
+                                             filter_hours_remix,
                                              G_plus_H[idx_creux],
                                              eps);
                 if (idx_pic == -1)
@@ -161,8 +211,9 @@ std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
                     break;
                 }
 
-                std::vector<double> intermediate_level(level.begin() + std::min(idx_creux, idx_pic),
-                                                       level.begin()
+                std::vector<double> intermediate_level(levels.begin()
+                                                         + std::min(idx_creux, idx_pic),
+                                                       levels.begin()
                                                          + std::max(idx_creux, idx_pic));
 
                 double max_pic = std::min(new_H[idx_pic] - P_min[idx_pic],
@@ -204,14 +255,13 @@ std::pair<std::vector<double>, std::vector<double>> new_remix_hydro(
         }
 
         std::transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), std::plus<>());
-        level[0] = initial_level + inflows[0] - new_H[0];
-        for (size_t i = 1; i < level.size(); ++i)
+        levels[0] = initial_level + inflows[0] - overflow[0] + pump[0] - new_H[0];
+        for (size_t i = 1; i < levels.size(); ++i)
         {
-            level[i] = level[i - 1] + inflows[i] - new_H[i];
+            levels[i] = levels[i - 1] + inflows[i] - overflow[i] + pump[i] - new_H[i];
         }
     }
-
-    return {new_H, new_D};
+    return {new_H, new_D, levels};
 }
 
 } // End namespace Antares::Solver::Simulation
