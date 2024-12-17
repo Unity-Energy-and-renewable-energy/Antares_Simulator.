@@ -169,9 +169,8 @@ BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_smoothed_to_mean_H_20
     BOOST_CHECK(new_D == expected_D);
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_pmax)
+BOOST_AUTO_TEST_CASE(influence_of_pmax, *boost::unit_test::tolerance(0.01))
 {
-    std::vector<double> P_max(5, 20.);
     std::vector<double> P_min(5, 0.);
 
     // G decreases
@@ -184,21 +183,29 @@ BOOST_AUTO_TEST_CASE(influence_of_pmax)
     double capa = 1000.;
     std::vector<double> inflows(5, 0.);
 
-    // What we expect to happen :
-    // Algorithm tends to flatten G + H, so it would require H to increase.
-    // But H is limited by P_max. So Algo does nothing in the end.
-    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+    // 1. Algorithm tends to flatten G + H, so it would require H to increase.
+    // Proof :
+    std::vector<double> P_max(5., std::numeric_limits<double>::max());
 
-    std::vector<double> expected_H = {20., 20., 20., 20., 20.};
-    std::vector<double> expected_D = {50., 50., 50., 50., 50.};
-    BOOST_CHECK(new_H == expected_H);
-    BOOST_CHECK(new_D == expected_D);
+    auto [new_H1, new_D1] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H1 = {0., 0., 13.33, 33.33, 53.33};
+    BOOST_TEST(new_H1 == expected_H1, boost::test_tools::per_element());
+
+    // 2. But H is limited by P_max. So Algo does nothing in the end.
+    // Proof :
+    P_max = {20., 20., 20., 20., 20.};
+    auto [new_H2, new_D2] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H2 = {20., 20., 20., 20., 20.};
+    std::vector<double> expected_D2 = {50., 50., 50., 50., 50.};
+    BOOST_CHECK(new_H2 == expected_H2);
+    BOOST_CHECK(new_D2 == expected_D2);
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_pmin)
+BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
 {
     std::vector<double> P_max(5, std::numeric_limits<double>::max());
-    std::vector<double> P_min(5, 20.);
 
     // G decreases
     std::vector<double> G = {100., 80., 60., 40., 20.};
@@ -210,15 +217,20 @@ BOOST_AUTO_TEST_CASE(influence_of_pmin)
     double capa = 1000.;
     std::vector<double> inflows(5, 0.);
 
-    // What we expect to happen :
-    // Algorithm tends to flatten G + H, so it would require H to decrease.
-    // But H is low bounded by P_min. So Algo does nothing in the end.
-    auto [new_H, new_D] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+    // 1. Algorithm tends to flatten G + H, so it would require H to increase.
+    std::vector<double> P_min(5, 0.);
+    auto [new_H1, new_D1] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+    std::vector<double> expected_H1 = {0., 0., 13.33, 33.33, 53.33};
+    BOOST_TEST(new_H1 == expected_H1, boost::test_tools::per_element());
 
-    std::vector<double> expected_H = {20., 20., 20., 20., 20.};
-    std::vector<double> expected_D = {50., 50., 50., 50., 50.};
-    BOOST_CHECK(new_H == expected_H);
-    BOOST_CHECK(new_D == expected_D);
+    // 2. But H is low bounded by P_min. So Algo does nothing in the end.
+    P_min = {20., 20., 20., 20., 20.};
+    auto [new_H2, new_D2] = new_remix_hydro(G, H, D, P_max, P_min, initial_level, capa, inflows);
+
+    std::vector<double> expected_H2 = {20., 20., 20., 20., 20.};
+    std::vector<double> expected_D2 = {50., 50., 50., 50., 50.};
+    BOOST_CHECK(new_H2 == expected_H2);
+    BOOST_CHECK(new_D2 == expected_D2);
 }
 
 // Ideas for building further tests :
