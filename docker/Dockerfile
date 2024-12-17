@@ -56,7 +56,7 @@ RUN  source /opt/rh/devtoolset-11/enable && \
     -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
     -DCMAKE_TOOLCHAIN_FILE=/workspace/Antares_Simulator/vcpkg/scripts/buildsystems/vcpkg.cmake \
     -DVCPKG_TARGET_TRIPLET=x64-linux-release \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DBUILD_TESTING=OFF \
     -DBUILD_TOOLS=ON \
     -DBUILD_UI=OFF \
@@ -66,7 +66,7 @@ ARG NPROC=2
 RUN  source /opt/rh/devtoolset-11/enable && \
      source /opt/rh/rh-git227/enable && \
      export VCPKG_BINARY_SOURCES="clear;files,/workspace/vcpkg_cache,readwrite" && \
-     cmake --build _build --config Release -j${NPROC} &&\
+     cmake --build _build --config Debug -j${NPROC} &&\
      ccache -s
 
 #Installer .rpm creation

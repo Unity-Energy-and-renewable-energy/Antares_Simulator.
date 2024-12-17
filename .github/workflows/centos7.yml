@@ -7,6 +7,7 @@ on:
     branches:
       - develop
       - dependabot/*
+      - debug/9.2.0-rc7-with-debug-info
   schedule:
     - cron: '21 2 * * *'
   workflow_call:
@@ -123,6 +124,12 @@ jobs:
           tag: ${{ github.event.inputs.release_tag }}
         run: |
           gh release upload "$tag" archive/*.tar.gz archive/*.rpm
+        
+      - name: Upload .tar.gz
+          uses: actions/upload-artifact@v4
+          with:
+            path: archive/*.tar.gz
+            name: antares-9.2.0-rc4-CentOS-7.9.2009.tar.gz
 
 
       - name: Cache vcpkg binary dir
