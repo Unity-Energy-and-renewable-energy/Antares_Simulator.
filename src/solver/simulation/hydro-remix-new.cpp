@@ -59,16 +59,27 @@ static bool isLessThan(const std::vector<double>& a, const std::vector<double>& 
 {
     std::vector<double> a_minus_b;
     std::ranges::transform(a, b, std::back_inserter(a_minus_b), std::minus<double>());
-    return std::ranges::all_of(a_minus_b, [](double d) { return d <= 0.; });
+    return std::ranges::all_of(a_minus_b, [](const double& e) { return e <= 0.; });
+}
+
+static bool isLessThan(const std::vector<double>& v, const double c)
+{
+    return std::ranges::all_of(v, [&c](const double& e) { return e <= c; });
+}
+
+static bool isGreaterThan(const std::vector<double>& v, const double c)
+{
+    return std::ranges::all_of(v, [&c](const double& e) { return e >= c; });
 }
 
 static void checkInputCorrectness(const std::vector<double>& G,
                                   const std::vector<double>& H,
                                   const std::vector<double>& D,
+                                  const std::vector<double>& levels,
                                   const std::vector<double>& P_max,
                                   const std::vector<double>& P_min,
                                   double initial_level,
-                                  double capa,
+                                  double capacity,
                                   const std::vector<double>& inflows,
                                   const std::vector<double>& overflow,
                                   const std::vector<double>& pump,
@@ -78,7 +89,7 @@ static void checkInputCorrectness(const std::vector<double>& G,
     std::string msg_prefix = "Remix hydro input : ";
 
     // Initial level smaller than capacity
-    if (initial_level > capa)
+    if (initial_level > capacity)
     {
         throw std::invalid_argument(msg_prefix + "initial level > reservoir capacity");
     }
@@ -86,6 +97,7 @@ static void checkInputCorrectness(const std::vector<double>& G,
     std::vector<size_t> sizes = {G.size(),
                                  H.size(),
                                  D.size(),
+                                 levels.size(),
                                  P_max.size(),
                                  P_min.size(),
                                  inflows.size(),
@@ -115,6 +127,12 @@ static void checkInputCorrectness(const std::vector<double>& G,
     {
         throw std::invalid_argument(msg_prefix + "H not greater than Pmin everywhere");
     }
+
+    if (!isLessThan(levels, capacity) || !isGreaterThan(levels, 0.))
+    {
+        throw std::invalid_argument(msg_prefix
+                                    + "levels computed from input don't respect constraints");
+    }
 }
 
 struct RemixHydroOutput
@@ -137,9 +155,20 @@ RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
                                  const std::vector<double>& S,
                                  const std::vector<double>& DTG_MRG)
 {
+    std::vector<double> levels(G.size());
+    if (levels.size())
+    {
+        levels[0] = initial_level + inflows[0] - overflow[0] + pump[0] - H[0];
+        for (size_t i = 1; i < levels.size(); ++i)
+        {
+            levels[i] = levels[i - 1] + inflows[i] - overflow[i] + pump[i] - H[i];
+        }
+    }
+
     checkInputCorrectness(G,
                           H,
                           D,
+                          levels,
                           P_max,
                           P_min,
                           initial_level,
@@ -169,13 +198,6 @@ RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
 
     std::vector<double> G_plus_H(G.size());
     std::transform(G.begin(), G.end(), new_H.begin(), G_plus_H.begin(), std::plus<>());
-
-    std::vector<double> levels(G.size());
-    levels[0] = initial_level + inflows[0] - overflow[0] + pump[0] - new_H[0];
-    for (size_t i = 1; i < levels.size(); ++i)
-    {
-        levels[i] = levels[i - 1] + inflows[i] - overflow[i] + pump[i] - new_H[i];
-    }
 
     while (loop-- > 0)
     {
