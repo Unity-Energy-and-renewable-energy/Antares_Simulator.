@@ -378,6 +378,8 @@ BOOST_AUTO_TEST_CASE(what_if_levels_are_up_bounded_by_capacity)
     // Bad ! Levels not limited by capacity.
     std::vector<double> expected_levels = {520., 540., 560., 580., 600.};
     BOOST_TEST(levels == expected_levels, boost::test_tools::per_element());
+
+    BOOST_CHECK(std::ranges::all_of(levels, [&capacity](double e) { return e <= capacity; }));
 }
 
 // Ideas for building further tests :
