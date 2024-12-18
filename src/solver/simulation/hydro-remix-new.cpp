@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <array>
 #include <ranges>
 #include <stdexcept>
 #include <vector>
@@ -56,6 +55,13 @@ int find_max_index(const std::vector<double>& G_plus_H,
     return max_idx;
 }
 
+static bool isLessThan(const std::vector<double>& a, const std::vector<double>& b)
+{
+    std::vector<double> a_minus_b;
+    std::ranges::transform(a, b, std::back_inserter(a_minus_b), std::minus<double>());
+    return std::ranges::all_of(a_minus_b, [](double d) { return d <= 0.; });
+}
+
 static void checkInputCorrectness(const std::vector<double>& G,
                                   const std::vector<double>& H,
                                   const std::vector<double>& D,
@@ -100,20 +106,14 @@ static void checkInputCorrectness(const std::vector<double>& G,
     }
 
     // Hydro production < Pmax
-    for (int h = 0; h < H.size(); h++)
+    if (!isLessThan(H, P_max))
     {
-        if (H[h] > P_max[h])
-        {
-            throw std::invalid_argument(msg_prefix + "H not smaller than Pmax everywhere");
-        }
+        throw std::invalid_argument(msg_prefix + "H not smaller than Pmax everywhere");
     }
     // Hydro production > Pmin
-    for (int h = 0; h < H.size(); h++)
+    if (!isLessThan(P_min, H))
     {
-        if (H[h] < P_min[h])
-        {
-            throw std::invalid_argument(msg_prefix + "H not greater than Pmin everywhere");
-        }
+        throw std::invalid_argument(msg_prefix + "H not greater than Pmin everywhere");
     }
 }
 
