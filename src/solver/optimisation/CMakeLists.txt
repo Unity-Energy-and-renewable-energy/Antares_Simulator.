@@ -3,6 +3,7 @@ set(RTESOLVER_OPT
         opt_appel_solveur_quadratique.cpp
         opt_gestion_second_membre_cas_lineaire.cpp
         opt_optimisation_lineaire.cpp
+        opt_export_raw_optimization_results.cpp
         opt_chainage_intercos.cpp
         include/antares/solver/optimisation/opt_fonctions.h
         opt_pilotage_optimisation_lineaire.cpp
