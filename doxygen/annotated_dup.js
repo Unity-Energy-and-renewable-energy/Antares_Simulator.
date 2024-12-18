@@ -595,6 +595,17 @@ var annotated_dup =
           [ "yearJob", "classAntares_1_1Solver_1_1Simulation_1_1yearJob.html", null ],
           [ "yearRandomNumbers", "classAntares_1_1Solver_1_1Simulation_1_1yearRandomNumbers.html", null ]
         ] ],
+        [ "SystemConverter", null, [
+          [ "ErrorWhileSplittingLibraryAndModel", "classAntares_1_1Solver_1_1SystemConverter_1_1ErrorWhileSplittingLibraryAndModel.html", null ],
+          [ "LibraryNotFound", "classAntares_1_1Solver_1_1SystemConverter_1_1LibraryNotFound.html", null ],
+          [ "ModelNotFound", "classAntares_1_1Solver_1_1SystemConverter_1_1ModelNotFound.html", null ]
+        ] ],
+        [ "SystemParser", null, [
+          [ "Component", "structAntares_1_1Solver_1_1SystemParser_1_1Component.html", null ],
+          [ "Parameter", "structAntares_1_1Solver_1_1SystemParser_1_1Parameter.html", null ],
+          [ "Parser", "classAntares_1_1Solver_1_1SystemParser_1_1Parser.html", null ],
+          [ "System", "structAntares_1_1Solver_1_1SystemParser_1_1System.html", null ]
+        ] ],
         [ "Variable", null, [
           [ "Adequacy", null, [
             [ "OverallCost", "classAntares_1_1Solver_1_1Variable_1_1Adequacy_1_1OverallCost.html", "classAntares_1_1Solver_1_1Variable_1_1Adequacy_1_1OverallCost" ],
@@ -1283,6 +1294,9 @@ var annotated_dup =
       [ "convert< Antares::Solver::ModelParser::PortType >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1PortType_01_4.html", null ],
       [ "convert< Antares::Solver::ModelParser::ValueType >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1ValueType_01_4.html", null ],
       [ "convert< Antares::Solver::ModelParser::Variable >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Variable_01_4.html", null ],
+      [ "convert< Antares::Solver::SystemParser::Component >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1SystemParser_1_1Component_01_4.html", null ],
+      [ "convert< Antares::Solver::SystemParser::Parameter >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1SystemParser_1_1Parameter_01_4.html", null ],
+      [ "convert< Antares::Solver::SystemParser::System >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1SystemParser_1_1System_01_4.html", null ],
       [ "convert< Monster >", "structYAML_1_1convert_3_01Monster_01_4.html", null ],
       [ "convert< Power >", "structYAML_1_1convert_3_01Power_01_4.html", null ],
       [ "convert< Vec3 >", "structYAML_1_1convert_3_01Vec3_01_4.html", null ]
@@ -1408,6 +1422,7 @@ var annotated_dup =
     [ "JobFileReader", "classJobFileReader.html", "classJobFileReader" ],
     [ "LEVEL_FLEX_DOWN_NODE", "structLEVEL__FLEX__DOWN__NODE.html", null ],
     [ "LEVEL_FLEX_UP_NODE", "structLEVEL__FLEX__UP__NODE.html", null ],
+    [ "LibraryObjects", "structLibraryObjects.html", null ],
     [ "LinearProblemBuildingFixture", "structLinearProblemBuildingFixture.html", null ],
     [ "LinearProblemMatrix", "classLinearProblemMatrix.html", null ],
     [ "LinearProblemMatrixStartUpCosts", "classLinearProblemMatrixStartUpCosts.html", null ],
