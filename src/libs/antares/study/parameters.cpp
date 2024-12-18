@@ -303,7 +303,7 @@ void Parameters::reset()
     // readonly
     readonly = false;
     synthesis = true;
-    //Outputing the delta of the number of groups that are on inside each clusters
+    // Outputing the delta of the number of groups that are on inside each clusters
     exportRawOptimizationResults = false;
 
     // Hydro heuristic policy

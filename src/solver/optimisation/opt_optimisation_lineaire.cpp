@@ -234,10 +234,10 @@ bool OPT_OptimisationLineaire(const OptimizationOptions& options,
         // We need to adjust some stuff before running the 2nd optimisation
         runThermalHeuristic(problemeHebdo);
         ret = runWeeklyOptimization(options,
-                                     problemeHebdo,
-                                     writer,
-                                     DEUXIEME_OPTIMISATION,
-                                     simulationObserver);
+                                    problemeHebdo,
+                                    writer,
+                                    DEUXIEME_OPTIMISATION,
+                                    simulationObserver);
         filename = "afterHeuristic";
         OPT_ExportRawOptimizationResults(problemeHebdo, writer, filename);
     }
