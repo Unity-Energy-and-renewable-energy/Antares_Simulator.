@@ -23,7 +23,7 @@
 #include <antares/logs/logs.h>
 #include <antares/solver/modelConverter/modelConverter.h>
 #include <antares/solver/modelParser/parser.h>
-#include "antares/solver/loadFiles/loadFiles.h"
+#include "antares/solver/modeler/loadFiles/loadFiles.h"
 
 namespace fs = std::filesystem;
 
