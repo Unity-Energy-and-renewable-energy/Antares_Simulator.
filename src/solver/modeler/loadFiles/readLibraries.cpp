@@ -39,13 +39,12 @@ static Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
     return ModelConverter::convert(libraryObj);
 }
 
-
 std::vector<Study::SystemModel::Library> loadLibraries(const fs::path& studyPath)
 {
     std::vector<Study::SystemModel::Library> libraries;
 
     const fs::path directoryPath = studyPath / "input" / "model-libraries";
-    for (const auto& entry : fs::directory_iterator(directoryPath))
+    for (const auto& entry: fs::directory_iterator(directoryPath))
     {
         if (entry.path().extension() != "yml")
         {
