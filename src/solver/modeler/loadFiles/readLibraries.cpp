@@ -20,8 +20,8 @@
  */
 
 #include <antares/io/file.h>
-#include <antares/solver/modelParser/parser.h>
 #include <antares/solver/modelConverter/modelConverter.h>
+#include <antares/solver/modelParser/parser.h>
 #include "antares/solver/loadFiles/loadFiles.h"
 
 namespace fs = std::filesystem;
@@ -29,10 +29,13 @@ namespace fs = std::filesystem;
 namespace Antares::Solver::LoadFiles
 {
 
-Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
+static Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
 {
-    Study::SystemModel::Library lib;
-    return lib;
+    const std::string libraryStr = IO::readFile(filePath);
+
+    ModelParser::Parser parser;
+    ModelParser::Library libraryObj = parser.parse(libraryStr);
+    return ModelConverter::convert(libraryObj);
 }
 
 } // namespace Antares::Solver::LoadFiles
