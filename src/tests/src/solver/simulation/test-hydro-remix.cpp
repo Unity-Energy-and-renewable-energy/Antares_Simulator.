@@ -388,7 +388,7 @@ BOOST_AUTO_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised)
         "Remix hydro input : levels computed from input don't respect reservoir bounds"));
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_reservoir_capacity_on_hydro_production,
+BOOST_AUTO_TEST_CASE(influence_of_capacity_on_hydro_prod___case_where_no_influence,
                      *boost::unit_test::tolerance(0.001))
 {
     // Not important for this test
@@ -426,8 +426,9 @@ BOOST_AUTO_TEST_CASE(influence_of_reservoir_capacity_on_hydro_production,
     BOOST_TEST(new_H == expected_H, boost::test_tools::per_element());
     BOOST_TEST(L == expected_L, boost::test_tools::per_element());
 
-    // Now, if we limit to capacity to sup(input_levels) = 155, we should have same H and L
-    // as previously
+    // Case 2 : now, if we lower capacity to sup(input_levels) = 155, we should
+    // have same computed H and L as previously : this value of capacity should
+    // not have an influence on H and levels as results of the algorithm.
     capacity = 155.;
     auto [new_H2, new_D2, L2] = new_remix_hydro(G,
                                                 H,
@@ -444,6 +445,68 @@ BOOST_AUTO_TEST_CASE(influence_of_reservoir_capacity_on_hydro_production,
 
     BOOST_TEST(new_H2 == expected_H, boost::test_tools::per_element());
     BOOST_TEST(L2 == expected_L, boost::test_tools::per_element());
+}
+
+BOOST_AUTO_TEST_CASE(lowering_capacity_too_much_leads_to_suboptimal_solution_for_GplusH,
+                     *boost::unit_test::tolerance(0.001))
+{
+    // Not important for this test
+    std::vector<double> P_max(10, std::numeric_limits<double>::max());
+    std::vector<double> P_min(10, 0.);
+    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
+    std::vector<double> D(10, 20.);
+
+    // H oscillates between 10 and 20 (new H will be flattened to 15 everywhere)
+    std::vector<double> H = {20., 10., 20., 10., 20., 10., 20., 10., 20., 10.};
+    // First inflows > H, then inflows < H. Consequence : levels first increase, then decrease.
+    std::vector<double> inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
+    double init_level = 100.;
+    // H and inflows result in : input_levels = {105, 120, 125, 140, 145, 140, 125, 120, 105, 100}
+    // Note sup(input_levels) = 145
+
+    // Case 1 : capacity unlimited
+    double capacity = std::numeric_limits<double>::max();
+    auto [new_H, new_D, L] = new_remix_hydro(G,
+                                             H,
+                                             D,
+                                             P_max,
+                                             P_min,
+                                             init_level,
+                                             capacity,
+                                             inflows,
+                                             ovf,
+                                             pump,
+                                             S,
+                                             DTG_MRG);
+
+    std::vector<double> expected_H(10, 15.); // H is flat and is 15. (means of initial H)
+    // Levels associated to new H are such as sup(L) = 150. > sup(input_levels) = 145
+    std::vector<double> expected_L = {110., 120., 130., 140., 150., 140., 130., 120., 110., 100.};
+    BOOST_TEST(new_H == expected_H, boost::test_tools::per_element());
+    BOOST_TEST(L == expected_L, boost::test_tools::per_element());
+
+    // Case 2 : now we lower capacity to sup(input_levels) = 145.
+    // This makes input acceptable for algo : levels computed from input have an
+    // up bound <= capacity
+    // But this time levels can not increase up to sup(L) = 150., as it would if capacity
+    // was infinite. So we expect to get an output H flat by interval, not on the whole domain.
+    capacity = 145.;
+    auto [new_H2, new_D2, L2] = new_remix_hydro(G,
+                                                H,
+                                                D,
+                                                P_max,
+                                                P_min,
+                                                init_level,
+                                                capacity,
+                                                inflows,
+                                                ovf,
+                                                pump,
+                                                S,
+                                                DTG_MRG);
+
+    // new_H2 is flat by interval
+    std::vector<double> expected_H2 = {16., 16., 16., 16., 16., 14., 14., 14., 14., 14.};
+    BOOST_TEST(new_H2 == expected_H2, boost::test_tools::per_element());
 }
 
 // Ideas for building further tests :
