@@ -46,7 +46,7 @@ std::vector<Study::SystemModel::Library> loadLibraries(const fs::path& studyPath
     const fs::path directoryPath = studyPath / "input" / "model-libraries";
     for (const auto& entry: fs::directory_iterator(directoryPath))
     {
-        if (entry.path().extension() != "yml")
+        if (entry.path().extension() != ".yml")
         {
             logs.info() << "File ignored because of wrong extension: " << entry.path();
             continue;

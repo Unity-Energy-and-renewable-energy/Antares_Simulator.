@@ -31,24 +31,41 @@
 
 BOOST_AUTO_TEST_SUITE(read_modeler_parameters)
 
-BOOST_AUTO_TEST_CASE(all_properties_set)
-{
-    /* const auto working_tmp_dir = CREATE_TMP_DIR_BASED_ON_TEST_NAME(); */
-    /* const auto fileP = working_tmp_dir / "parameters.yaml"; */
-    /* { */
-    /*     std::ofstream param(fileP); */
-    /*     param << R"( */
-    /* solver: sirius */
-    /* solver-logs: false */
-    /* solver-parameters: PRESOLVE 1 */
-    /* no-output: true)"; */
-    /* } */
+namespace fs = std::filesystem;
 
-    /* auto params = Antares::Solver::parseModelerParameters(fileP); */
-    /* BOOST_CHECK_EQUAL(params.solver, "sirius"); */
-    /* BOOST_CHECK_EQUAL(params.solverLogs, false); */
-    /* BOOST_CHECK_EQUAL(params.solverParameters, "PRESOLVE 1"); */
-    /* BOOST_CHECK_EQUAL(params.noOutput, true); */
+struct FixtureLoadFile
+{
+    fs::path studyPath;
+    fs::path inputPath;
+    fs::path libraryDirPath;
+
+    FixtureLoadFile()
+    {
+        studyPath = CREATE_TMP_DIR_BASED_ON_TEST_NAME();
+        inputPath = createFolder(studyPath, "input");
+        libraryDirPath = createFolder(inputPath, "model-libraries");
+    }
+
+    ~FixtureLoadFile()
+    {
+        fs::remove_all(studyPath);
+    }
+};
+
+BOOST_FIXTURE_TEST_CASE(read_one_lib_file, FixtureLoadFile)
+{
+    std::ofstream libStream(libraryDirPath / "simple.yml");
+    libStream << R"(
+        library:
+            id: lib_id
+            description: lib_description
+            port-types: []
+            models: []
+    )";
+    libStream.close();
+
+    auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
+    /* BOOST_CHECK_EQUAL(libraries[0].Id(), "lib_id"); */
 }
 
 BOOST_AUTO_TEST_SUITE_END()

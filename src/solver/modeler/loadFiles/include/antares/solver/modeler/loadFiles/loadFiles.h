@@ -22,6 +22,7 @@
 #pragma once
 
 #include <filesystem>
+#include <vector>
 
 #include <antares/study/system-model/library.h>
 #include <antares/study/system-model/system.h>
@@ -31,5 +32,7 @@ namespace Antares::Solver::LoadFiles
 
 Study::SystemModel::System loadSystem(const std::filesystem::path& studyPath,
                                       const std::vector<Study::SystemModel::Library>& libraries);
+
+std::vector<Study::SystemModel::Library> loadLibraries(const std::filesystem::path& studyPath);
 
 } // namespace Antares::Solver::LoadFiles
