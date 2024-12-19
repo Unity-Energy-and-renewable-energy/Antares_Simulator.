@@ -456,7 +456,7 @@ BOOST_AUTO_TEST_CASE(influence_of_reservoir_capacity_on_hydro_production,
 // Possible simplifications / clarifications of the algorithm itself :
 // - remove french from variable names
 // - the algo is flat, it's C (not C++), it should be divided in a small number of steps
-// - max_pic is a up hydro production margin (H_up_mrg)
+// - max_pic is an up hydro production margin (H_up_mrg)
 // - max_creux is a down hydro production margin (H_down_mrg)
 // - an iter updates new_H : it's its main job. So new_D could be updated from new_H at the
 //   end of an iteration, separately.

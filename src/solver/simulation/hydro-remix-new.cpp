@@ -237,18 +237,28 @@ RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
                                                          + std::min(idx_creux, idx_pic),
                                                        levels.begin()
                                                          + std::max(idx_creux, idx_pic));
+                double max_pic, max_creux;
+                if (idx_creux < idx_creux)
+                {
+                    max_pic = capa;
+                    max_creux = *std::min_element(intermediate_level.begin(),
+                                                  intermediate_level.end());
+                }
+                else
+                {
+                    max_pic = capa
+                              - *std::max_element(intermediate_level.begin(),
+                                                  intermediate_level.end());
+                    max_creux = capa;
+                }
 
-                double max_pic = std::min(new_H[idx_pic] - P_min[idx_pic],
-                                          capa
-                                            - *std::max_element(intermediate_level.begin(),
-                                                                intermediate_level.end()));
-                double max_creux = std::min(
-                  {P_max[idx_creux] - new_H[idx_creux],
-                   new_D[idx_creux],
-                   *std::min_element(intermediate_level.begin(), intermediate_level.end())});
-                double dif_pic_creux = std::max(G_plus_H[idx_pic] - G_plus_H[idx_creux], 0.0);
+                max_pic = std::min(new_H[idx_pic] - P_min[idx_pic], max_pic);
+                max_creux = std::min(
+                  {P_max[idx_creux] - new_H[idx_creux], new_D[idx_creux], max_creux});
 
-                delta = std::max(std::min({max_pic, max_creux, dif_pic_creux / 2.0}), 0.0);
+                double dif_pic_creux = std::max(G_plus_H[idx_pic] - G_plus_H[idx_creux], 0.);
+
+                delta = std::max(std::min({max_pic, max_creux, dif_pic_creux / 2.}), 0.);
 
                 if (delta > 0)
                 {
