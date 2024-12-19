@@ -365,7 +365,8 @@ BOOST_AUTO_TEST_CASE(input_leads_to_levels_over_capacity___exception_raised)
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
-      checkMessage("Remix hydro input : levels computed from input don't respect constraints"));
+      checkMessage(
+        "Remix hydro input : levels computed from input don't respect reservoir bounds"));
 }
 
 BOOST_AUTO_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised)
