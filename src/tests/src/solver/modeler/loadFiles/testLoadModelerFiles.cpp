@@ -115,4 +115,35 @@ BOOST_FIXTURE_TEST_CASE(read_several_lib_file, FixtureLoadFile)
     BOOST_CHECK(!checkLibIdInVector("id not in vector"));
 }
 
+BOOST_FIXTURE_TEST_CASE(read_system_file, FixtureLoadFile)
+{
+    std::ofstream libStream(libraryDirPath / "simple.yml");
+    libStream << R"(
+        library:
+            id: std
+            description: lib_description
+            port-types: []
+            models:
+                - id: generator
+                  description: A basic generator model
+
+    )";
+    libStream.close();
+
+    std::ofstream systemStream(inputPath / "system.yml");
+    systemStream << R"(
+        system:
+            id: base_system
+            description: two components
+            components:
+                - id: N
+                  model: std.generator
+                  scenario-group: group-234
+    )";
+    systemStream.close();
+
+    auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
+    auto system = Antares::Solver::LoadFiles::loadSystem(studyPath, libraries);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
