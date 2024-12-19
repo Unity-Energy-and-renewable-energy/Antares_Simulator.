@@ -35,6 +35,7 @@ Study::SystemModel::System loadSystem(const fs::path& studyPath,
     const std::string systemStr = IO::readFile(studyPath / "input" / "system.yml");
 
     SystemParser::Parser parser;
+    // Add try/catch and error handling
     SystemParser::System systemObj = parser.parse(systemStr);
 
     return SystemConverter::convert(systemObj, libraries);

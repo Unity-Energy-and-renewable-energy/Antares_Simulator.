@@ -35,6 +35,7 @@ static Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
     const std::string libraryStr = IO::readFile(filePath);
 
     ModelParser::Parser parser;
+    // Add try/catch and error handling
     ModelParser::Library libraryObj = parser.parse(libraryStr);
     return ModelConverter::convert(libraryObj);
 }
