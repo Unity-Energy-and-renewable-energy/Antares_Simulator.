@@ -65,7 +65,54 @@ BOOST_FIXTURE_TEST_CASE(read_one_lib_file, FixtureLoadFile)
     libStream.close();
 
     auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
-    /* BOOST_CHECK_EQUAL(libraries[0].Id(), "lib_id"); */
+    BOOST_CHECK_EQUAL(libraries[0].Id(), "lib_id");
+}
+
+BOOST_FIXTURE_TEST_CASE(read_several_lib_file, FixtureLoadFile)
+{
+    std::ofstream libStream(libraryDirPath / "simple.yml");
+    libStream << R"(
+        library:
+            id: lib_id
+            description: lib_description
+            port-types: []
+            models: []
+    )";
+    libStream.close();
+
+    std::ofstream libStream2(libraryDirPath / "2.yml");
+    libStream2 << R"(
+        library:
+            id: lib_id2
+            description: lib_description
+            port-types: []
+            models: []
+    )";
+    libStream2.close();
+
+    std::ofstream libStream3(libraryDirPath / "3.yml");
+    libStream3 << R"(
+        library:
+            id: lib_id3
+            description: lib_description
+            port-types: []
+            models: []
+    )";
+    libStream3.close();
+
+    auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
+
+    auto checkLibIdInVector = [&libraries](const std::string& libId)
+    {
+        return std::ranges::find_if(libraries, [&libId](const auto& l) { return l.Id() == libId; })
+               != libraries.end();
+    };
+
+    BOOST_CHECK(checkLibIdInVector("lib_id"));
+    BOOST_CHECK(checkLibIdInVector("lib_id2"));
+    BOOST_CHECK(checkLibIdInVector("lib_id3"));
+
+    BOOST_CHECK(!checkLibIdInVector("id not in vector"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
