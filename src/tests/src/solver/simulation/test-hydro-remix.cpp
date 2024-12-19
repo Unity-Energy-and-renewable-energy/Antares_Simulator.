@@ -447,7 +447,7 @@ BOOST_AUTO_TEST_CASE(influence_of_capacity_on_hydro_prod___case_where_no_influen
     BOOST_TEST(L2 == expected_L, boost::test_tools::per_element());
 }
 
-BOOST_AUTO_TEST_CASE(lowering_capacity_too_much_leads_to_suboptimal_solution_for_GplusH,
+BOOST_AUTO_TEST_CASE(lowering_capacity_too_low_leads_to_suboptimal_solution_for_GplusH,
                      *boost::unit_test::tolerance(0.001))
 {
     // Not important for this test
@@ -506,6 +506,69 @@ BOOST_AUTO_TEST_CASE(lowering_capacity_too_much_leads_to_suboptimal_solution_for
 
     // new_H2 is flat by interval
     std::vector<double> expected_H2 = {16., 16., 16., 16., 16., 14., 14., 14., 14., 14.};
+    BOOST_TEST(new_H2 == expected_H2, boost::test_tools::per_element());
+}
+
+BOOST_AUTO_TEST_CASE(lowering_initial_level_too_low_leads_to_suboptimal_solution_for_GplusH,
+                     *boost::unit_test::tolerance(0.001))
+{
+    // Not important for this test
+    std::vector<double> P_max(10, std::numeric_limits<double>::max());
+    std::vector<double> P_min(10, 0.);
+    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
+    std::vector<double> D(10, 20.);
+
+    // H oscillates between 20 and 30 (new H will be flattened to 15 everywhere)
+    std::vector<double> H = {20., 30., 20., 30., 20., 30., 20., 30., 20., 30.};
+    // First inflows < H, then inflows > H. Consequence : levels first decrease, then increase.
+    std::vector<double> inflows = {5., 5., 5., 5., 5., 45., 45., 45., 45., 45.};
+    double capacity = std::numeric_limits<double>::max();
+    double init_level = 100.;
+    // H and inflows result in : input_levels = {85, 60, 45, 20, 5, 20, 45, 60, 85, 100}
+    // Note : inf(input_levels) = 5
+
+    // Case 1 : init level (== 100) is high enough so that input levels (computed from input data)
+    // are acceptable by algorithm, and levels computed by algorithm (output) are optimal, that is
+    // computed from a optimal (that is flat) new_H.
+    auto [new_H, new_D, L] = new_remix_hydro(G,
+                                             H,
+                                             D,
+                                             P_max,
+                                             P_min,
+                                             init_level,
+                                             capacity,
+                                             inflows,
+                                             ovf,
+                                             pump,
+                                             S,
+                                             DTG_MRG);
+
+    std::vector<double> expected_H(10, 25.); // H is flat and is 25. (means of initial H)
+    // Levels associated to new H are such as inf(L) = 0. > inf(input_levels) = 5
+    std::vector<double> expected_L = {80., 60., 40., 20., 0., 20., 40., 60., 80., 100.};
+    BOOST_TEST(new_H == expected_H, boost::test_tools::per_element());
+    BOOST_TEST(L == expected_L, boost::test_tools::per_element());
+
+    // Case 2 : now we lower initial level. We know that input data are still acceptable
+    // for algorithm, and that algorithm will have take the levels lower bound (0.)
+    // into account. As the level change, the solution new_H will be suboptimal, that
+    // is flat by interval.
+    init_level = 95.;
+    auto [new_H2, new_D2, L2] = new_remix_hydro(G,
+                                                H,
+                                                D,
+                                                P_max,
+                                                P_min,
+                                                init_level,
+                                                capacity,
+                                                inflows,
+                                                ovf,
+                                                pump,
+                                                S,
+                                                DTG_MRG);
+
+    // new_H2 is flat by interval
+    std::vector<double> expected_H2 = {24., 24., 24., 24., 24., 26., 26., 26., 26., 26.};
     BOOST_TEST(new_H2 == expected_H2, boost::test_tools::per_element());
 }
 
