@@ -1,5 +1,8 @@
 var NAVTREEINDEX12 =
 {
+"classAntares_1_1Map_1_1PanelInfos.html#ac708c2c9632313db98b3bbe31aaedeae":[9,0,0,10,11,3],
+"classAntares_1_1Map_1_1Private_1_1AddingToolsHelper.html":[9,0,0,10,0,0],
+"classAntares_1_1Map_1_1RemovalToolPredicate.html":[9,0,0,10,12],
 "classAntares_1_1Map_1_1Settings.html":[9,0,0,10,13],
 "classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html":[9,0,0,10,1,0],
 "classAntares_1_1Map_1_1Tool_1_1ConnectionCreator.html#a2324eb0c10ce5d14e35d84a641f7ef33":[9,0,0,10,1,0,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX12 =
 "classAntares_1_1Solver_1_1HebdoProblemToLpsTranslator.html#adbae3fe7a047491de04c12120ea8a69e":[9,0,0,13,19,0],
 "classAntares_1_1Solver_1_1HydroAreaNumberOfTSretriever.html":[9,0,0,13,20],
 "classAntares_1_1Solver_1_1IName.html":[9,0,0,13,22],
-"classAntares_1_1Solver_1_1IResultWriter.html":[9,0,0,13,25],
-"classAntares_1_1Solver_1_1IResultWriter.html#a866bc43cd373dc27cf69ec3968737c8c":[9,0,0,13,25,0],
-"classAntares_1_1Solver_1_1ImmediateFileResultWriter.html":[9,0,0,13,21],
-"classAntares_1_1Solver_1_1ImmediateFileResultWriter.html#af331f4ce440c90a0b402f9dbd6c67629":[9,0,0,13,21,0]
+"classAntares_1_1Solver_1_1IResultWriter.html":[9,0,0,13,25]
 };

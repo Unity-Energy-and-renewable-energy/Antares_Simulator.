@@ -1,5 +1,7 @@
 var NAVTREEINDEX7 =
 {
+"classAntares_1_1Data_1_1AreaLink.html#a83b87793efb7e0aa271da6264e1cd850":[9,0,0,4,9,14],
+"classAntares_1_1Data_1_1AreaLink.html#a9002ec505954a9752e91ea4a43412703":[9,0,0,4,9,2],
 "classAntares_1_1Data_1_1AreaLink.html#a953ec9b48ab3a1e28cb0e22b2d7a2ac4":[9,0,0,4,9,8],
 "classAntares_1_1Data_1_1AreaLink.html#a9566bbabc0f225c78c99ddcf0cfa597b":[9,0,0,4,9,3],
 "classAntares_1_1Data_1_1AreaLink.html#aaa3c926f3e04e727bde222abe2a01852":[9,0,0,4,9,25],
@@ -247,7 +249,5 @@ var NAVTREEINDEX7 =
 "classAntares_1_1Data_1_1HydroAllocation.html#ac9ff05a5e4e6a373f7485dec1ea29e44":[9,0,0,4,34,7],
 "classAntares_1_1Data_1_1HydroAllocation.html#add18ed47df45017fd18e40a2e3b72f29":[9,0,0,4,34,17],
 "classAntares_1_1Data_1_1HydroAllocation.html#ade200607558dce782585fd39713af6b9":[9,0,0,4,34,12],
-"classAntares_1_1Data_1_1HydroAllocation.html#ae51e4f93585d23d50332288a372df88d":[9,0,0,4,34,0],
-"classAntares_1_1Data_1_1HydroMaxTimeSeriesReader.html":[9,0,0,4,35],
-"classAntares_1_1Data_1_1HydroMaxTimeSeriesReader.html#ab549c3a4826ca7160b6f30f4752ee47b":[9,0,0,4,35,0]
+"classAntares_1_1Data_1_1HydroAllocation.html#ae51e4f93585d23d50332288a372df88d":[9,0,0,4,34,0]
 };

@@ -258,6 +258,7 @@ var annotated_dup =
           [ "windTSNumberData", "classAntares_1_1Data_1_1ScenarioBuilder_1_1windTSNumberData.html", "classAntares_1_1Data_1_1ScenarioBuilder_1_1windTSNumberData" ]
         ] ],
         [ "ShortTermStorage", null, [
+          [ "AdditionalConstraint", "structAntares_1_1Data_1_1ShortTermStorage_1_1AdditionalConstraint.html", "structAntares_1_1Data_1_1ShortTermStorage_1_1AdditionalConstraint" ],
           [ "Properties", "classAntares_1_1Data_1_1ShortTermStorage_1_1Properties.html", "classAntares_1_1Data_1_1ShortTermStorage_1_1Properties" ],
           [ "Series", "classAntares_1_1Data_1_1ShortTermStorage_1_1Series.html", null ],
           [ "STStorageCluster", "classAntares_1_1Data_1_1ShortTermStorage_1_1STStorageCluster.html", null ],
@@ -1365,6 +1366,7 @@ var annotated_dup =
     [ "CsrBindingConstraintHourData", "structCsrBindingConstraintHourData.html", null ],
     [ "CsrFlowDissociation", "classCsrFlowDissociation.html", null ],
     [ "CsrFlowDissociationData", "structCsrFlowDissociationData.html", null ],
+    [ "CumulationConstraint", "classCumulationConstraint.html", null ],
     [ "DataFile", "classDataFile.html", "classDataFile" ],
     [ "DEMAND_FLEX_DOWN_POOL", "structDEMAND__FLEX__DOWN__POOL.html", null ],
     [ "DEMAND_FLEX_UP_POOL", "structDEMAND__FLEX__UP__POOL.html", null ],
@@ -1415,6 +1417,7 @@ var annotated_dup =
     [ "HydroPowerSmoothingUsingVariationSum", "classHydroPowerSmoothingUsingVariationSum.html", "classHydroPowerSmoothingUsingVariationSum" ],
     [ "I_MPS_writer", "classI__MPS__writer.html", null ],
     [ "IItem", "classIItem.html", "classIItem" ],
+    [ "InjectionCumulationConstraint", "classInjectionCumulationConstraint.html", null ],
     [ "InMemoryStudyLoader", "classInMemoryStudyLoader.html", "classInMemoryStudyLoader" ],
     [ "IntoUTF8ArgsTranslator", "classIntoUTF8ArgsTranslator.html", null ],
     [ "IProvider", "classIProvider.html", "classIProvider" ],
@@ -1452,6 +1455,7 @@ var annotated_dup =
     [ "NbUnitsOutageLessThanNbUnitsStop", "classNbUnitsOutageLessThanNbUnitsStop.html", "classNbUnitsOutageLessThanNbUnitsStop" ],
     [ "NbUnitsOutageLessThanNbUnitsStopData", "structNbUnitsOutageLessThanNbUnitsStopData.html", null ],
     [ "NbUnitsOutageLessThanNbUnitsStopGroup", "classNbUnitsOutageLessThanNbUnitsStopGroup.html", "classNbUnitsOutageLessThanNbUnitsStopGroup" ],
+    [ "NettingCumulationConstraint", "classNettingCumulationConstraint.html", null ],
     [ "NonCopyableFunctionObject", "structNonCopyableFunctionObject.html", null ],
     [ "nullMPSwriter", "classnullMPSwriter.html", null ],
     [ "NullName", "classNullName.html", null ],
@@ -1508,6 +1512,8 @@ var annotated_dup =
     [ "ShortTermStorageCostVariationInjectionForward", "classShortTermStorageCostVariationInjectionForward.html", null ],
     [ "ShortTermStorageCostVariationWithdrawalBackward", "classShortTermStorageCostVariationWithdrawalBackward.html", null ],
     [ "ShortTermStorageCostVariationWithdrawalForward", "classShortTermStorageCostVariationWithdrawalForward.html", null ],
+    [ "ShortTermStorageCumulation", "classShortTermStorageCumulation.html", null ],
+    [ "ShortTermStorageCumulativeConstraintData", "structShortTermStorageCumulativeConstraintData.html", null ],
     [ "ShortTermStorageData", "structShortTermStorageData.html", null ],
     [ "ShortTermStorageLevel", "classShortTermStorageLevel.html", null ],
     [ "SimplexResult", "structSimplexResult.html", null ],
@@ -1549,5 +1555,6 @@ var annotated_dup =
     [ "VariableData", "structVariableData.html", null ],
     [ "VariableNamer", "classVariableNamer.html", null ],
     [ "VARIABLES_DUALES_INTERCONNEXIONS", "structVARIABLES__DUALES__INTERCONNEXIONS.html", null ],
-    [ "Vec3", "structVec3.html", null ]
+    [ "Vec3", "structVec3.html", null ],
+    [ "WithdrawalCumulationConstraint", "classWithdrawalCumulationConstraint.html", null ]
 ];

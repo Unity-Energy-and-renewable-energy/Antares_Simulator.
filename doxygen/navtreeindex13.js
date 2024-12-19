@@ -1,5 +1,8 @@
 var NAVTREEINDEX13 =
 {
+"classAntares_1_1Solver_1_1IResultWriter.html#a866bc43cd373dc27cf69ec3968737c8c":[9,0,0,13,25,0],
+"classAntares_1_1Solver_1_1ImmediateFileResultWriter.html":[9,0,0,13,21],
+"classAntares_1_1Solver_1_1ImmediateFileResultWriter.html#af331f4ce440c90a0b402f9dbd6c67629":[9,0,0,13,21,0],
 "classAntares_1_1Solver_1_1InMemoryWriter.html":[9,0,0,13,23],
 "classAntares_1_1Solver_1_1InMemoryWriter.html#ae79bc278d4eff373baf313ebb426361b":[9,0,0,13,23,0],
 "classAntares_1_1Solver_1_1Initialization_1_1Error_1_1NoQueueService.html":[9,0,0,13,0,0,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX13 =
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionFeeAbs.html#ac8b1da7c04fa4dbb8badcae7ed9a8b34":[9,0,0,13,10,4,4,1],
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionProbability.html":[9,0,0,13,10,4,5],
 "classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionProbability.html#a52b87b62e143d64a7caa445b931105a7":[9,0,0,13,10,4,5,4],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionProbability.html#a5302b5ab60234abcd409d5c150ff9cb3":[9,0,0,13,10,4,5,2],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionProbability.html#a5f9aaa48561c34bfa553a3549f75089c":[9,0,0,13,10,4,5,1],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionProbability.html#acd13d29fbdbad7c894a59965bd067bed":[9,0,0,13,10,4,5,3],
-"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1DispatchableGenMargin.html":[9,0,0,13,10,4,7]
+"classAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionProbability.html#a5302b5ab60234abcd409d5c150ff9cb3":[9,0,0,13,10,4,5,2]
 };

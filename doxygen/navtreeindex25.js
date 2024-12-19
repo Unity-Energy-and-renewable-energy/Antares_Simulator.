@@ -1,5 +1,15 @@
 var NAVTREEINDEX25 =
 {
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFeeAbs.html":[9,0,0,13,10,4,59],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFeeAbs.html#a19131fca284bf51dc32ffe2373f0892e":[9,0,0,13,10,4,59,0],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionProbability.html":[9,0,0,13,10,4,60],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionProbability.html#a91c021d0e49cd8e6795287c04dcb741b":[9,0,0,13,10,4,60,1],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionProbability_1_1Multiple.html":[9,0,0,13,10,4,60,0],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGenMargin.html":[9,0,0,13,10,4,62],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGenMargin.html#ad117138d22d955953875420f1389854d":[9,0,0,13,10,4,62,1],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGenMargin.html#adf3cbed622f2dda59ec2b8e7ddab9216":[9,0,0,13,10,4,62,0],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGeneration.html":[9,0,0,13,10,4,61],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGeneration.html#a8f2272a79d8584dc78393ea5269b62d7":[9,0,0,13,10,4,61,1],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGeneration.html#aa8f17bf94969d2135a203fd5600dfe6a":[9,0,0,13,10,4,61,2],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGeneration_1_1Multiple.html":[9,0,0,13,10,4,61,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDomesticUnsuppliedEnergy.html":[9,0,0,13,10,4,63],
@@ -239,15 +249,5 @@ var NAVTREEINDEX25 =
 "structAntares_1_1Window_1_1Inspector_1_1PClusterInstalled.html":[9,0,0,19,1,23],
 "structAntares_1_1Window_1_1Inspector_1_1PClusterLawForced.html":[9,0,0,19,1,24],
 "structAntares_1_1Window_1_1Inspector_1_1PClusterLawPlanned.html":[9,0,0,19,1,25],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMarginalCost.html":[9,0,0,19,1,26],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMarginalCostEnable.html":[9,0,0,19,1,27],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMinDownTime.html":[9,0,0,19,1,28],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMinStablePower.html":[9,0,0,19,1,29],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMinStablePowerColor.html":[9,0,0,19,1,30],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMinUpTime.html":[9,0,0,19,1,31],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterMustRun.html":[9,0,0,19,1,32],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterNomCapacity.html":[9,0,0,19,1,33],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterNomCapacityColor.html":[9,0,0,19,1,34],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterRandomSpread.html":[9,0,0,19,1,35],
-"structAntares_1_1Window_1_1Inspector_1_1PClusterReference.html":[9,0,0,19,1,36]
+"structAntares_1_1Window_1_1Inspector_1_1PClusterMarginalCost.html":[9,0,0,19,1,26]
 };

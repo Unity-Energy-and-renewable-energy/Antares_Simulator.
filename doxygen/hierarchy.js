@@ -17,6 +17,7 @@ var hierarchy =
     [ "Antares::Action::ActionInformations", "classAntares_1_1Action_1_1ActionInformations.html", null ],
     [ "Antares::Window::Inspector::Add", "structAntares_1_1Window_1_1Inspector_1_1Add.html", null ],
     [ "Antares::Map::Private::AddingToolsHelper", "classAntares_1_1Map_1_1Private_1_1AddingToolsHelper.html", null ],
+    [ "Antares::Data::ShortTermStorage::AdditionalConstraint", "structAntares_1_1Data_1_1ShortTermStorage_1_1AdditionalConstraint.html", null ],
     [ "Antares::Graph::Edge< NodeT >::addpWeight", "structAntares_1_1Graph_1_1Edge_1_1addpWeight.html", null ],
     [ "Antares::linkInfo::addpWeight", "structAntares_1_1linkInfo_1_1addpWeight.html", null ],
     [ "Antares::linkInfo::addpWeightWithImpedance", "structAntares_1_1linkInfo_1_1addpWeightWithImpedance.html", null ],
@@ -188,6 +189,7 @@ var hierarchy =
         [ "ShortTermStorageCostVariationWithdrawalBackward", "classShortTermStorageCostVariationWithdrawalBackward.html", null ],
         [ "ShortTermStorageCostVariationWithdrawalForward", "classShortTermStorageCostVariationWithdrawalForward.html", null ]
       ] ],
+      [ "ShortTermStorageCumulation", "classShortTermStorageCumulation.html", null ],
       [ "ShortTermStorageLevel", "classShortTermStorageLevel.html", null ]
     ] ],
     [ "ConstraintGroup", "classConstraintGroup.html", [
@@ -249,6 +251,11 @@ var hierarchy =
     [ "CsrBindingConstraintHourData", "structCsrBindingConstraintHourData.html", null ],
     [ "CsrFlowDissociationData", "structCsrFlowDissociationData.html", null ],
     [ "Antares::Solver::Optimization::CsrQuadraticProblem", "classAntares_1_1Solver_1_1Optimization_1_1CsrQuadraticProblem.html", null ],
+    [ "CumulationConstraint", "classCumulationConstraint.html", [
+      [ "InjectionCumulationConstraint", "classInjectionCumulationConstraint.html", null ],
+      [ "NettingCumulationConstraint", "classNettingCumulationConstraint.html", null ],
+      [ "WithdrawalCumulationConstraint", "classWithdrawalCumulationConstraint.html", null ]
+    ] ],
     [ "Antares::Data::AdequacyPatch::CurtailmentSharing", "classAntares_1_1Data_1_1AdequacyPatch_1_1CurtailmentSharing.html", null ],
     [ "Antares::Cycle", "classAntares_1_1Cycle.html", null ],
     [ "Antares::Data::DailyDemand", "structAntares_1_1Data_1_1DailyDemand.html", null ],
@@ -1320,7 +1327,9 @@ var hierarchy =
     [ "Antares::Map::Settings", "classAntares_1_1Map_1_1Settings.html", null ],
     [ "Antares::TSGenerator::Settings", "structAntares_1_1TSGenerator_1_1Settings.html", null ],
     [ "Settings", "classSettings.html", null ],
-    [ "ShortTermStorageData", "structShortTermStorageData.html", null ],
+    [ "ShortTermStorageData", "structShortTermStorageData.html", [
+      [ "ShortTermStorageCumulativeConstraintData", "structShortTermStorageCumulativeConstraintData.html", null ]
+    ] ],
     [ "SimplexResult", "structSimplexResult.html", null ],
     [ "Antares::Data::SimulationComments", "classAntares_1_1Data_1_1SimulationComments.html", null ],
     [ "SimulationHandler", "classSimulationHandler.html", null ],
@@ -1619,6 +1628,7 @@ var hierarchy =
     [ "Antares::Window::Inspector::Unique", "structAntares_1_1Window_1_1Inspector_1_1Unique.html", null ],
     [ "Antares::Statistics::Updater", "classAntares_1_1Statistics_1_1Updater.html", null ],
     [ "VALEURS_DE_NTC_ET_RESISTANCES", "structVALEURS__DE__NTC__ET__RESISTANCES.html", null ],
+    [ "Antares::Data::ShortTermStorage::AdditionalConstraint::ValidateResult", "structAntares_1_1Data_1_1ShortTermStorage_1_1AdditionalConstraint_1_1ValidateResult.html", null ],
     [ "Antares::Toolbox::Filter::Operator::Parameter::Value", "structAntares_1_1Toolbox_1_1Filter_1_1Operator_1_1Parameter_1_1Value.html", null ],
     [ "Antares::Solver::ModelParser::Variable", "structAntares_1_1Solver_1_1ModelParser_1_1Variable.html", null ],
     [ "Antares::Study::SystemModel::Variable", "classAntares_1_1Study_1_1SystemModel_1_1Variable.html", null ],

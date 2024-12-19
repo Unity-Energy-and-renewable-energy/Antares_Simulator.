@@ -1,5 +1,13 @@
 var NAVTREEINDEX24 =
 {
+"solver_2hydro_2include_2antares_2solver_2hydro_2management_2management_8h_source.html":[10,0,0,4,3,0,0,0,0,2,3],
+"solver_2misc_2include_2antares_2solver_2misc_2options_8h_source.html":[10,0,0,4,6,0,0,0,0,4],
+"solver_2signal-handling_2include_2antares_2signal-handling_2common_8h_source.html":[10,0,0,4,12,0,0,0,0],
+"solver_2simulation_2include_2antares_2solver_2simulation_2simulation_8h_source.html":[10,0,0,4,13,0,0,0,0,15],
+"solver_2simulation_2include_2antares_2solver_2simulation_2solver_8h_source.html":[10,0,0,4,13,0,0,0,0,17],
+"solver_2systemParser_2include_2antares_2solver_2systemParser_2system_8h_source.html":[10,0,0,4,14,0,0,0,0,2],
+"solver_2ts-generator_2include_2antares_2solver_2ts-generator_2prepro_8h_source.html":[10,0,0,4,15,0,0,0,0,4],
+"solver_2ts-generator_2include_2antares_2solver_2ts-generator_2xcast_2constants_8h_source.html":[10,0,0,4,15,0,0,0,0,0,0],
 "solver_2ts-generator_2include_2antares_2solver_2ts-generator_2xcast_2studydata_8h_source.html":[10,0,0,4,15,0,0,0,0,0,3],
 "solver_2ts-generator_2include_2antares_2solver_2ts-generator_2xcast_2xcast_8h_source.html":[10,0,0,4,15,0,0,0,0,0,5],
 "solver_2ts-generator_2include_2antares_2solver_2ts-generator_2xcast_2xcast_8hxx_source.html":[10,0,0,4,15,0,0,0,0,0,6],
@@ -87,6 +95,8 @@ var NAVTREEINDEX24 =
 "structAntares_1_1Data_1_1Parameters_1_1UCMode.html":[9,0,0,4,39,3],
 "structAntares_1_1Data_1_1Parameters_1_1UCMode.html#a54ca3186d2fc07dcf60311e8bd250c3d":[9,0,0,4,39,3,0],
 "structAntares_1_1Data_1_1Parameters_1_1UCMode.html#aa0b613cb0812e2bb6231b6f65b54aa01":[9,0,0,4,39,3,1],
+"structAntares_1_1Data_1_1ShortTermStorage_1_1AdditionalConstraint.html":[9,0,0,4,3,0],
+"structAntares_1_1Data_1_1ShortTermStorage_1_1AdditionalConstraint_1_1ValidateResult.html":[9,0,0,4,3,0,0],
 "structAntares_1_1Data_1_1StudyRangeLimits.html":[9,0,0,4,57],
 "structAntares_1_1Data_1_1StudyRangeLimits.html#a317a01bb25e5660216e1de2dc9858067":[9,0,0,4,57,4],
 "structAntares_1_1Data_1_1StudyRangeLimits.html#a34a9a61a1eb3785b8def5f91e8c7bbb9":[9,0,0,4,57,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX24 =
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardBindingConstMarginCost.html":[9,0,0,13,10,4,57],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardBindingConstMarginCost.html#ad5c23c20b5d9315b10689448b7310251":[9,0,0,13,10,4,57,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFee.html":[9,0,0,13,10,4,58],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFee.html#ab104766e003e9658b8dd9a368dab3c09":[9,0,0,13,10,4,58,0],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFeeAbs.html":[9,0,0,13,10,4,59],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFeeAbs.html#a19131fca284bf51dc32ffe2373f0892e":[9,0,0,13,10,4,59,0],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionProbability.html":[9,0,0,13,10,4,60],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionProbability.html#a91c021d0e49cd8e6795287c04dcb741b":[9,0,0,13,10,4,60,1],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionProbability_1_1Multiple.html":[9,0,0,13,10,4,60,0],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGenMargin.html":[9,0,0,13,10,4,62],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGenMargin.html#ad117138d22d955953875420f1389854d":[9,0,0,13,10,4,62,1],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGenMargin.html#adf3cbed622f2dda59ec2b8e7ddab9216":[9,0,0,13,10,4,62,0],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGeneration.html":[9,0,0,13,10,4,61],
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardDispatchableGeneration.html#a8f2272a79d8584dc78393ea5269b62d7":[9,0,0,13,10,4,61,1]
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1VCardCongestionFee.html#ab104766e003e9658b8dd9a368dab3c09":[9,0,0,13,10,4,58,0]
 };
