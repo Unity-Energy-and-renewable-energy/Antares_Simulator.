@@ -238,7 +238,7 @@ RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
                                                        levels.begin()
                                                          + std::max(idx_creux, idx_pic));
                 double max_pic, max_creux;
-                if (idx_creux < idx_creux)
+                if (idx_creux < idx_pic)
                 {
                     max_pic = capa;
                     max_creux = *std::min_element(intermediate_level.begin(),
