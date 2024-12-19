@@ -14,7 +14,6 @@ add_library(io
 )
 add_library(Antares::io ALIAS io)
 
-
 target_link_libraries(io
         PRIVATE
         yuni-static-core
