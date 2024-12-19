@@ -858,6 +858,7 @@ var annotated_dup =
         [ "IResultWriter", "classAntares_1_1Solver_1_1IResultWriter.html", "classAntares_1_1Solver_1_1IResultWriter" ],
         [ "LoadAreaNumberOfTSretriever", "classAntares_1_1Solver_1_1LoadAreaNumberOfTSretriever.html", null ],
         [ "LpsFromAntares", "classAntares_1_1Solver_1_1LpsFromAntares.html", null ],
+        [ "ModelerParameters", "structAntares_1_1Solver_1_1ModelerParameters.html", null ],
         [ "NodeRegistry", "classAntares_1_1Solver_1_1NodeRegistry.html", null ],
         [ "NullResultWriter", "classAntares_1_1Solver_1_1NullResultWriter.html", null ],
         [ "PortFieldHash", "structAntares_1_1Solver_1_1PortFieldHash.html", null ],
@@ -1305,6 +1306,7 @@ var annotated_dup =
       [ "VariableManager", "classVariableManagement_1_1VariableManager.html", null ]
     ] ],
     [ "YAML", null, [
+      [ "convert< Antares::Solver::ModelerParameters >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelerParameters_01_4.html", null ],
       [ "convert< Antares::Solver::ModelParser::Constraint >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Constraint_01_4.html", null ],
       [ "convert< Antares::Solver::ModelParser::Library >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Library_01_4.html", null ],
       [ "convert< Antares::Solver::ModelParser::Model >", "structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Model_01_4.html", null ],

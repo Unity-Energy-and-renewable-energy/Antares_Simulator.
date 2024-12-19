@@ -114,13 +114,13 @@ var NAVTREEINDEX =
 "classAntares_1_1Window_1_1OutputViewer_1_1Layer.html#ad1ec37e76a8b518741041761006e083b",
 "classFixtureMultipleTS.html",
 "classSumSubstitutionFixture.html",
-"dir_55fc06a35a697286ba08bd7ad23cc1f6.html",
-"dir_f29c49b486707c7343f6e57aca063a47.html",
-"libs_2antares_2array_2include_2antares_2array_2matrix_8h_source.html",
-"results_8h_source.html",
-"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1Balance_1_1Statistics.html",
-"structAntares_1_1Solver_1_1Variable_1_1SetsOfAreas_1_1Statistics.html",
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1SystemParser_1_1Parameter_01_4.html"
+"dir_55354ad62ab15b406bc8a0cf7a437900.html",
+"dir_ef685d8b7fd6cac78c9f14322de7752d.html",
+"layer_8hxx_source.html",
+"renewable_2defines_8h_source.html",
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1MultipleCaptionProxy_3_011_00_01VCardT_01_4.html",
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxBase.html",
+"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Constraint_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

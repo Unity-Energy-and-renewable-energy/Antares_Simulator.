@@ -1,5 +1,15 @@
 var NAVTREEINDEX25 =
 {
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1MultipleCaptionProxy_3_011_00_01VCardT_01_4.html":[9,0,0,13,10,2,2],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1MultipleCaptionProxy_3_01Category_1_1dynamicColumns_00_01VCardT_01_4.html":[9,0,0,13,10,2,3],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1SpatialAggregate_1_1Statistics.html":[9,0,0,13,10,2,4,0],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1VCardProxy.html":[9,0,0,13,10,2,5],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1VCardProxy.html#a9a44430db793c29fddd32b7f47c7b7e8":[9,0,0,13,10,2,5,3],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1VCardProxy.html#aaa890883e70aa99ba77758166a186ccc":[9,0,0,13,10,2,5,2],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1VCardProxy.html#ad8bcde81cd7a9576a40fcfbdec0ef641":[9,0,0,13,10,2,5,1],
+"structAntares_1_1Solver_1_1Variable_1_1Common_1_1VCardProxy_1_1Multiple.html":[9,0,0,13,10,2,5,0],
+"structAntares_1_1Solver_1_1Variable_1_1Container_1_1EndOfList_1_1Statistics.html":[9,0,0,13,10,3,0,0],
+"structAntares_1_1Solver_1_1Variable_1_1Economy_1_1AvailableDispatchGen_1_1Statistics.html":[9,0,0,13,10,4,0,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1Balance_1_1Statistics.html":[9,0,0,13,10,4,1,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1BindingConstMarginCost_1_1Statistics.html":[9,0,0,13,10,4,2,0],
 "structAntares_1_1Solver_1_1Variable_1_1Economy_1_1CongestionFeeAbs_1_1Statistics.html":[9,0,0,13,10,4,4,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX25 =
 "structAntares_1_1Solver_1_1Variable_1_1PrecisionToPrintfFormat_3_015_01_4.html":[9,0,0,13,10,20],
 "structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Average.html":[9,0,0,13,10,6,0,0],
 "structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Average.html#a78db0f8bffc05da1df4366d1b2f25054":[9,0,0,13,10,6,0,0,1],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Average_1_1Data.html":[9,0,0,13,10,6,0,0,0],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxBase.html":[9,0,0,13,10,6,0,4],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxBase.html#a22867a4b6e6809f5c815050b22a524ca":[9,0,0,13,10,6,0,4,0],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxData_1_1Data.html":[9,0,0,13,10,6,0,5,0],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Or.html":[9,0,0,13,10,6,0,6],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Raw.html":[9,0,0,13,10,6,0,7],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Raw.html#a64a09e4897a39e1a1a14ffb548c91e4b":[9,0,0,13,10,6,0,7,1],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Raw_1_1Data.html":[9,0,0,13,10,6,0,7,0],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1StdDeviation.html":[9,0,0,13,10,6,0,9],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1StdDeviation.html#ae75c526742c65aca4a309c6c16561506":[9,0,0,13,10,6,0,9,1],
-"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1StdDeviation_1_1Data.html":[9,0,0,13,10,6,0,9,0]
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Average_1_1Data.html":[9,0,0,13,10,6,0,0,0]
 };

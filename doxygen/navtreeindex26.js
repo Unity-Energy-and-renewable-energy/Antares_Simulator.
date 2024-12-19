@@ -1,5 +1,15 @@
 var NAVTREEINDEX26 =
 {
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxBase.html":[9,0,0,13,10,6,0,4],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxBase.html#a22867a4b6e6809f5c815050b22a524ca":[9,0,0,13,10,6,0,4,0],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1MinMaxData_1_1Data.html":[9,0,0,13,10,6,0,5,0],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Or.html":[9,0,0,13,10,6,0,6],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Raw.html":[9,0,0,13,10,6,0,7],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Raw.html#a64a09e4897a39e1a1a14ffb548c91e4b":[9,0,0,13,10,6,0,7,1],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1Raw_1_1Data.html":[9,0,0,13,10,6,0,7,0],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1StdDeviation.html":[9,0,0,13,10,6,0,9],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1StdDeviation.html#ae75c526742c65aca4a309c6c16561506":[9,0,0,13,10,6,0,9,1],
+"structAntares_1_1Solver_1_1Variable_1_1R_1_1AllYears_1_1StdDeviation_1_1Data.html":[9,0,0,13,10,6,0,9,0],
 "structAntares_1_1Solver_1_1Variable_1_1SetsOfAreas_1_1Statistics.html":[9,0,0,13,10,23,0],
 "structAntares_1_1Solver_1_1Variable_1_1SpatialAggregateOperation.html":[9,0,0,13,10,24],
 "structAntares_1_1Solver_1_1Variable_1_1SpatialAggregateOperation_3_01true_00_01Category_1_1spati841a76f09dca40f27176e5114824b3ac.html":[9,0,0,13,10,29],
@@ -37,8 +47,8 @@ var NAVTREEINDEX26 =
 "structAntares_1_1Solver_1_1Visitors_1_1PortFieldSubstitutionContext.html":[9,0,0,13,11,13],
 "structAntares_1_1Solver_1_1Visitors_1_1PortFieldSumSubstitutionContext.html":[9,0,0,13,11,15],
 "structAntares_1_1Solver_1_1Visitors_1_1SubstitutionContext.html":[9,0,0,13,11,18],
-"structAntares_1_1Solver_1_1WeeklyDataFromAntares.html":[9,0,0,13,37],
-"structAntares_1_1Solver_1_1WeeklyProblemId.html":[9,0,0,13,38],
+"structAntares_1_1Solver_1_1WeeklyDataFromAntares.html":[9,0,0,13,38],
+"structAntares_1_1Solver_1_1WeeklyProblemId.html":[9,0,0,13,39],
 "structAntares_1_1Study_1_1SystemModel_1_1SystemData.html":[9,0,0,15,0,16],
 "structAntares_1_1TSGenerator_1_1LinkTSgenerationParams.html":[9,0,0,17,4],
 "structAntares_1_1TSGenerator_1_1Settings.html":[9,0,0,17,5],
@@ -239,15 +249,5 @@ var NAVTREEINDEX26 =
 "structVALEURS__DE__NTC__ET__RESISTANCES.html":[9,0,267],
 "structVARIABLES__DUALES__INTERCONNEXIONS.html":[9,0,271],
 "structVariableData.html":[9,0,269],
-"structVec3.html":[9,0,272],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Constraint_01_4.html":[9,0,28,0],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Library_01_4.html":[9,0,28,1],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Model_01_4.html":[9,0,28,2],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Parameter_01_4.html":[9,0,28,3],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1PortFieldDefinition_01_4.html":[9,0,28,5],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1PortType_01_4.html":[9,0,28,6],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Port_01_4.html":[9,0,28,4],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1ValueType_01_4.html":[9,0,28,7],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1ModelParser_1_1Variable_01_4.html":[9,0,28,8],
-"structYAML_1_1convert_3_01Antares_1_1Solver_1_1SystemParser_1_1Component_01_4.html":[9,0,28,9]
+"structVec3.html":[9,0,272]
 };
