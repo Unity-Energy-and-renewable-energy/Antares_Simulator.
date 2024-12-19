@@ -25,7 +25,7 @@ RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
                                  const std::vector<double>& P_max,
                                  const std::vector<double>& P_min,
                                  double init_level,
-                                 double capa,
+                                 double capacity,
                                  const std::vector<double>& inflow,
                                  const std::vector<double>& overflow,
                                  const std::vector<double>& pump,
@@ -41,10 +41,10 @@ BOOST_AUTO_TEST_CASE(input_vectors_of_different_sizes__exception_raised)
     std::vector<double> G, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
     std::vector<double> H = {0., 0.};
     double init_level = 0.;
-    double capa = 0.;
+    double capacity = 0.;
 
     BOOST_CHECK_EXCEPTION(
-      new_remix_hydro(G, H, D, P_max, P_min, init_level, capa, inflows, ovf, pump, S, DTG_MRG),
+      new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
       checkMessage("Remix hydro input : arrays of different sizes"));
 }
@@ -54,10 +54,10 @@ BOOST_AUTO_TEST_CASE(input_init_level_exceeds_capacity__exception_raised)
     std::vector<double> G, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
     std::vector<double> H = {0., 0.};
     double init_level = 2.;
-    double capa = 1.;
+    double capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
-      new_remix_hydro(G, H, D, P_max, P_min, init_level, capa, inflows, ovf, pump, S, DTG_MRG),
+      new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
       checkMessage("Remix hydro input : initial level > reservoir capacity"));
 }
@@ -66,10 +66,10 @@ BOOST_AUTO_TEST_CASE(all_input_arrays_of_size_0__exception_raised)
 {
     std::vector<double> G, H, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
     double init_level = 0.;
-    double capa = 1.;
+    double capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
-      new_remix_hydro(G, H, D, P_max, P_min, init_level, capa, inflows, ovf, pump, S, DTG_MRG),
+      new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
       checkMessage("Remix hydro input : all arrays of sizes 0"));
 }
@@ -81,10 +81,10 @@ BOOST_AUTO_TEST_CASE(H_not_smaller_than_pmax__exception_raised)
     std::vector<double> H = {1., 2., 3., 4., 5.};
     std::vector<double> P_max = {2., 2., 2., 4., 5.};
     double init_level = 0.;
-    double capa = 1.;
+    double capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
-      new_remix_hydro(G, H, D, P_max, P_min, init_level, capa, inflows, ovf, pump, S, DTG_MRG),
+      new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
       checkMessage("Remix hydro input : H not smaller than Pmax everywhere"));
 }
@@ -96,10 +96,10 @@ BOOST_AUTO_TEST_CASE(H_not_greater_than_pmin__exception_raised)
     std::vector<double> H = {1., 2., 3., 4., 5.};
     std::vector<double> P_min = {0., 0., 4., 0., 0.};
     double init_level = 0.;
-    double capa = 1.;
+    double capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
-      new_remix_hydro(G, H, D, P_max, P_min, init_level, capa, inflows, ovf, pump, S, DTG_MRG),
+      new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
       checkMessage("Remix hydro input : H not greater than Pmin everywhere"));
 }
@@ -109,10 +109,10 @@ BOOST_AUTO_TEST_CASE(input_is_acceptable__no_exception_raised)
     std::vector<double> G = {0.}, H = {0.}, D = {0.}, P_max = {0.}, P_min = {0.}, inflows = {0.};
     std::vector<double> ovf = {0.}, pump = {0.}, S = {0.}, DTG_MRG = {0.};
     double init_level = 0.;
-    double capa = 1.;
+    double capacity = 1.;
 
     BOOST_CHECK_NO_THROW(
-      new_remix_hydro(G, H, D, P_max, P_min, init_level, capa, inflows, ovf, pump, S, DTG_MRG));
+      new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG));
 }
 
 BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh)
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_2
     std::vector<double> H = {0., 10., 20., 30., 40.}; // we have Pmin <= H <= Pmax
     std::vector<double> D = {80.0, 60., 40., 20., 0.};
     double init_level = 500.;
-    double capa = 1000.;
+    double capacity = 1000.;
     std::vector<double> inflows(5, 0.);
     std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
 
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_2
                                              P_max,
                                              P_min,
                                              init_level,
-                                             capa,
+                                             capacity,
                                              inflows,
                                              ovf,
                                              pump,
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_CASE(Pmax_does_not_impact_results_when_greater_than_40mwh)
     std::vector<double> H = {0., 10., 20., 30., 40.};
     std::vector<double> D = {80.0, 60., 40., 20., 0.};
     double init_level = 500.;
-    double capa = 1000.;
+    double capacity = 1000.;
     std::vector<double> inflows(5, 0.);
     std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
 
@@ -165,7 +165,7 @@ BOOST_AUTO_TEST_CASE(Pmax_does_not_impact_results_when_greater_than_40mwh)
                                              P_max,
                                              P_min,
                                              init_level,
-                                             capa,
+                                             capacity,
                                              inflows,
                                              ovf,
                                              pump,
@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_flattened_to_mean_H_2
     std::vector<double> H = {40., 30., 20., 10., 0.};
     std::vector<double> D = {0., 20., 40., 60., 80.};
     double init_level = 500.;
-    double capa = 1000.;
+    double capacity = 1000.;
     std::vector<double> inflows(5, 0.);
     std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
 
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_flattened_to_mean_H_2
                                              P_max,
                                              P_min,
                                              init_level,
-                                             capa,
+                                             capacity,
                                              inflows,
                                              ovf,
                                              pump,
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE(influence_of_pmax, *boost::unit_test::tolerance(0.01))
     std::vector<double> H = {20., 20., 20., 20., 20.};
     std::vector<double> D = {50., 50., 50., 50., 50.};
     double init_level = 500.;
-    double capa = 1000.;
+    double capacity = 1000.;
     std::vector<double> inflows(5, 0.);
     std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
 
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE(influence_of_pmax, *boost::unit_test::tolerance(0.01))
                                                P_max,
                                                P_min,
                                                init_level,
-                                               capa,
+                                               capacity,
                                                inflows,
                                                ovf,
                                                pump,
@@ -255,7 +255,7 @@ BOOST_AUTO_TEST_CASE(influence_of_pmax, *boost::unit_test::tolerance(0.01))
                                                P_max,
                                                P_min,
                                                init_level,
-                                               capa,
+                                               capacity,
                                                inflows,
                                                ovf,
                                                pump,
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
     std::vector<double> H = {20., 20., 20., 20., 20.};
     std::vector<double> D = {50., 50., 50., 50., 50.};
     double init_level = 500.;
-    double capa = 1000.;
+    double capacity = 1000.;
     std::vector<double> inflows(5, 0.);
     std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
 
@@ -291,7 +291,7 @@ BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
                                                P_max,
                                                P_min,
                                                init_level,
-                                               capa,
+                                               capacity,
                                                inflows,
                                                ovf,
                                                pump,
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
                                                P_max,
                                                P_min,
                                                init_level,
-                                               capa,
+                                               capacity,
                                                inflows,
                                                ovf,
                                                pump,
@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE(H_is_already_flat___remix_is_useless__level_easily_computed
     // Not important for testing levels
     std::vector<double> P_max(5, 25.), P_min(5, 0.), G(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
     std::vector<double> D(5, 10.);
-    double capa = 1000.;
+    double capacity = 1000.;
 
     // Used for level computations
     double init_level = 500.;
@@ -339,7 +339,7 @@ BOOST_AUTO_TEST_CASE(H_is_already_flat___remix_is_useless__level_easily_computed
                                                   P_max,
                                                   P_min,
                                                   init_level,
-                                                  capa,
+                                                  capacity,
                                                   inflows,
                                                   ovf,
                                                   pump,
@@ -383,7 +383,66 @@ BOOST_AUTO_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised)
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
       std::invalid_argument,
-      checkMessage("Remix hydro input : levels computed from input don't respect constraints"));
+      checkMessage(
+        "Remix hydro input : levels computed from input don't respect reservoir bounds"));
+}
+
+BOOST_AUTO_TEST_CASE(influence_of_reservoir_capacity_on_hydro_production,
+                     *boost::unit_test::tolerance(0.001))
+{
+    // Not important for this test
+    std::vector<double> P_max(10, std::numeric_limits<double>::max());
+    std::vector<double> P_min(10, 0.);
+    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
+    std::vector<double> D(10, 20.);
+
+    // H oscillates between 10 and 20 (new H will be flattened to 15 everywhere)
+    std::vector<double> H = {10., 20., 10., 20., 10., 20., 10., 20., 10., 20.};
+    // First inflows > H, then inflows < H. Consequence : levels first increase, then decrease.
+    std::vector<double> inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
+    double init_level = 100.;
+    // H and inflows result in : input_levels = {115, 120, 135, 140, 155, 140, 135, 120, 115, 100}
+    // Note sup(input_levels) = 155
+
+    // Case 1 : capacity unlimited
+    double capacity = std::numeric_limits<double>::max();
+    auto [new_H, new_D, L] = new_remix_hydro(G,
+                                             H,
+                                             D,
+                                             P_max,
+                                             P_min,
+                                             init_level,
+                                             capacity,
+                                             inflows,
+                                             ovf,
+                                             pump,
+                                             S,
+                                             DTG_MRG);
+
+    std::vector<double> expected_H(10, 15.); // H is flat and is 15. (means of initial H)
+    // Levels associated to new H are such as sup(L) = 150. < sup(input_levels) = 155
+    std::vector<double> expected_L = {110., 120., 130., 140., 150., 140., 130., 120., 110., 100.};
+    BOOST_TEST(new_H == expected_H, boost::test_tools::per_element());
+    BOOST_TEST(L == expected_L, boost::test_tools::per_element());
+
+    // Now, if we limit to capacity to sup(input_levels) = 155, we should have same H and L
+    // as previously
+    capacity = 155.;
+    auto [new_H2, new_D2, L2] = new_remix_hydro(G,
+                                                H,
+                                                D,
+                                                P_max,
+                                                P_min,
+                                                init_level,
+                                                capacity,
+                                                inflows,
+                                                ovf,
+                                                pump,
+                                                S,
+                                                DTG_MRG);
+
+    BOOST_TEST(new_H2 == expected_H, boost::test_tools::per_element());
+    BOOST_TEST(L2 == expected_L, boost::test_tools::per_element());
 }
 
 // Ideas for building further tests :
@@ -392,6 +451,7 @@ BOOST_AUTO_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised)
 //   vectors, run the algo on reversed vectors gives reversed output result vectors)
 // - After running remix hydro algo, sum(H), sum(H + D) must remain the same.
 // - influence of D : low values of G + H are searched where D > 0 (not where D == 0)
+// -
 
 // Possible simplifications / clarifications of the algorithm itself :
 // - remove french from variable names

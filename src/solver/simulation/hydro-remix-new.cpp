@@ -131,7 +131,7 @@ static void checkInputCorrectness(const std::vector<double>& G,
     if (!isLessThan(levels, capacity) || !isGreaterThan(levels, 0.))
     {
         throw std::invalid_argument(msg_prefix
-                                    + "levels computed from input don't respect constraints");
+                                    + "levels computed from input don't respect reservoir bounds");
     }
 }
 
@@ -183,7 +183,7 @@ RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
     std::vector<double> new_D = D;
 
     int loop = 1000;
-    double eps = 1e-2;
+    double eps = 1e-3;
     double top = *std::max_element(G.begin(), G.end()) + *std::max_element(H.begin(), H.end())
                  + *std::max_element(D.begin(), D.end()) + 1;
 
