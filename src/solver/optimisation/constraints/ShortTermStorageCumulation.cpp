@@ -130,28 +130,32 @@ void ShortTermStorageCumulation::add(int pays)
 
     for (const auto& storage: data.ShortTermStorage[pays])
     {
-        for (const auto& constraint: storage.additional_constraints)
+        for (const auto& additional_constraints: storage.additional_constraints)
         {
             // sum (var[h]) sign rhs, h in list provided by user where:
             // var = injection for InjectionCumulationConstraint
             // var = withdrawal for WithdrawalCumulationConstraint
             // var = injectionEfficiency * injection - withdrawalEfficiency * withdrawal for Netting
-            auto constraintHelper = cumulationConstraintFromVariable(constraint.variable);
-            namer.ShortTermStorageCumulation(constraintHelper->name(),
-                                             builder.data.nombreDeContraintes,
-                                             storage.name,
-                                             constraint.name);
-            const auto index = storage.clusterGlobalIndex;
-            data.CorrespondanceCntNativesCntOptimHebdomadaires
-              .ShortTermStorageCumulation[constraint.globalIndex]
-              = builder.data.nombreDeContraintes;
-
-            for (const auto& hour: constraint.hours)
+            auto constraintHelper = cumulationConstraintFromVariable(
+                    additional_constraints.variable);
+            for (auto& constraint: additional_constraints.constraints)
             {
-                builder.updateHourWithinWeek(hour - 1);
-                constraintHelper->build(builder, index, storage);
+                namer.ShortTermStorageCumulation(constraintHelper->name() +,
+                                                 builder.data.nombreDeContraintes,
+                                                 storage.name,
+                                                 additional_constraints.name);
+                const auto index = storage.clusterGlobalIndex;
+                data.CorrespondanceCntNativesCntOptimHebdomadaires
+                        .ShortTermStorageCumulation[additional_constraints.globalIndex]
+                        = builder.data.nombreDeContraintes;
+
+                for (const auto& hour: additional_constraints.hours)
+                {
+                    builder.updateHourWithinWeek(hour - 1);
+                    constraintHelper->build(builder, index, storage);
+                }
+                builder.SetOperator(ConvertSense(additional_constraints.operatorType)).build();
             }
-            builder.SetOperator(ConvertSense(constraint.operatorType)).build();
         }
     }
 }

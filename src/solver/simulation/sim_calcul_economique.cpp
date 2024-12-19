@@ -61,10 +61,13 @@ static void importShortTermStorages(
             toInsert.penalizeVariationWithdrawal = st.properties.penalizeVariationWithdrawal;
             toInsert.name = st.properties.name;
             toInsert.additional_constraints = st.additional_constraints;
-            for (auto& constraint: toInsert.additional_constraints)
+            for (auto& additional_constraints: toInsert.additional_constraints)
             {
-                constraint.globalIndex = clusterCumulativeConstraintGlobalIndex;
-                ++clusterCumulativeConstraintGlobalIndex;
+                for (auto& [_, globalIndex]: additional_constraints.constraints)
+                {
+                    globalIndex = clusterCumulativeConstraintGlobalIndex;
+                    ++clusterCumulativeConstraintGlobalIndex;
+                }
             }
             toInsert.series = st.series;
 

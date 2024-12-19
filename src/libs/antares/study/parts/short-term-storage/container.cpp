@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <regex>
 #include <string>
 
 #include <yuni/io/file.h>
@@ -87,7 +88,7 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
 
     for (auto* section = ini.firstSection; section; section = section->next)
     {
-        AdditionalConstraint constraint;
+        AdditionalConstraints constraint;
         constraint.name = section->name.c_str();
         for (auto* property = section->firstProperty; property; property = property->next)
         {
@@ -111,24 +112,50 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
             }
             else if (key == "hours")
             {
-                std::stringstream ss(value.c_str());
-                std::string hour;
-                while (std::getline(ss, hour, ','))
+                //
+                // std::stringstream ss(value.c_str());
+                // std::string hour;
+                // while (std::getline(ss, hour, ','))
+                // {
+                //     int hourVal = std::stoi(hour);
+                //     constraint.hours.insert(hourVal);
+                // }
+
+                // Split the `hours` field into multiple groups
+                std::string hoursStr = value.c_str();
+                std::regex groupRegex(R"(\[(.*?)\])");
+                // Match each group enclosed in square brackets
+                auto groupsBegin = std::sregex_iterator(hoursStr.begin(),
+                                                        hoursStr.end(),
+                                                        groupRegex);
+                auto groupsEnd = std::sregex_iterator();
+                for (auto it = groupsBegin; it != groupsEnd; ++it)
                 {
-                    int hourVal = std::stoi(hour);
-                    constraint.hours.insert(hourVal);
+                    // Extract the contents of the square brackets
+                    std::string group = (*it)[1].str();
+                    std::stringstream ss(group);
+                    std::string hour;
+                    std::set<int> hourSet;
+
+                    while (std::getline(ss, hour, ','))
+                    {
+                        int hourVal = std::stoi(hour);
+                        hourSet.insert(hourVal);
+                    }
+
+                    constraint.hours.push_back(hourSet); // Add this group to the `hours` vector
                 }
             }
-            else if (key == "rhs")
-            {
-                property->value.to<double>(constraint.rhs);
-            }
+
+            // try to read the rhs
+            loadFile(parent_path / ("rhs_" + constraint.name + ".txt"), constraint.rhs);
+            fillIfEmpty(constraint.rhs, 0.0);
         }
 
-        if (auto ret = constraint.validate(); !ret.ok)
+        if (auto [ok, error_msg] = constraint.validate(); !ok)
         {
             logs.error() << "Invalid constraint in section: " << section->name;
-            logs.error() << ret.error_msg;
+            logs.error() << error_msg;
             return false;
         }
 

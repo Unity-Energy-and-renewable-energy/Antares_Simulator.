@@ -26,7 +26,7 @@
 
 #include <antares/inifile/inifile.h>
 
-#include "AdditionalConstraint.h"
+#include "AdditionalConstraints.h"
 #include "properties.h"
 #include "series.h"
 
@@ -51,6 +51,6 @@ public:
 
     std::shared_ptr<Series> series = std::make_shared<Series>();
     mutable Properties properties;
-    std::vector<AdditionalConstraint> additional_constraints;
+    std::vector<AdditionalConstraints> additional_constraints;
 };
 } // namespace Antares::Data::ShortTermStorage

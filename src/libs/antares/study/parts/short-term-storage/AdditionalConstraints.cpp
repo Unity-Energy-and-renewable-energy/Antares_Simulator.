@@ -18,11 +18,12 @@
 ** You should have received a copy of the Mozilla Public Licence 2.0
 ** along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
 */
-#include "antares/study/parts/short-term-storage/AdditionalConstraint.h"
+#include "antares/study/parts/short-term-storage/AdditionalConstraints.h"
+#include <algorithm>
 
 namespace Antares::Data::ShortTermStorage
 {
-AdditionalConstraint::ValidateResult AdditionalConstraint::validate() const
+AdditionalConstraints::ValidateResult AdditionalConstraints::validate() const
 {
     if (cluster_id.empty())
     {
@@ -39,26 +40,38 @@ AdditionalConstraint::ValidateResult AdditionalConstraint::validate() const
         return {false, "Invalid operator type. Must be 'less', 'equal', or 'greater'."};
     }
 
-    if (!isValidHoursRange())
+    if (!isValidHours())
     {
-        return {false, "Hours set contains invalid values. Must be between 1 and 168."};
+        return {false, "Hours sets contains invalid values. Must be between 1 and 168."};
     }
 
     return {true, ""};
 }
-
-bool AdditionalConstraint::isValidHoursRange() const
+bool SingleAdditionalConstraint::isValidHoursRange() const
 {
     // `hours` is a sorted set; begin() gives the smallest and prev(end()) gives the largest.
-    return !hours.empty() && *hours.begin() >= 1 && *std::prev(hours.end()) <= 168;
+    return !hours.empty() && *hours.begin()
+           >= 1 && *std::prev(
+                   hours.end()) <= 168;
 }
 
-bool AdditionalConstraint::isValidVariable() const
+bool AdditionalConstraints::isValidHours() const
+{
+    return std::ranges::all_of(constraints.begin(),
+                               constraints.end(),
+                               [](const auto& constraint)
+                               {
+                                   return constraint.isValidHoursRange();
+                               });
+}
+
+
+bool AdditionalConstraints::isValidVariable() const
 {
     return variable == "injection" || variable == "withdrawal" || variable == "netting";
 }
 
-bool AdditionalConstraint::isValidOperatorType() const
+bool AdditionalConstraints::isValidOperatorType() const
 {
     return operatorType == "less" || operatorType == "equal" || operatorType == "greater";
 }

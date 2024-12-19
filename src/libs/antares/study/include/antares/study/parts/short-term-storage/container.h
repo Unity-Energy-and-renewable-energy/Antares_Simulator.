@@ -23,7 +23,6 @@
 #include <filesystem>
 #include <string>
 
-#include "AdditionalConstraint.h"
 #include "cluster.h"
 
 namespace Antares::Data::ShortTermStorage
