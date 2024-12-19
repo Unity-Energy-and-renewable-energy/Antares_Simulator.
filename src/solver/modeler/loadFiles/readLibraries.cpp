@@ -20,6 +20,7 @@
  */
 
 #include <antares/io/file.h>
+#include <antares/logs/logs.h>
 #include <antares/solver/modelConverter/modelConverter.h>
 #include <antares/solver/modelParser/parser.h>
 #include "antares/solver/loadFiles/loadFiles.h"
@@ -38,4 +39,23 @@ static Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
     return ModelConverter::convert(libraryObj);
 }
 
+
+std::vector<Study::SystemModel::Library> loadLibraries(const fs::path& studyPath)
+{
+    std::vector<Study::SystemModel::Library> libraries;
+
+    const fs::path directoryPath = studyPath / "input" / "model-libraries";
+    for (const auto& entry : fs::directory_iterator(directoryPath))
+    {
+        if (entry.path().extension() != "yml")
+        {
+            logs.info() << "File ignored because of wrong extension: " << entry.path();
+            continue;
+        }
+
+        libraries.push_back(loadSingleLibrary(entry.path()));
+    }
+
+    return libraries;
+}
 } // namespace Antares::Solver::LoadFiles
