@@ -20,7 +20,7 @@ target_link_libraries(loadModelerFiles
         PUBLIC
         Antares::antares-study-system-model
         PRIVATE
-        io
+        Antares::io
         Antares::systemParser
         Antares::modelParser
         Antares::modelConverter

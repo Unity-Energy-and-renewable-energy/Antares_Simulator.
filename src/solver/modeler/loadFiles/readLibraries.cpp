@@ -48,7 +48,8 @@ std::vector<Study::SystemModel::Library> loadLibraries(const fs::path& studyPath
     {
         if (entry.path().extension() != ".yml")
         {
-            logs.info() << "File ignored because of wrong extension: " << entry.path();
+            logs.info() << entry.path()
+                        << " ignored, only files having the `.yml` extension are loaded";
             continue;
         }
 
