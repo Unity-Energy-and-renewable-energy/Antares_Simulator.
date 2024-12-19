@@ -19,17 +19,20 @@
  * along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
  */
 
-#pragma once
+#include <antares/io/file.h>
+#include <antares/solver/modelParser/parser.h>
+#include <antares/solver/modelConverter/modelConverter.h>
+#include "antares/solver/loadFiles/loadFiles.h"
 
-#include <filesystem>
-
-#include <antares/study/system-model/library.h>
-#include <antares/study/system-model/system.h>
+namespace fs = std::filesystem;
 
 namespace Antares::Solver::LoadFiles
 {
 
-Study::SystemModel::System loadSystem(const std::filesystem::path& studyPath,
-                                      const std::vector<Study::SystemModel::Library>& libraries);
+Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
+{
+    Study::SystemModel::Library lib;
+    return lib;
+}
 
 } // namespace Antares::Solver::LoadFiles

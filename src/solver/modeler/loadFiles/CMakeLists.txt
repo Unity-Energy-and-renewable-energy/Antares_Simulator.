@@ -1,5 +1,6 @@
 set(SOURCES
         readSystem.cpp
+        readLibraries.cpp
 )
 
 # Create the library
@@ -19,6 +20,7 @@ target_link_libraries(loadFiles
         PRIVATE
         io
         Antares::systemParser
+        Antares::modelParser
         Antares::modelConverter
 )
 
