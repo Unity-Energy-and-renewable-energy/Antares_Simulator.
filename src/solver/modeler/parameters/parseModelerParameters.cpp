@@ -23,6 +23,7 @@
 #include <fstream>
 
 #include <antares/io/file.h>
+#include <antares/solver/modeler/parameters/parseModelerParameters.h>
 
 #include "encoder.hxx"
 

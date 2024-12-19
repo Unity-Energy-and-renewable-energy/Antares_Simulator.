@@ -20,12 +20,25 @@
  */
 
 #include <antares/logs/logs.h>
-
 #include <antares/solver/modeler/loadFiles/loadFiles.h>
-#include <antares/solver/modeler/parameters/modelerParameters.h>
+#include <antares/solver/modeler/parameters/parseModelerParameters.h>
+
+using namespace Antares;
+using namespace Antares::Solver;
 
 int main(int argc, const char** argv)
 {
+    if (argc < 1)
+    {
+        logs.error() << "No study path provided, exiting.";
+        return EXIT_FAILURE;
+    }
+
+    std::filesystem::path studyPath(argv[1]);
+
+    const auto parameters = parseModelerParameters(studyPath);
+    const auto libraries = LoadFiles::loadLibraries(studyPath);
+    const auto system = LoadFiles::loadSystem(studyPath, libraries);
 
     return 0;
 }
