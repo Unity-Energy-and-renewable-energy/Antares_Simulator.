@@ -108,7 +108,7 @@ static void checkInputCorrectness(const std::vector<double>& G,
                                  S.size(),
                                  DTG_MRG.size()};
 
-    if (std::ranges::adjacent_find(sizes, std::not_equal_to()) != sizes.end())
+    if (!std::ranges::all_of(sizes, [&sizes](const size_t s) { return s == sizes.front(); }))
     {
         throw std::invalid_argument(msg_prefix + "arrays of different sizes");
     }
