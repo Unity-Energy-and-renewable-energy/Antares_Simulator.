@@ -26,6 +26,7 @@
 #include <fstream>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/data/test_case.hpp>
 
 #include <yuni/io/file.h>
 
@@ -772,6 +773,32 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_IncompleteRhsFile)
     BOOST_CHECK_EQUAL(result, false);
 
     std::filesystem::remove_all(testPath);
+}
+
+// Test data for parameterization
+namespace bdata = boost::unit_test::data;
+
+BOOST_DATA_TEST_CASE(Validate_AllVariableOperatorCombinations,
+                     bdata::make({"injection", "withdrawal", "netting"}) ^
+                     bdata::make({"less", "equal", "greater"}),
+                     variable,
+                     op)
+{
+    ShortTermStorage::AdditionalConstraints constraints;
+    constraints.cluster_id = "ClusterA";
+    constraints.variable = variable;
+    constraints.operatorType = op;
+
+    // Create constraints with valid hours
+    constraints.constraints.push_back(ShortTermStorage::SingleAdditionalConstraint{{1, 2, 3}});
+    constraints.constraints.push_back(ShortTermStorage::SingleAdditionalConstraint{{50, 100, 150}});
+    constraints.constraints.
+            push_back(ShortTermStorage::SingleAdditionalConstraint{{120, 121, 122}});
+
+    // Validate the constraints
+    auto [ok, error_msg] = constraints.validate();
+    BOOST_CHECK_EQUAL(ok, true);
+    BOOST_CHECK(error_msg.empty());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
