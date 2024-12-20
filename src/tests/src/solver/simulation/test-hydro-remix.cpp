@@ -381,7 +381,7 @@ BOOST_AUTO_TEST_CASE(influence_of_capacity_on_algorithm___case_where_no_influenc
     // H and inflows result in : input_levels = {115, 120, 135, 140, 155, 140, 135, 120, 115, 100}
     // Note sup(input_levels) = 155
 
-    // Case 1 : capacity unlimited
+    // Case 1 : capacity unlimited (relaxed) ==> leads to optimal solution (H is flat)
     double capacity = std::numeric_limits<double>::max();
     auto [new_H, new_D, L] = new_remix_hydro(G,
                                              H,
@@ -403,7 +403,7 @@ BOOST_AUTO_TEST_CASE(influence_of_capacity_on_algorithm___case_where_no_influenc
     BOOST_TEST(L == expected_L, boost::test_tools::per_element());
 
     // Case 2 : now, if we lower capacity to sup(input_levels) = 155, we should
-    // have same computed H and L as previously : this value of capacity should
+    // have H and L identical to previously : this value of capacity should
     // not have an influence on H and levels as results of the algorithm.
     capacity = 155.;
     auto [new_H2, new_D2, L2] = new_remix_hydro(G,
@@ -437,10 +437,11 @@ BOOST_AUTO_TEST_CASE(lowering_capacity_too_low_leads_to_suboptimal_solution_for_
     // First inflows > H, then inflows < H. Consequence : levels first increase, then decrease.
     std::vector<double> inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
     double init_level = 100.;
-    // H and inflows result in : input_levels = {105, 120, 125, 140, 145, 140, 125, 120, 105, 100}
+    // H and inflows lead to have :
+    // input_levels = {105, 120, 125, 140, 145, 140, 125, 120, 105,100}
     // Note sup(input_levels) = 145
 
-    // Case 1 : capacity unlimited
+    // Case 1 : capacity unlimited (relaxed) ==> leads to optimal solution (H is flat)
     double capacity = std::numeric_limits<double>::max();
     auto [new_H, new_D, L] = new_remix_hydro(G,
                                              H,
@@ -461,11 +462,12 @@ BOOST_AUTO_TEST_CASE(lowering_capacity_too_low_leads_to_suboptimal_solution_for_
     BOOST_TEST(new_H == expected_H, boost::test_tools::per_element());
     BOOST_TEST(L == expected_L, boost::test_tools::per_element());
 
-    // Case 2 : now we lower capacity to sup(input_levels) = 145.
+    // Case 2 : we lower capacity to sup(input_levels) = 145.
     // This makes input acceptable for algo : levels computed from input have an
     // up bound <= capacity
     // But this time levels can not increase up to sup(L) = 150., as it would if capacity
-    // was infinite. So we expect to get an output H flat by interval, not on the whole domain.
+    // was infinite. Therefore, solution found is suboptimal : we expect to get an
+    // output H flat by interval, not flat on the whole domain.
     capacity = 145.;
     auto [new_H2, new_D2, L2] = new_remix_hydro(G,
                                                 H,
@@ -504,8 +506,8 @@ BOOST_AUTO_TEST_CASE(lowering_initial_level_too_low_leads_to_suboptimal_solution
     // Note : inf(input_levels) = 5
 
     // Case 1 : init level (== 100) is high enough so that input levels (computed from input data)
-    // are acceptable by algorithm, and levels computed by algorithm (output) are optimal, that is
-    // computed from a optimal (that is flat) new_H.
+    // are acceptable for algorithm (input levels >= 0.), and running algorithm leads to optimal
+    // solution (new_H is flat)
     auto [new_H, new_D, L] = new_remix_hydro(G,
                                              H,
                                              D,
@@ -525,10 +527,10 @@ BOOST_AUTO_TEST_CASE(lowering_initial_level_too_low_leads_to_suboptimal_solution
     BOOST_TEST(new_H == expected_H, boost::test_tools::per_element());
     BOOST_TEST(L == expected_L, boost::test_tools::per_element());
 
-    // Case 2 : now we lower initial level. We know that input data are still acceptable
-    // for algorithm, and that algorithm will have to take the levels lower bound (0.)
-    // into account. As the level change, the solution new_H will be suboptimal, that
-    // is flat by interval.
+    // Case 2 : we lower initial level. Input data are still acceptable
+    // for algorithm (despite the new init level), algorithm will have to take the levels lower
+    // bound (0.) into account. As the levels change, the solution new_H will be suboptimal, that is
+    // flat by interval (not flat on the whole domain).
     init_level = 95.;
     auto [new_H2, new_D2, L2] = new_remix_hydro(G,
                                                 H,
