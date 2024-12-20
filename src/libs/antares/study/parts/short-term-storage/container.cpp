@@ -143,10 +143,13 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
                         int hourVal = std::stoi(hour);
                         hourSet.insert(hourVal);
                     }
-                    // Add this group to the `hours` vec
-                    additional_constraints.constraints.push_back(
-                            {.hours = hourSet, .localIndex = localIndex});
-                    ++localIndex;
+                    if (!hourSet.empty())
+                    {
+                        // Add this group to the `hours` vec
+                        additional_constraints.constraints.push_back(
+                                {.hours = hourSet, .localIndex = localIndex});
+                        ++localIndex;
+                    }
                 }
             }
         }
