@@ -30,6 +30,7 @@
 #include <yuni/io/file.h>
 
 #include "antares/study/parts/short-term-storage/container.h"
+#include "antares/study/parts/short-term-storage/AdditionalConstraints.h"
 
 using namespace std;
 using namespace Antares::Data;
@@ -451,3 +452,84 @@ BOOST_FIXTURE_TEST_CASE(check_series_save, Fixture)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(AdditionalConstraintsTests)
+
+BOOST_AUTO_TEST_CASE(Validate_ClusterIdEmpty)
+{
+    ShortTermStorage::AdditionalConstraints constraints;
+    constraints.cluster_id = ""; // Cluster ID is empty
+    constraints.variable = "injection";
+    constraints.operatorType = "less";
+
+    auto [ok, error_msg] = constraints.validate();
+    BOOST_CHECK_EQUAL(ok, false);
+    BOOST_CHECK_EQUAL(error_msg, "Cluster ID is empty.");
+}
+
+BOOST_AUTO_TEST_CASE(Validate_InvalidVariable)
+{
+    ShortTermStorage::AdditionalConstraints constraints;
+    constraints.cluster_id = "ClusterA";
+    constraints.variable = "invalid"; // Invalid variable type
+    constraints.operatorType = "less";
+
+    auto [ok, error_msg] = constraints.validate();
+    BOOST_CHECK_EQUAL(ok, false);
+    BOOST_CHECK_EQUAL(error_msg,
+                      "Invalid variable type. Must be 'injection', 'withdrawal', or 'netting'.");
+}
+
+BOOST_AUTO_TEST_CASE(Validate_InvalidOperatorType)
+{
+    ShortTermStorage::AdditionalConstraints constraints;
+    constraints.cluster_id = "ClusterA";
+    constraints.variable = "injection";
+    constraints.operatorType = "invalid"; // Invalid operator type
+
+    auto [ok, error_msg] = constraints.validate();
+    BOOST_CHECK_EQUAL(ok, false);
+    BOOST_CHECK_EQUAL(error_msg,
+                      "Invalid operator type. Must be 'less', 'equal', or 'greater'.");
+}
+
+BOOST_AUTO_TEST_CASE(Validate_InvalidHours)
+{
+    ShortTermStorage::AdditionalConstraints constraints;
+    constraints.cluster_id = "ClusterA";
+    constraints.variable = "injection";
+    constraints.operatorType = "less";
+
+    ShortTermStorage::SingleAdditionalConstraint constraint;
+    constraint.hours = {0, 169}; // Invalid hours range (out of 1-168)
+    constraints.constraints.push_back(constraint);
+
+    auto [ok, error_msg] = constraints.validate();
+    BOOST_CHECK_EQUAL(ok, false);
+    BOOST_CHECK_EQUAL(error_msg,
+                      "Hours sets contains invalid values. Must be between 1 and 168.");
+}
+
+BOOST_AUTO_TEST_CASE(Validate_ValidConstraints)
+{
+    ShortTermStorage::AdditionalConstraints constraints;
+    constraints.cluster_id = "ClusterA";
+    constraints.variable = "injection";
+    constraints.operatorType = "less";
+
+    ShortTermStorage::SingleAdditionalConstraint constraint1;
+    constraint1.hours = {1, 2, 3}; // Valid hours
+
+    ShortTermStorage::SingleAdditionalConstraint constraint2;
+    constraint2.hours = {100, 150, 168}; // Valid hours
+
+    constraints.constraints.push_back(constraint1);
+    constraints.constraints.push_back(constraint2);
+
+    auto [ok, error_msg] = constraints.validate();
+    BOOST_CHECK_EQUAL(ok, true);
+    BOOST_CHECK(error_msg.empty());
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
