@@ -357,11 +357,12 @@ void State::initFromThermalClusterIndexProduction(const uint clusterAreaWideInde
                   .thermalGroupsReserveParticipation[thermalCluster->groupID][res]
                   += participationOn + participationOff;
 
-                reserveParticipationPerThermalClusterForYear[hourInTheYear][thermalCluster->name()][res]
-                  .addOffParticipation(participationOff);
+                DetailledParticipation participation;
+                participation.addOffParticipation(participationOff);
+                participation.addOnParticipation(participationOn);
 
-                reserveParticipationPerThermalClusterForYear[hourInTheYear][thermalCluster->name()][res]
-                  .addOnParticipation(participationOn);
+                reserveParticipationPerThermalClusterForYear[hourInTheYear][thermalCluster->name()][res] = participation;
+
             }
             else
                 logs.error() << "No index for cluster " << thermalCluster->name() << " in reserve "

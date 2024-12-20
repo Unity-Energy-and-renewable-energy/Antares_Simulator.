@@ -345,9 +345,9 @@ public:
     /// \name AllCapacityReservations structure to keep track of the added capacity reservations
     AllCapacityReservations allCapacityReservations;
 
-    BiMap<std::pair<Data::ClusterName, Data::ReserveName>>
+    BiMap<std::pair<Data::ReserveName, Data::ClusterName>>
       reserveParticipationThermalClustersIndexMap;
-    BiMap<std::pair<Data::ClusterName, Data::ReserveName>>
+    BiMap<std::pair<Data::ReserveName, Data::ClusterName>>
       reserveParticipationSTStorageClustersIndexMap;
     BiMap<Data::ReserveName> reserveParticipationLTStorageIndexMap;
 

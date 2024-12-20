@@ -103,16 +103,11 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the area
-        pSize = 0;
-        for (auto res : area->allCapacityReservations.areaCapacityReservationsUp)
-        {
-            pSize += Antares::Data::ThermalCluster::groupMax;
-        }
-        for (auto res : area->allCapacityReservations.areaCapacityReservationsDown)
-        {
-            pSize += Antares::Data::ThermalCluster::groupMax;
-        }
+        // Get the number of potential group reserve participation
+        pSize = area->allCapacityReservations.areaCapacityReservationsUp.size()
+                  * Antares::Data::ThermalCluster::groupMax
+                + area->allCapacityReservations.areaCapacityReservationsDown.size()
+                    * Antares::Data::ThermalCluster::groupMax;
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
@@ -233,7 +228,7 @@ public:
         auto& area = state.area;
         auto& thermal = state.thermal;
         int column = 0;
-        for (auto  [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
+        for (const auto& [reserveName, _]: area->allCapacityReservations.areaCapacityReservationsUp)
         {
             for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
             {
@@ -244,7 +239,8 @@ public:
                 column++;
             }
         }
-        for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
+        for (const auto& [reserveName, _]:
+             area->allCapacityReservations.areaCapacityReservationsDown)
         {
             for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
             {
@@ -277,16 +273,15 @@ public:
         if (AncestorType::isPrinted[0])
         {
             assert(NULL != results.data.area);
-            const auto& thermal = results.data.area->thermal;
-
             // Write the data for the current year
             int column = 0;
-            for (auto res : results.data.area->allCapacityReservations.areaCapacityReservationsUp)
+            for (const auto& [resName, _]:
+                 results.data.area->allCapacityReservations.areaCapacityReservationsUp)
             {
                 for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
                 {
                     // Write the data for the current year
-                    Yuni::String caption = res.first;
+                    Yuni::String caption = resName;
                     caption << "_" << Data::ThermalCluster::GroupName(static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup));
                     results.variableCaption = caption; // VCardType::Caption();
                     results.variableUnit = VCardType::Unit();
@@ -295,12 +290,13 @@ public:
                     column++;
                 }
             }
-            for (auto res : results.data.area->allCapacityReservations.areaCapacityReservationsDown)
+            for (const auto& [resName, _]:
+                 results.data.area->allCapacityReservations.areaCapacityReservationsDown)
             {
                 for (int indexGroup = 0; indexGroup < Antares::Data::ThermalCluster::groupMax; indexGroup++)
                 {
                     // Write the data for the current year
-                    Yuni::String caption = res.first;
+                    Yuni::String caption = resName;
                     caption << "_" << Data::ThermalCluster::GroupName(static_cast<Data::ThermalCluster::ThermalDispatchableGroup>(indexGroup));
                     results.variableCaption = caption; // VCardType::Caption();
                     results.variableUnit = VCardType::Unit();

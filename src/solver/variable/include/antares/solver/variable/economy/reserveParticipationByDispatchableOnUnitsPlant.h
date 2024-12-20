@@ -172,24 +172,6 @@ public:
 
     void yearEndBuildForEachThermalCluster(State& state, uint year, unsigned int numSpace)
     {
-        // Get end year calculations
-        if (pSize)
-        {
-            for (unsigned int i = state.study.runtime.rangeLimits.hour[Data::rangeBegin];
-                i <= state.study.runtime.rangeLimits.hour[Data::rangeEnd];
-                ++i)
-            {
-                for (auto const& [reserveName, reserveParticipation] :
-                    state.reserveParticipationPerThermalClusterForYear[i][state.thermalCluster->name()])
-                {
-                    pValuesForTheCurrentYear
-                        [numSpace][state.area->reserveParticipationThermalClustersIndexMap.get(
-                            std::make_pair(reserveName, state.thermalCluster->name()))]
-                        .hour[i]
-                        = reserveParticipation.onUnitsParticipation;
-                }
-            }
-        }
         // Next variable
         NextType::yearEndBuildForEachThermalCluster(state, year, numSpace);
     }
@@ -239,6 +221,22 @@ public:
 
     void hourForEachArea(State& state, unsigned int numSpace)
     {
+        // Get end year calculations
+        for (auto& [clusterName, _]:
+             state.reserveParticipationPerThermalClusterForYear[state.hourInTheYear])
+        {
+            for (const auto& [reserveName, reserveParticipation]:
+                 state
+                   .reserveParticipationPerThermalClusterForYear[state.hourInTheYear][clusterName])
+            {
+                pValuesForTheCurrentYear[numSpace]
+                                        [state.area->reserveParticipationThermalClustersIndexMap
+                                           .get(std::make_pair(reserveName, clusterName))]
+                                          .hour[state.hourInTheYear]
+                  = reserveParticipation.onUnitsParticipation;
+            }
+        }
+
         // Next variable
         NextType::hourForEachArea(state, numSpace);
     }
@@ -273,9 +271,10 @@ public:
                 }
                 else
                 {
-                    auto [clusterName, reserveName]
-                        = results.data.area->reserveParticipationThermalClustersIndexMap.get(i);
-                    results.variableCaption = clusterName + "_" + reserveName; // VCardType::Caption();
+                    auto [reserveName, clusterName]
+                      = results.data.area->reserveParticipationThermalClustersIndexMap.get(i);
+                    results.variableCaption = reserveName + "_"
+                                              + clusterName; // VCardType::Caption();
                     results.variableUnit = VCardType::Unit();
                     pValuesForTheCurrentYear[numSpace][i].template buildAnnualSurveyReport<VCardType>(
                         results, fileLevel, precision);

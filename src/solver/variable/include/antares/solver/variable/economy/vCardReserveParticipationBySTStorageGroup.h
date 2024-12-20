@@ -114,11 +114,11 @@ static std::string STStorageGroupToString(Data::ShortTermStorage::Group idx)
     case Group::Other2:
         return "Other2";
     case Group::Other3:
-        return "Other 3";
+        return "Other3";
     case Group::Other4:
-        return "Other 4";
+        return "Other4";
     case Group::Other5:
-        return "Other 5";
+        return "Other5";
     default:
         return "<unknown>";
     }
