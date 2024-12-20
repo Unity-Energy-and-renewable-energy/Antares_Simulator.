@@ -544,7 +544,7 @@ BOOST_AUTO_TEST_CASE(Validate_ValidConstraints)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_ValidFile)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -572,7 +572,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_ValidFile)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_InvalidHours)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -596,7 +596,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_InvalidHours)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_ValidHoursFormats)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -627,7 +627,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_MissingFile)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_InvalidConstraint)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -651,7 +651,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_InvalidConstraint)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_ValidRhs)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -689,7 +689,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_ValidRhs)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_MissingRhsFile)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -717,7 +717,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_MissingRhsFile)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_MalformedRhsFile)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
@@ -745,7 +745,7 @@ BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_MalformedRhsFile)
 
 BOOST_AUTO_TEST_CASE(LoadConstraintsFromIniFile_IncompleteRhsFile)
 {
-    std::filesystem::path testPath = "test_data";
+    std::filesystem::path testPath = getFolder() / "test_data";
     std::filesystem::create_directory(testPath);
 
     std::ofstream iniFile(testPath / "additional-constraints.ini");
