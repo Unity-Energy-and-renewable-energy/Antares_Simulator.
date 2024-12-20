@@ -12,12 +12,31 @@
 
 using namespace Antares::Solver::Simulation;
 
-BOOST_AUTO_TEST_CASE(input_vectors_of_different_sizes__exception_raised)
+template<unsigned int size>
+struct InputFixture
 {
-    std::vector<double> G, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
-    std::vector<double> H = {0., 0.};
+    InputFixture()
+    {
+        G.assign(size, 0.);
+        H.assign(size, 0.);
+        D.assign(size, 0.);
+        P_max.assign(size, std::numeric_limits<double>::max());
+        P_min.assign(size, 0.);
+        inflows.assign(size, 0.);
+        ovf.assign(size, 0.);
+        pump.assign(size, 0.);
+        S.assign(size, 0.);
+        DTG_MRG.assign(size, 0.);
+    }
+
+    std::vector<double> G, H, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
     double init_level = 0.;
-    double capacity = 0.;
+    double capacity = std::numeric_limits<double>::max();
+};
+
+BOOST_FIXTURE_TEST_CASE(input_vectors_of_different_sizes__exception_raised, InputFixture<0>)
+{
+    H = {0., 0.};
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -25,12 +44,11 @@ BOOST_AUTO_TEST_CASE(input_vectors_of_different_sizes__exception_raised)
       checkMessage("Remix hydro input : arrays of different sizes"));
 }
 
-BOOST_AUTO_TEST_CASE(input_init_level_exceeds_capacity__exception_raised)
+BOOST_FIXTURE_TEST_CASE(input_init_level_exceeds_capacity__exception_raised, InputFixture<0>)
 {
-    std::vector<double> G, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
-    std::vector<double> H = {0., 0.};
-    double init_level = 2.;
-    double capacity = 1.;
+    H = {0., 0.};
+    init_level = 2.;
+    capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -38,11 +56,10 @@ BOOST_AUTO_TEST_CASE(input_init_level_exceeds_capacity__exception_raised)
       checkMessage("Remix hydro input : initial level > reservoir capacity"));
 }
 
-BOOST_AUTO_TEST_CASE(all_input_arrays_of_size_0__exception_raised)
+BOOST_FIXTURE_TEST_CASE(all_input_arrays_of_size_0__exception_raised, InputFixture<0>)
 {
-    std::vector<double> G, H, D, P_max, P_min, inflows, ovf, pump, S, DTG_MRG;
-    double init_level = 0.;
-    double capacity = 1.;
+    init_level = 0.;
+    capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -50,14 +67,12 @@ BOOST_AUTO_TEST_CASE(all_input_arrays_of_size_0__exception_raised)
       checkMessage("Remix hydro input : all arrays of sizes 0"));
 }
 
-BOOST_AUTO_TEST_CASE(H_not_smaller_than_pmax__exception_raised)
+BOOST_FIXTURE_TEST_CASE(H_not_smaller_than_pmax__exception_raised, InputFixture<5>)
 {
-    std::vector<double> G(5, 0.), D(5, 0.), P_min(5, 0.), inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
-    std::vector<double> H = {1., 2., 3., 4., 5.};
-    std::vector<double> P_max = {2., 2., 2., 4., 5.};
-    double init_level = 0.;
-    double capacity = 1.;
+    H = {1., 2., 3., 4., 5.};
+    P_max = {2., 2., 2., 4., 5.};
+    init_level = 0.;
+    capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -65,14 +80,12 @@ BOOST_AUTO_TEST_CASE(H_not_smaller_than_pmax__exception_raised)
       checkMessage("Remix hydro input : H not smaller than Pmax everywhere"));
 }
 
-BOOST_AUTO_TEST_CASE(H_not_greater_than_pmin__exception_raised)
+BOOST_FIXTURE_TEST_CASE(H_not_greater_than_pmin__exception_raised, InputFixture<5>)
 {
-    std::vector<double> G(5, 0.), D(5, 0.), P_max(5, 1000.), inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
-    std::vector<double> H = {1., 2., 3., 4., 5.};
-    std::vector<double> P_min = {0., 0., 4., 0., 0.};
-    double init_level = 0.;
-    double capacity = 1.;
+    H = {1., 2., 3., 4., 5.};
+    P_min = {0., 0., 4., 0., 0.};
+    init_level = 0.;
+    capacity = 1.;
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -80,28 +93,53 @@ BOOST_AUTO_TEST_CASE(H_not_greater_than_pmin__exception_raised)
       checkMessage("Remix hydro input : H not greater than Pmin everywhere"));
 }
 
-BOOST_AUTO_TEST_CASE(input_is_acceptable__no_exception_raised)
+BOOST_FIXTURE_TEST_CASE(input_is_acceptable__no_exception_raised, InputFixture<1>)
 {
-    std::vector<double> G = {0.}, H = {0.}, D = {0.}, P_max = {0.}, P_min = {0.}, inflows = {0.};
-    std::vector<double> ovf = {0.}, pump = {0.}, S = {0.}, DTG_MRG = {0.};
-    double init_level = 0.;
-    double capacity = 1.;
+    init_level = 0.;
+    capacity = 1.;
 
     BOOST_CHECK_NO_THROW(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG));
 }
 
-BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh)
+BOOST_FIXTURE_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh,
+                        InputFixture<5>)
 {
-    std::vector<double> P_max(5, 40.);
-    std::vector<double> P_min(5, 0.);
-    std::vector<double> G(5, 100.);
-    std::vector<double> H = {0., 10., 20., 30., 40.}; // we have Pmin <= H <= Pmax
-    std::vector<double> D = {80.0, 60., 40., 20., 0.};
-    double init_level = 500.;
-    double capacity = 1000.;
-    std::vector<double> inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
+    std::ranges::fill(P_max, 40.);
+    std::ranges::fill(G, 100.);
+    H = {0., 10., 20., 30., 40.}; // we have Pmin <= H <= Pmax
+    D = {80.0, 60., 40., 20., 0.};
+    init_level = 500.;
+    capacity = 1000.;
+
+    auto [new_H, new_D, _] = new_remix_hydro(G,
+                                             H,
+                                             D,
+                                             P_max,
+                                             P_min,
+                                             init_level,
+                                             capacity,
+                                             inflows,
+                                             ovf,
+                                             pump,
+                                             S,
+                                             DTG_MRG);
+
+    std::vector<double> expected_H = {20., 20., 20., 20., 20.};
+    // D such as G + H + D remains flat
+    std::vector<double> expected_D = {60., 50., 40., 30., 20.};
+    BOOST_CHECK(new_H == expected_H);
+    BOOST_CHECK(new_D == expected_D);
+}
+
+BOOST_FIXTURE_TEST_CASE(Pmax_does_not_impact_results_when_greater_than_40mwh, InputFixture<5>)
+{
+    std::ranges::fill(P_max, 50.);
+    std::ranges::fill(G, 100.);
+    H = {0., 10., 20., 30., 40.};
+    D = {80.0, 60., 40., 20., 0.};
+    init_level = 500.;
+    capacity = 1000.;
 
     auto [new_H, new_D, _] = new_remix_hydro(G,
                                              H,
@@ -123,49 +161,15 @@ BOOST_AUTO_TEST_CASE(hydro_increases_and_pmax_40mwh___H_is_flattened_to_mean_H_2
     BOOST_CHECK(new_D == expected_D);
 }
 
-BOOST_AUTO_TEST_CASE(Pmax_does_not_impact_results_when_greater_than_40mwh)
+BOOST_FIXTURE_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh,
+                        InputFixture<5>)
 {
-    std::vector<double> P_max(5, 50.);
-    std::vector<double> P_min(5, 0.);
-    std::vector<double> G(5, 100.);
-    std::vector<double> H = {0., 10., 20., 30., 40.};
-    std::vector<double> D = {80.0, 60., 40., 20., 0.};
-    double init_level = 500.;
-    double capacity = 1000.;
-    std::vector<double> inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
-
-    auto [new_H, new_D, _] = new_remix_hydro(G,
-                                             H,
-                                             D,
-                                             P_max,
-                                             P_min,
-                                             init_level,
-                                             capacity,
-                                             inflows,
-                                             ovf,
-                                             pump,
-                                             S,
-                                             DTG_MRG);
-
-    std::vector<double> expected_H = {20., 20., 20., 20., 20.};
-    // D such as G + H + D remains constant at each hour
-    std::vector<double> expected_D = {60., 50., 40., 30., 20.};
-    BOOST_CHECK(new_H == expected_H);
-    BOOST_CHECK(new_D == expected_D);
-}
-
-BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_flattened_to_mean_H_20mwh)
-{
-    std::vector<double> P_max(5, 40.);
-    std::vector<double> P_min(5, 0.);
-    std::vector<double> G(5, 100.);
-    std::vector<double> H = {40., 30., 20., 10., 0.};
-    std::vector<double> D = {0., 20., 40., 60., 80.};
-    double init_level = 500.;
-    double capacity = 1000.;
-    std::vector<double> inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
+    std::ranges::fill(P_max, 40.);
+    std::ranges::fill(G, 100.);
+    H = {40., 30., 20., 10., 0.};
+    D = {0., 20., 40., 60., 80.};
+    init_level = 500.;
+    capacity = 1000.;
 
     auto [new_H, new_D, _] = new_remix_hydro(G,
                                              H,
@@ -187,25 +191,19 @@ BOOST_AUTO_TEST_CASE(hydro_decreases_and_pmax_40mwh___H_is_flattened_to_mean_H_2
     BOOST_CHECK(new_D == expected_D);
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_pmax, *boost::unit_test::tolerance(0.01))
+BOOST_FIXTURE_TEST_CASE(influence_of_pmax, InputFixture<5>, *boost::unit_test::tolerance(0.01))
 {
-    std::vector<double> P_min(5, 0.);
-
     // G decreases
-    std::vector<double> G = {100., 80., 60., 40., 20.};
+    G = {100., 80., 60., 40., 20.};
 
     // H is flat and must respect H <= Pmax everywhere
-    std::vector<double> H = {20., 20., 20., 20., 20.};
-    std::vector<double> D = {50., 50., 50., 50., 50.};
-    double init_level = 500.;
-    double capacity = 1000.;
-    std::vector<double> inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
+    H = {20., 20., 20., 20., 20.};
+    D = {50., 50., 50., 50., 50.};
+    init_level = 500.;
+    capacity = 1000.;
 
     // 1. Algorithm tends to flatten G + H, so it would require H to increase.
     // Proof :
-    std::vector<double> P_max(5., std::numeric_limits<double>::max());
-
     auto [new_H1, new_D1, L] = new_remix_hydro(G,
                                                H,
                                                D,
@@ -244,23 +242,18 @@ BOOST_AUTO_TEST_CASE(influence_of_pmax, *boost::unit_test::tolerance(0.01))
     BOOST_CHECK(new_D2 == expected_D2);
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
+BOOST_FIXTURE_TEST_CASE(influence_of_pmin, InputFixture<5>, *boost::unit_test::tolerance(0.01))
 {
-    std::vector<double> P_max(5, std::numeric_limits<double>::max());
-
     // G decreases
-    std::vector<double> G = {100., 80., 60., 40., 20.};
+    G = {100., 80., 60., 40., 20.};
 
     // H is flat and must respect  Pmin <= H <= Pmax everywhere
-    std::vector<double> H = {20., 20., 20., 20., 20.};
-    std::vector<double> D = {50., 50., 50., 50., 50.};
-    double init_level = 500.;
-    double capacity = 1000.;
-    std::vector<double> inflows(5, 0.);
-    std::vector<double> ovf(5, 0.), pump(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
+    H = {20., 20., 20., 20., 20.};
+    D = {50., 50., 50., 50., 50.};
+    init_level = 500.;
+    capacity = 1000.;
 
     // 1. Algorithm tends to flatten G + H, so it would require H to increase.
-    std::vector<double> P_min(5, 0.);
     auto [new_H1, new_D1, L] = new_remix_hydro(G,
                                                H,
                                                D,
@@ -297,17 +290,14 @@ BOOST_AUTO_TEST_CASE(influence_of_pmin, *boost::unit_test::tolerance(0.01))
     BOOST_CHECK(new_D2 == expected_D2);
 }
 
-BOOST_AUTO_TEST_CASE(H_is_already_flat___remix_is_useless__level_easily_computed)
+BOOST_FIXTURE_TEST_CASE(H_is_already_flat___remix_is_useless__level_easily_computed,
+                        InputFixture<5>)
 {
-    // Not important for testing levels
-    std::vector<double> P_max(5, 25.), P_min(5, 0.), G(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
-    std::vector<double> D(5, 10.);
-    double capacity = 1000.;
-
-    // Used for level computations
-    double init_level = 500.;
-    std::vector<double> ovf(5, 25.), H(5, 20.);        // Cause levels to lower
-    std::vector<double> inflows(5, 15.), pump(5, 10.); // Cause levels to raise
+    init_level = 500.;
+    std::ranges::fill(ovf, 25.);     // Cause levels to decrease
+    std::ranges::fill(H, 20.);       // Cause levels to decrease
+    std::ranges::fill(inflows, 15.); // Cause levels to increase
+    std::ranges::fill(pump, 10.);    // Cause levels to increase
 
     auto [new_H, new_D, levels] = new_remix_hydro(G,
                                                   H,
@@ -326,17 +316,14 @@ BOOST_AUTO_TEST_CASE(H_is_already_flat___remix_is_useless__level_easily_computed
     BOOST_TEST(levels == expected_levels, boost::test_tools::per_element());
 }
 
-BOOST_AUTO_TEST_CASE(input_leads_to_levels_over_capacity___exception_raised)
+BOOST_FIXTURE_TEST_CASE(input_leads_to_levels_over_capacity___exception_raised, InputFixture<5>)
 {
-    // Not important for testing levels
-    std::vector<double> P_max(5, 25.), P_min(5, 0.), G(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
-    std::vector<double> D(5, 10.);
-
-    // Used for level computations
-    double init_level = 500.;
-    double capacity = 550.;
-    std::vector<double> ovf(5, 15.), H(5, 10.);        // Cause levels to lower
-    std::vector<double> inflows(5, 25.), pump(5, 20.); // Cause levels to raise
+    init_level = 500.;
+    capacity = 550.;
+    std::ranges::fill(ovf, 15);     // Cause levels to decrease
+    std::ranges::fill(H, 10);       // Cause levels to decrease
+    std::ranges::fill(inflows, 25); // Cause levels to increase
+    std::ranges::fill(pump, 20);    // Cause levels to increase
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -345,17 +332,13 @@ BOOST_AUTO_TEST_CASE(input_leads_to_levels_over_capacity___exception_raised)
         "Remix hydro input : levels computed from input don't respect reservoir bounds"));
 }
 
-BOOST_AUTO_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised)
+BOOST_FIXTURE_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised, InputFixture<5>)
 {
-    // Not important for testing levels
-    std::vector<double> P_max(5, 25.), P_min(5, 0.), G(5, 0.), S(5, 0.), DTG_MRG(5, 0.);
-    std::vector<double> D(5, 10.);
-
-    // Used for level computations
-    double init_level = 50.;
-    double capacity = 100.;
-    std::vector<double> ovf(5, 30.), H(5, 10.);        // Cause levels to lower
-    std::vector<double> inflows(5, 10.), pump(5, 10.); // Cause levels to raise
+    init_level = 50.;
+    std::ranges::fill(ovf, 30);    // Cause levels to decrease
+    std::ranges::fill(H, 10);      // Cause levels to decrease
+    std::ranges::fill(inflows, 5); // Cause levels to increase
+    std::ranges::fill(pump, 10);   // Cause levels to increase
 
     BOOST_CHECK_EXCEPTION(
       new_remix_hydro(G, H, D, P_max, P_min, init_level, capacity, inflows, ovf, pump, S, DTG_MRG),
@@ -364,25 +347,21 @@ BOOST_AUTO_TEST_CASE(input_leads_to_levels_less_than_zero___exception_raised)
         "Remix hydro input : levels computed from input don't respect reservoir bounds"));
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_capacity_on_algorithm___case_where_no_influence,
-                     *boost::unit_test::tolerance(0.001))
+BOOST_FIXTURE_TEST_CASE(influence_of_capacity_on_algorithm___case_where_no_influence,
+                        InputFixture<10>,
+                        *boost::unit_test::tolerance(0.001))
 {
-    // Not important for this test
-    std::vector<double> P_max(10, std::numeric_limits<double>::max());
-    std::vector<double> P_min(10, 0.);
-    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
-    std::vector<double> D(10, 20.);
+    std::ranges::fill(D, 20); // Not important for this test
 
     // H oscillates between 10 and 20 (new H will be flattened to 15 everywhere)
-    std::vector<double> H = {10., 20., 10., 20., 10., 20., 10., 20., 10., 20.};
+    H = {10., 20., 10., 20., 10., 20., 10., 20., 10., 20.};
     // First inflows > H, then inflows < H. Consequence : levels first increase, then decrease.
-    std::vector<double> inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
-    double init_level = 100.;
+    inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
+    init_level = 100.;
     // H and inflows result in : input_levels = {115, 120, 135, 140, 155, 140, 135, 120, 115, 100}
     // Note sup(input_levels) = 155
 
-    // Case 1 : capacity unlimited (relaxed) ==> leads to optimal solution (H is flat)
-    double capacity = std::numeric_limits<double>::max();
+    // Case 1 : capacity relaxed (infinite by default) ==> leads to optimal solution (H is flat)
     auto [new_H, new_D, L] = new_remix_hydro(G,
                                              H,
                                              D,
@@ -423,26 +402,22 @@ BOOST_AUTO_TEST_CASE(influence_of_capacity_on_algorithm___case_where_no_influenc
     BOOST_TEST(L2 == expected_L, boost::test_tools::per_element());
 }
 
-BOOST_AUTO_TEST_CASE(lowering_capacity_too_low_leads_to_suboptimal_solution_for_GplusH,
-                     *boost::unit_test::tolerance(0.001))
+BOOST_FIXTURE_TEST_CASE(lowering_capacity_too_low_leads_to_suboptimal_solution_for_GplusH,
+                        InputFixture<10>,
+                        *boost::unit_test::tolerance(0.001))
 {
-    // Not important for this test
-    std::vector<double> P_max(10, std::numeric_limits<double>::max());
-    std::vector<double> P_min(10, 0.);
-    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
-    std::vector<double> D(10, 20.);
+    std::ranges::fill(D, 20); // Not important for this test
 
     // H oscillates between 10 and 20 (new H will be flattened to 15 everywhere)
-    std::vector<double> H = {20., 10., 20., 10., 20., 10., 20., 10., 20., 10.};
+    H = {20., 10., 20., 10., 20., 10., 20., 10., 20., 10.};
     // First inflows > H, then inflows < H. Consequence : levels first increase, then decrease.
-    std::vector<double> inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
-    double init_level = 100.;
+    inflows = {25., 25., 25., 25., 25., 5., 5., 5., 5., 5.};
+    init_level = 100.;
     // H and inflows lead to have :
     // input_levels = {105, 120, 125, 140, 145, 140, 125, 120, 105,100}
     // Note sup(input_levels) = 145
 
-    // Case 1 : capacity unlimited (relaxed) ==> leads to optimal solution (H is flat)
-    double capacity = std::numeric_limits<double>::max();
+    // Case 1 : capacity relaxed (infinite by default) ==> leads to optimal solution (H is flat)
     auto [new_H, new_D, L] = new_remix_hydro(G,
                                              H,
                                              D,
@@ -487,21 +462,18 @@ BOOST_AUTO_TEST_CASE(lowering_capacity_too_low_leads_to_suboptimal_solution_for_
     BOOST_TEST(new_H2 == expected_H2, boost::test_tools::per_element());
 }
 
-BOOST_AUTO_TEST_CASE(lowering_initial_level_too_low_leads_to_suboptimal_solution_for_GplusH,
-                     *boost::unit_test::tolerance(0.001))
+BOOST_FIXTURE_TEST_CASE(lowering_initial_level_too_low_leads_to_suboptimal_solution_for_GplusH,
+                        InputFixture<10>,
+                        *boost::unit_test::tolerance(0.001))
 {
-    // Not important for this test
-    std::vector<double> P_max(10, std::numeric_limits<double>::max());
-    std::vector<double> P_min(10, 0.);
-    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
-    std::vector<double> D(10, 20.);
+    std::ranges::fill(D, 20); // Not important for this test
 
     // H oscillates between 20 and 30 (new H will be flattened to 25 everywhere)
-    std::vector<double> H = {20., 30., 20., 30., 20., 30., 20., 30., 20., 30.};
+    H = {20., 30., 20., 30., 20., 30., 20., 30., 20., 30.};
     // First inflows < H, then inflows > H. Consequence : levels first decrease, then increase.
-    std::vector<double> inflows = {5., 5., 5., 5., 5., 45., 45., 45., 45., 45.};
-    double capacity = std::numeric_limits<double>::max();
-    double init_level = 100.;
+    inflows = {5., 5., 5., 5., 5., 45., 45., 45., 45., 45.};
+    capacity = std::numeric_limits<double>::max();
+    init_level = 100.;
     // H and inflows result in : input_levels = {85, 60, 45, 20, 5, 20, 45, 60, 85, 100}
     // Note : inf(input_levels) = 5
 
@@ -550,21 +522,17 @@ BOOST_AUTO_TEST_CASE(lowering_initial_level_too_low_leads_to_suboptimal_solution
     BOOST_TEST(new_H2 == expected_H2, boost::test_tools::per_element());
 }
 
-BOOST_AUTO_TEST_CASE(influence_of_initial_level_on_algorithm___case_where_no_influence,
-                     *boost::unit_test::tolerance(0.001))
+BOOST_FIXTURE_TEST_CASE(influence_of_initial_level_on_algorithm___case_where_no_influence,
+                        InputFixture<10>,
+                        *boost::unit_test::tolerance(0.001))
 {
-    // Not important for this test
-    std::vector<double> P_max(10, std::numeric_limits<double>::max());
-    std::vector<double> P_min(10, 0.);
-    std::vector<double> G(10, 0.), pump(10, 0.), ovf(10, 0.), S(10, 0.), DTG_MRG(10, 0.);
-    std::vector<double> D(10, 20.);
+    std::ranges::fill(D, 20); // Not important for this test
 
     // H oscillates between 10 and 20 (new H will be flattened to 15 everywhere)
-    std::vector<double> H = {20., 10., 20., 10., 20., 10., 20., 10., 20., 10.};
+    H = {20., 10., 20., 10., 20., 10., 20., 10., 20., 10.};
     // First inflows < H, then inflows > H. Consequence : levels first decrease, then increase.
-    std::vector<double> inflows = {5., 5., 5., 5., 5., 25., 25., 25., 25., 25.};
-    double capacity = std::numeric_limits<double>::max();
-    double init_level = 100.;
+    inflows = {5., 5., 5., 5., 5., 25., 25., 25., 25., 25.};
+    init_level = 100.;
     // H and inflows are such as inf(input_levels) = 45
 
     // Case 1 : init level (== 100) is high enough so that input levels (computed from input data)
