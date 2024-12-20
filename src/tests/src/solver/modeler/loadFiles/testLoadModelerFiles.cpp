@@ -68,6 +68,13 @@ BOOST_FIXTURE_TEST_CASE(read_one_lib_file, FixtureLoadFile)
     BOOST_CHECK_EQUAL(libraries[0].Id(), "lib_id");
 }
 
+BOOST_FIXTURE_TEST_CASE(dont_read_bad_extension, FixtureLoadFile)
+{
+    createFile(studyPath, "abc.txt");
+    auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
+    BOOST_CHECK(libraries.empty());
+}
+
 BOOST_FIXTURE_TEST_CASE(read_several_lib_file, FixtureLoadFile)
 {
     std::ofstream libStream(libraryDirPath / "simple.yml");
