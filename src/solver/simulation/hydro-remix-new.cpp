@@ -57,19 +57,19 @@ int find_max_index(const std::vector<double>& G_plus_H,
     return max_idx;
 }
 
-static bool isLessThan(const std::vector<double>& a, const std::vector<double>& b)
+static bool operator<=(const std::vector<double>& a, const std::vector<double>& b)
 {
     std::vector<double> a_minus_b;
     std::ranges::transform(a, b, std::back_inserter(a_minus_b), std::minus<double>());
     return std::ranges::all_of(a_minus_b, [](const double& e) { return e <= 0.; });
 }
 
-static bool isLessThan(const std::vector<double>& v, const double c)
+static bool operator<=(const std::vector<double>& v, const double c)
 {
     return std::ranges::all_of(v, [&c](const double& e) { return e <= c; });
 }
 
-static bool isGreaterThan(const std::vector<double>& v, const double c)
+static bool operator>=(const std::vector<double>& v, const double c)
 {
     return std::ranges::all_of(v, [&c](const double& e) { return e >= c; });
 }
@@ -120,17 +120,18 @@ static void checkInputCorrectness(const std::vector<double>& G,
     }
 
     // Hydro production < Pmax
-    if (!isLessThan(H, P_max))
+    if (!(H <= P_max))
     {
         throw std::invalid_argument(msg_prefix + "H not smaller than Pmax everywhere");
     }
+
     // Hydro production > Pmin
-    if (!isLessThan(P_min, H))
+    if (!(P_min <= H))
     {
         throw std::invalid_argument(msg_prefix + "H not greater than Pmin everywhere");
     }
 
-    if (!isLessThan(levels, capacity) || !isGreaterThan(levels, 0.))
+    if (!(levels <= capacity) || !(levels >= 0.))
     {
         throw std::invalid_argument(msg_prefix
                                     + "levels computed from input don't respect reservoir bounds");
