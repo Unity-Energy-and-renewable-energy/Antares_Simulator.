@@ -130,6 +130,11 @@ add_executable(test-hydro-remix
         ${src_solver_simulation}/hydro-remix-new.cpp
 )
 
+target_include_directories(test-hydro-remix
+        PRIVATE
+        ${src_solver_simulation}
+)
+
 target_link_libraries(test-hydro-remix
         PRIVATE
         Boost::unit_test_framework

@@ -1,3 +1,5 @@
+#include "include/antares/solver/simulation/hydro-remix-new.h"
+
 #include <algorithm>
 #include <ranges>
 #include <stdexcept>
@@ -134,13 +136,6 @@ static void checkInputCorrectness(const std::vector<double>& G,
                                     + "levels computed from input don't respect reservoir bounds");
     }
 }
-
-struct RemixHydroOutput
-{
-    std::vector<double> new_H;
-    std::vector<double> new_D;
-    std::vector<double> levels;
-};
 
 RemixHydroOutput new_remix_hydro(const std::vector<double>& G,
                                  const std::vector<double>& H,
