@@ -75,6 +75,19 @@ BOOST_FIXTURE_TEST_CASE(dont_read_bad_extension, FixtureLoadFile)
     BOOST_CHECK(libraries.empty());
 }
 
+BOOST_FIXTURE_TEST_CASE(incorrect_library, FixtureLoadFile)
+{
+    std::ofstream libStream(libraryDirPath / "simple.yml");
+    libStream << R"(
+        library:
+            port-types: []
+            models: []
+    )";
+    libStream.close();
+
+    BOOST_CHECK_THROW(Antares::Solver::LoadFiles::loadLibraries(studyPath), std::runtime_error);
+}
+
 BOOST_FIXTURE_TEST_CASE(read_several_lib_file, FixtureLoadFile)
 {
     std::ofstream libStream(libraryDirPath / "simple.yml");

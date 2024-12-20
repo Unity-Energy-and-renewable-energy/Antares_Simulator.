@@ -35,9 +35,20 @@ static Study::SystemModel::Library loadSingleLibrary(const fs::path& filePath)
     const std::string libraryStr = IO::readFile(filePath);
 
     ModelParser::Parser parser;
-    // Add try/catch and error handling
-    ModelParser::Library libraryObj = parser.parse(libraryStr);
-    return ModelConverter::convert(libraryObj);
+
+    try
+    {
+        ModelParser::Library libraryObj = parser.parse(libraryStr);
+        return ModelConverter::convert(libraryObj);
+    }
+    catch (const std::runtime_error& e)
+    {
+        logs.error() << "Error while parsing or converting this yaml file:";
+        logs.error() << filePath;
+        logs.error() << e.what();
+
+        throw std::runtime_error(e.what());
+    }
 }
 
 std::vector<Study::SystemModel::Library> loadLibraries(const fs::path& studyPath)
