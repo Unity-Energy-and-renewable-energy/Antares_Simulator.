@@ -105,16 +105,12 @@ public:
         pNbYearsParallel = study->maxNbYearsInParallel;
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
-        // Get the area
-        pSize = 0;
-        for (auto res : area->allCapacityReservations.areaCapacityReservationsUp)
-        {
-            pSize += Antares::Data::ShortTermStorage::Group::groupMax;
-        }
-        for (auto res : area->allCapacityReservations.areaCapacityReservationsDown)
-        {
-            pSize += Antares::Data::ShortTermStorage::Group::groupMax;
-        }
+        // Get the number of potential group reserve participation
+        pSize = area->allCapacityReservations.areaCapacityReservationsUp.size()
+                  * Antares::Data::ShortTermStorage::groupMax
+                + area->allCapacityReservations.areaCapacityReservationsDown.size()
+                    * Antares::Data::ShortTermStorage::groupMax;
+
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
@@ -234,7 +230,7 @@ public:
     {
         auto& area = state.area;
         int column = 0;
-        for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
+        for (const auto& [reserveName, _]: area->allCapacityReservations.areaCapacityReservationsUp)
         {
             for (int indexGroup = 0; indexGroup < Antares::Data::ShortTermStorage::groupMax;
                  indexGroup++)
@@ -246,7 +242,8 @@ public:
                 column++;
             }
         }
-        for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
+        for (const auto& [reserveName, _]:
+             area->allCapacityReservations.areaCapacityReservationsDown)
         {
             for (int indexGroup = 0; indexGroup < Antares::Data::ShortTermStorage::groupMax;
                  indexGroup++)
@@ -283,14 +280,14 @@ public:
 
             // Write the data for the current year
             int column = 0;
-            for (auto& res : results.data.area->allCapacityReservations.areaCapacityReservationsUp)
+            for (const auto& [resName, _]:
+                 results.data.area->allCapacityReservations.areaCapacityReservationsUp)
             {
-                for (int indexGroup = 0;
-                     indexGroup < Antares::Data::ShortTermStorage::Group::groupMax;
+                for (int indexGroup = 0; indexGroup < Antares::Data::ShortTermStorage::groupMax;
                      indexGroup++)
                 {
                     // Write the data for the current year
-                    Yuni::String caption = res.first;
+                    Yuni::String caption = resName;
                     caption << "_"
                             << Antares::Data::ShortTermStorage::STStorageCluster::GroupName(
                                  static_cast<Antares::Data::ShortTermStorage::Group>(indexGroup));
@@ -301,15 +298,14 @@ public:
                     column++;
                 }
             }
-            for (auto& res :
+            for (const auto& [resName, _]:
                  results.data.area->allCapacityReservations.areaCapacityReservationsDown)
             {
-                for (int indexGroup = 0;
-                     indexGroup < Antares::Data::ShortTermStorage::Group::groupMax;
+                for (int indexGroup = 0; indexGroup < Antares::Data::ShortTermStorage::groupMax;
                      indexGroup++)
                 {
                     // Write the data for the current year
-                    Yuni::String caption = res.first;
+                    Yuni::String caption = resName;
                     caption << "_"
                             << Antares::Data::ShortTermStorage::STStorageCluster::GroupName(
                                  static_cast<Antares::Data::ShortTermStorage::Group>(indexGroup));

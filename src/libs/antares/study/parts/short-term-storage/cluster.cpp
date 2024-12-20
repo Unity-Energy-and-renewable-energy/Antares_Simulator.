@@ -47,15 +47,14 @@ const char* STStorageCluster::GroupName(enum Group grp)
     case Group::Other2:
         return "Other2";
     case Group::Other3:
-        return "Other 3";
+        return "Other3";
     case Group::Other4:
-        return "Other 4";
+        return "Other4";
     case Group::Other5:
-        return "Other 5";
-    case Group::groupMax:
-        return "";
+        return "Other5";
+    default :
+        throw std::out_of_range("groupMax shouln't be printed");
     }
-    return "";
 } // namespace Antares::Data::ShortTermStorage
 
 bool STStorageCluster::loadFromSection(const IniFile::Section& section)

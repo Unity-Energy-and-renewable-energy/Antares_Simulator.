@@ -104,15 +104,8 @@ public:
         pValuesForTheCurrentYear = new VCardType::IntermediateValuesBaseType[pNbYearsParallel];
 
         // Get the area
-        pSize = 0;
-        for (auto res : area->allCapacityReservations.areaCapacityReservationsUp)
-        {
-            pSize += 1;
-        }
-        for (auto res : area->allCapacityReservations.areaCapacityReservationsDown)
-        {
-            pSize += 1;
-        }
+        pSize = area->allCapacityReservations.areaCapacityReservationsUp.size()
+                + area->allCapacityReservations.areaCapacityReservationsDown.size();
         if (pSize)
         {
             AncestorType::pResults.resize(pSize);
