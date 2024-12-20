@@ -138,18 +138,19 @@ void ShortTermStorageCumulation::add(int pays)
             // var = injectionEfficiency * injection - withdrawalEfficiency * withdrawal for Netting
             auto constraintHelper = cumulationConstraintFromVariable(
                     additional_constraints.variable);
-            for (auto& constraint: additional_constraints.constraints)
+            for (const auto& [hours, globalIndex, localIndex]: additional_constraints.constraints)
             {
-                namer.ShortTermStorageCumulation(constraintHelper->name() +,
-                                                 builder.data.nombreDeContraintes,
-                                                 storage.name,
-                                                 additional_constraints.name);
+                namer.ShortTermStorageCumulation(
+                        constraintHelper->name() + std::to_string(localIndex),
+                        builder.data.nombreDeContraintes,
+                        storage.name,
+                        additional_constraints.name);
                 const auto index = storage.clusterGlobalIndex;
                 data.CorrespondanceCntNativesCntOptimHebdomadaires
-                        .ShortTermStorageCumulation[additional_constraints.globalIndex]
+                        .ShortTermStorageCumulation[globalIndex]
                         = builder.data.nombreDeContraintes;
 
-                for (const auto& hour: additional_constraints.hours)
+                for (const auto& hour: hours)
                 {
                     builder.updateHourWithinWeek(hour - 1);
                     constraintHelper->build(builder, index, storage);

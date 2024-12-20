@@ -88,8 +88,8 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
 
     for (auto* section = ini.firstSection; section; section = section->next)
     {
-        AdditionalConstraints constraint;
-        constraint.name = section->name.c_str();
+        AdditionalConstraints additional_constraints;
+        additional_constraints.name = section->name.c_str();
         for (auto* property = section->firstProperty; property; property = property->next)
         {
             const std::string key = property->key;
@@ -100,15 +100,15 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
                 // TODO do i have to transform the name to id? TransformNameIntoID
                 std::string clusterName;
                 value.to<std::string>(clusterName);
-                constraint.cluster_id = transformNameIntoID(clusterName);
+                additional_constraints.cluster_id = transformNameIntoID(clusterName);
             }
             else if (key == "variable")
             {
-                value.to<std::string>(constraint.variable);
+                value.to<std::string>(additional_constraints.variable);
             }
             else if (key == "operator")
             {
-                value.to<std::string>(constraint.operatorType);
+                value.to<std::string>(additional_constraints.operatorType);
             }
             else if (key == "hours")
             {
@@ -129,6 +129,7 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
                                                         hoursStr.end(),
                                                         groupRegex);
                 auto groupsEnd = std::sregex_iterator();
+                unsigned int localIndex = 0;
                 for (auto it = groupsBegin; it != groupsEnd; ++it)
                 {
                     // Extract the contents of the square brackets
@@ -142,17 +143,20 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
                         int hourVal = std::stoi(hour);
                         hourSet.insert(hourVal);
                     }
-
-                    constraint.hours.push_back(hourSet); // Add this group to the `hours` vector
+                    // Add this group to the `hours` vec
+                    additional_constraints.constraints.push_back(
+                            {.hours = hourSet, .localIndex = localIndex});
+                    ++localIndex;
                 }
             }
 
             // try to read the rhs
-            loadFile(parent_path / ("rhs_" + constraint.name + ".txt"), constraint.rhs);
-            fillIfEmpty(constraint.rhs, 0.0);
+            loadFile(parent_path / ("rhs_" + additional_constraints.name + ".txt"),
+                     additional_constraints.rhs);
+            fillIfEmpty(additional_constraints.rhs, 0.0);
         }
 
-        if (auto [ok, error_msg] = constraint.validate(); !ok)
+        if (auto [ok, error_msg] = additional_constraints.validate(); !ok)
         {
             logs.error() << "Invalid constraint in section: " << section->name;
             logs.error() << error_msg;
@@ -161,8 +165,10 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
 
         auto it = std::find_if(storagesByIndex.begin(),
                                storagesByIndex.end(),
-                               [&constraint](const STStorageCluster& cluster)
-                               { return cluster.id == constraint.cluster_id; });
+                               [&additional_constraints](const STStorageCluster& cluster)
+                               {
+                                   return cluster.id == additional_constraints.cluster_id;
+                               });
         if (it == storagesByIndex.end())
         {
             logs.warning() << " from file " << pathIni;
@@ -172,7 +178,7 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
         }
         else
         {
-            it->additional_constraints.push_back(constraint);
+            it->additional_constraints.push_back(additional_constraints);
         }
     }
 
