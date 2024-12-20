@@ -163,12 +163,11 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
             return false;
         }
 
-        auto it = std::find_if(storagesByIndex.begin(),
-                               storagesByIndex.end(),
-                               [&additional_constraints](const STStorageCluster& cluster)
-                               {
-                                   return cluster.id == additional_constraints.cluster_id;
-                               });
+        auto it = std::ranges::find_if(storagesByIndex,
+                                       [&additional_constraints](const STStorageCluster& cluster)
+                                       {
+                                           return cluster.id == additional_constraints.cluster_id;
+                                       });
         if (it == storagesByIndex.end())
         {
             logs.warning() << " from file " << pathIni;
