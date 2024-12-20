@@ -28,6 +28,6 @@
 namespace Antares::Solver
 {
 
-ModelerParameters parseModelerParameters(const std::filesystem::path& path);
+ModelerParameters parseModelerParameters(const std::filesystem::path& studyPath);
 
 } // namespace Antares::Solver

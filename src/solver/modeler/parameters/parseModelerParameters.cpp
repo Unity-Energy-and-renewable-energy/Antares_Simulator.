@@ -29,9 +29,9 @@
 
 namespace Antares::Solver
 {
-ModelerParameters parseModelerParameters(const std::filesystem::path& path)
+ModelerParameters parseModelerParameters(const std::filesystem::path& studyPath)
 {
-    const auto contents = Antares::IO::readFile(path);
+    const auto contents = Antares::IO::readFile(studyPath / "parameters.yml");
     YAML::Node root = YAML::Load(contents);
     return root.as<ModelerParameters>();
 }
