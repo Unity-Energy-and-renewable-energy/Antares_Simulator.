@@ -149,12 +149,12 @@ bool STStorageInput::LoadConstraintsFromIniFile(const fs::path& parent_path)
                     ++localIndex;
                 }
             }
-
-            // try to read the rhs
-            loadFile(parent_path / ("rhs_" + additional_constraints.name + ".txt"),
-                     additional_constraints.rhs);
-            fillIfEmpty(additional_constraints.rhs, 0.0);
         }
+
+        // try to read the rhs
+        loadFile(parent_path / ("rhs_" + additional_constraints.name + ".txt"),
+                 additional_constraints.rhs);
+        fillIfEmpty(additional_constraints.rhs, 0.0);
 
         if (auto [ok, error_msg] = additional_constraints.validate(); !ok)
         {
@@ -229,8 +229,19 @@ std::size_t STStorageInput::cumulativeConstraintCount() const
     return std::accumulate(storagesByIndex.begin(),
                            storagesByIndex.end(),
                            0,
-                           [](int acc, const auto& cluster)
-                           { return acc + cluster.additional_constraints.size(); });
+                           [](size_t outer_constraint_count, const auto& cluster)
+                           {
+                               return outer_constraint_count + std::accumulate(
+                                              cluster.additional_constraints.begin(),
+                                              cluster.additional_constraints.end(),
+                                              0,
+                                              [](size_t inner_constraint_count,
+                                                 const auto& additional_constraints)
+                                              {
+                                                  return inner_constraint_count +
+                                                         additional_constraints.constraints.size();
+                                              });
+                           });
 }
 
 std::size_t STStorageInput::count() const

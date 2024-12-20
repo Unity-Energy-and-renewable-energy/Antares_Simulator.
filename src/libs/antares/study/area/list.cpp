@@ -1201,7 +1201,7 @@ bool AreaList::loadFromFolder(const StudyLoadOptions& options)
                       ret;
 
                 const auto constraints_folder = stsFolder / "constraints" / area->id.c_str();
-                ret = area->shortTermStorage.LoadConstraintsFromIniFile(cluster_folder) && ret;
+                ret = area->shortTermStorage.LoadConstraintsFromIniFile(constraints_folder) && ret;
             }
         }
         else
