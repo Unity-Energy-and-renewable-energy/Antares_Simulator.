@@ -144,7 +144,7 @@ void ShortTermStorageCumulation::add(int pays)
                         constraintHelper->name(),
                         builder.data.nombreDeContraintes,
                         storage.name,
-                        additional_constraints.name + std::to_string(localIndex));
+                        additional_constraints.name + "_" + std::to_string(localIndex));
                 const auto index = storage.clusterGlobalIndex;
                 data.CorrespondanceCntNativesCntOptimHebdomadaires
                         .ShortTermStorageCumulation[globalIndex]
