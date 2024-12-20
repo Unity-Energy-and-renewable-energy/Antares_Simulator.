@@ -238,18 +238,18 @@ std::pair<Data::ShortTermStorage::Group, Data::ReserveName>
   STStorageInput::reserveParticipationGroupAt(const Area* area, unsigned int index) const
 {
     int column = 0;
-    for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsUp)
+    for (const auto& [reserveName, _]: area->allCapacityReservations.areaCapacityReservationsUp)
     {
-        for (int indexGroup = 0; indexGroup < Data::groupMax; indexGroup++)
+        for (int indexGroup = 0; indexGroup < Data::ShortTermStorage::groupMax; indexGroup++)
         {
             if (column == index)
                 return {static_cast<Data::ShortTermStorage::Group>(indexGroup), reserveName};
             column++;
         }
     }
-    for (auto [reserveName, _] : area->allCapacityReservations.areaCapacityReservationsDown)
+    for (const auto& [reserveName, _]: area->allCapacityReservations.areaCapacityReservationsDown)
     {
-        for (int indexGroup = 0; indexGroup < Data::groupMax; indexGroup++)
+        for (int indexGroup = 0; indexGroup < Data::ShortTermStorage::groupMax; indexGroup++)
         {
             if (column == index)
                 return {static_cast<Data::ShortTermStorage::Group>(indexGroup), reserveName};
