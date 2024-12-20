@@ -166,4 +166,30 @@ BOOST_FIXTURE_TEST_CASE(read_system_file, FixtureLoadFile)
     auto system = Antares::Solver::LoadFiles::loadSystem(studyPath, libraries);
 }
 
+BOOST_FIXTURE_TEST_CASE(read_invalid_system_file, FixtureLoadFile)
+{
+    std::ofstream libStream(libraryDirPath / "simple.yml");
+    libStream << R"(
+        library:
+            id: std
+            description: lib_description
+            port-types: []
+            models:
+                - id: generator
+                  description: A basic generator model
+
+    )";
+    libStream.close();
+
+    std::ofstream systemStream(inputPath / "system.yml");
+    systemStream << R"(
+        system:
+    )";
+    systemStream.close();
+
+    auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
+    BOOST_CHECK_THROW(Antares::Solver::LoadFiles::loadSystem(studyPath, libraries),
+                      std::runtime_error);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

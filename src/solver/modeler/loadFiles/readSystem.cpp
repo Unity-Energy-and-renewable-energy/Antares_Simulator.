@@ -20,6 +20,7 @@
  */
 
 #include <antares/io/file.h>
+#include <antares/logs/logs.h>
 #include <antares/solver/systemParser/converter.h>
 #include <antares/solver/systemParser/parser.h>
 #include "antares/solver/modeler/loadFiles/loadFiles.h"
@@ -33,12 +34,20 @@ Study::SystemModel::System loadSystem(const fs::path& studyPath,
                                       const std::vector<Study::SystemModel::Library>& libraries)
 {
     const std::string systemStr = IO::readFile(studyPath / "input" / "system.yml");
-
     SystemParser::Parser parser;
-    // Add try/catch and error handling
-    SystemParser::System systemObj = parser.parse(systemStr);
 
-    return SystemConverter::convert(systemObj, libraries);
+    try
+    {
+        SystemParser::System systemObj = parser.parse(systemStr);
+        return SystemConverter::convert(systemObj, libraries);
+    }
+    catch (const std::runtime_error& e)
+    {
+        logs.error() << "Error while parsing or converting the system file:";
+        logs.error() << e.what();
+
+        throw std::runtime_error(e.what());
+    }
 }
 
 } // namespace Antares::Solver::LoadFiles
