@@ -27,7 +27,7 @@
 
 #include "encoder.hxx"
 
-namespace Antares::Solver
+namespace Antares::Solver::LoadFiles
 {
 ModelerParameters parseModelerParameters(const std::filesystem::path& studyPath)
 {
@@ -35,4 +35,4 @@ ModelerParameters parseModelerParameters(const std::filesystem::path& studyPath)
     YAML::Node root = YAML::Load(contents);
     return root.as<ModelerParameters>();
 }
-} // namespace Antares::Solver
+} // namespace Antares::Solver::LoadFiles

@@ -43,7 +43,7 @@ int main(int argc, const char** argv)
         return EXIT_FAILURE;
     }
 
-    const auto parameters = parseModelerParameters(studyPath);
+    const auto parameters = LoadFiles::parseModelerParameters(studyPath);
     const auto libraries = LoadFiles::loadLibraries(studyPath);
     const auto system = LoadFiles::loadSystem(studyPath, libraries);
 

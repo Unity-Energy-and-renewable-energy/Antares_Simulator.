@@ -25,9 +25,9 @@
 
 #include <antares/solver/modeler/parameters/modelerParameters.h>
 
-namespace Antares::Solver
+namespace Antares::Solver::LoadFiles
 {
 
 ModelerParameters parseModelerParameters(const std::filesystem::path& studyPath);
 
-} // namespace Antares::Solver
+} // namespace Antares::Solver::LoadFiles

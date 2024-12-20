@@ -31,6 +31,8 @@
 
 BOOST_AUTO_TEST_SUITE(read_modeler_parameters)
 
+using namespace Antares::Solver::LoadFiles;
+
 BOOST_AUTO_TEST_CASE(all_properties_set)
 {
     const auto working_tmp_dir = CREATE_TMP_DIR_BASED_ON_TEST_NAME();
@@ -44,7 +46,7 @@ solver-parameters: PRESOLVE 1
 no-output: true)";
     }
 
-    auto params = Antares::Solver::parseModelerParameters(working_tmp_dir);
+    auto params = parseModelerParameters(working_tmp_dir);
     BOOST_CHECK_EQUAL(params.solver, "sirius");
     BOOST_CHECK_EQUAL(params.solverLogs, false);
     BOOST_CHECK_EQUAL(params.solverParameters, "PRESOLVE 1");
@@ -64,7 +66,7 @@ solver-parameters: PRESOLVE 1
 no-output: true)";
     }
 
-    auto params = Antares::Solver::parseModelerParameters(working_tmp_dir);
+    auto params = parseModelerParameters(working_tmp_dir);
     BOOST_CHECK_EQUAL(params.solver, "sirius");
     BOOST_CHECK_EQUAL(params.solverLogs, false);
     BOOST_CHECK_EQUAL(params.solverParameters, "PRESOLVE 1");
