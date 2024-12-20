@@ -35,6 +35,13 @@ int main(int argc, const char** argv)
     }
 
     std::filesystem::path studyPath(argv[1]);
+    logs.info() << "Study path: " << studyPath;
+
+    if (!std::filesystem::is_directory(studyPath))
+    {
+        logs.error() << "The path provided isn't a valid directory, exiting";
+        return EXIT_FAILURE;
+    }
 
     const auto parameters = parseModelerParameters(studyPath);
     const auto libraries = LoadFiles::loadLibraries(studyPath);
