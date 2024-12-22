@@ -106,6 +106,7 @@ void Study::parameterFiller(const StudyLoadOptions& options)
         parameters.timeSeriesToArchive = 0;
         parameters.storeTimeseriesNumbers = false;
         parameters.synthesis = false;
+        parameters.exportRawOptimizationResults = false;
     }
 
     if (options.loadOnlyNeeded && !parameters.timeSeriesToGenerate)

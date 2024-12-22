@@ -983,4 +983,5 @@ void SIM_RenseignementProblemeHebdo(const Study& study,
         problem.CaracteristiquesHydrauliques[k].ContrainteDePmaxHydrauliqueHoraireRef
           = problem.CaracteristiquesHydrauliques[k].ContrainteDePmaxHydrauliqueHoraire;
     }
+    problem.exportRawOptimizationResults = parameters.exportRawOptimizationResults;
 }

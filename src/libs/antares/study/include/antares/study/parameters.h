@@ -333,6 +333,12 @@ public:
     bool storeTimeseriesNumbers;
     //@}
 
+    //! \name Delta Cluster
+    //@{
+    //! Output the delta of groups inside clusters for each hour of each mode
+    bool exportRawOptimizationResults;
+    //@}
+
     /*!
     ** \brief Read-only mode
     **
