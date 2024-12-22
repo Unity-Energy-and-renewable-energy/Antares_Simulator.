@@ -189,6 +189,7 @@ endif()
 
 #Boost header libraries
 find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS regex REQUIRED)
 
 find_package(antlr4-runtime REQUIRED)
 find_package(yaml-cpp REQUIRED)
