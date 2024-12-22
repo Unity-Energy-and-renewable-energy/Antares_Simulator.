@@ -111,6 +111,7 @@ int main(int argc, const char* argv[])
                                / formatTime(getCurrentTime(), "%Y%m%d-%H%M");
         thermalSavePath /= "ts-generator";
         thermalSavePath /= "thermal";
+        logs.info() << "  Thermal output folder : " << thermalSavePath;
         writeThermalTimeSeries(clusters, thermalSavePath);
     }
 
