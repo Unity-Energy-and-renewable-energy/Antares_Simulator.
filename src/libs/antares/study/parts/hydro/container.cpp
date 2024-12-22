@@ -356,8 +356,8 @@ bool PartHydro::checkReservoirLevels(const Study& study)
         for (unsigned int day = 0; day < DAYS_PER_YEAR; day++)
         {
             if (!errorLevels
-                && (colMin[day] < 0 || colAvg[day] < 0 || colMin[day] > colMax[day]
-                    || colAvg[day] > 100 || colMax[day] > 100))
+                && (0 > colMin[day] || colMin[day] > colAvg[day] || colAvg[day] > colMax[day]
+                    || colMax[day] > 100))
             {
                 logs.error() << areaName << ": invalid reservoir level value";
                 errorLevels = true;
