@@ -19,6 +19,8 @@
  * along with Antares_Simulator. If not, see <https://opensource.org/license/mpl-2-0/>.
  */
 
+#include <yaml-cpp/yaml.h>
+
 #include <antares/io/file.h>
 #include <antares/logs/logs.h>
 #include <antares/solver/systemParser/converter.h>
@@ -40,6 +42,17 @@ Study::SystemModel::System loadSystem(const fs::path& studyPath,
     {
         SystemParser::System systemObj = parser.parse(systemStr);
         return SystemConverter::convert(systemObj, libraries);
+    }
+    catch (const YAML::Exception& e)
+    {
+        logs.error() << "Error while parsing the yaml system file";
+        if (!e.mark.is_null())
+        {
+            logs.error() << "Line " << e.mark.line << " column " << e.mark.column;
+        }
+        logs.error() << e.what();
+
+        throw std::runtime_error(e.what());
     }
     catch (const std::runtime_error& e)
     {
