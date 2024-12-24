@@ -46,7 +46,7 @@ solver-parameters: PRESOLVE 1
 no-output: true)";
     }
 
-    auto params = parseModelerParameters(working_tmp_dir);
+    auto params = parseModelerParameters(fileP);
     BOOST_CHECK_EQUAL(params.solver, "sirius");
     BOOST_CHECK_EQUAL(params.solverLogs, false);
     BOOST_CHECK_EQUAL(params.solverParameters, "PRESOLVE 1");
@@ -66,7 +66,7 @@ solver-parameters: PRESOLVE 1
 no-output: true)";
     }
 
-    auto params = parseModelerParameters(working_tmp_dir);
+    auto params = parseModelerParameters(fileP);
     BOOST_CHECK_EQUAL(params.solver, "sirius");
     BOOST_CHECK_EQUAL(params.solverLogs, false);
     BOOST_CHECK_EQUAL(params.solverParameters, "PRESOLVE 1");

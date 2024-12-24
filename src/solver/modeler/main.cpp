@@ -45,7 +45,7 @@ int main(int argc, const char** argv)
 
     try
     {
-        const auto parameters = LoadFiles::parseModelerParameters(studyPath);
+        const auto parameters = LoadFiles::loadParameters(studyPath);
         const auto libraries = LoadFiles::loadLibraries(studyPath);
         const auto system = LoadFiles::loadSystem(studyPath, libraries);
     }
