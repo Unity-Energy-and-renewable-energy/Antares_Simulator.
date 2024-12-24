@@ -35,12 +35,12 @@ namespace Antares::Solver::LoadFiles
 Study::SystemModel::System loadSystem(const fs::path& studyPath,
                                       const std::vector<Study::SystemModel::Library>& libraries)
 {
-    const std::string systemStr = IO::readFile(studyPath / "input" / "system.yml");
-    SystemParser::Parser parser;
-
     try
     {
+        const std::string systemStr = IO::readFile(studyPath / "input" / "system.yml");
+        SystemParser::Parser parser;
         SystemParser::System systemObj = parser.parse(systemStr);
+
         return SystemConverter::convert(systemObj, libraries);
     }
     catch (const YAML::Exception& e)
@@ -52,14 +52,14 @@ Study::SystemModel::System loadSystem(const fs::path& studyPath,
         }
         logs.error() << e.what();
 
-        throw std::runtime_error(e.what());
+        throw ErrorLoadingYaml(e.what());
     }
     catch (const std::runtime_error& e)
     {
         logs.error() << "Error while parsing or converting the system file:";
         logs.error() << e.what();
 
-        throw std::runtime_error(e.what());
+        throw ErrorLoadingYaml(e.what());
     }
 }
 

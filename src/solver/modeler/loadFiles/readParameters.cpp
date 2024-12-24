@@ -47,14 +47,14 @@ ModelerParameters loadParameters(const fs::path& studyPath)
         }
         logs.error() << e.what();
 
-        throw std::runtime_error(e.what());
+        throw ErrorLoadingYaml(e.what());
     }
     catch (const std::runtime_error& e)
     {
         logs.error() << "Error while parsing the yaml parameters file:";
         logs.error() << e.what();
 
-        throw std::runtime_error(e.what());
+        throw ErrorLoadingYaml(e.what());
     }
 }
 

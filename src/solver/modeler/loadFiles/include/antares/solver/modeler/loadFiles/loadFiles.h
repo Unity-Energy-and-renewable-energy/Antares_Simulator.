@@ -38,4 +38,14 @@ std::vector<Study::SystemModel::Library> loadLibraries(const std::filesystem::pa
 Study::SystemModel::System loadSystem(const std::filesystem::path& studyPath,
                                       const std::vector<Study::SystemModel::Library>& libraries);
 
+/// Generic error class for all loading errors to catch in the main
+class ErrorLoadingYaml: public std::runtime_error
+{
+public:
+    explicit ErrorLoadingYaml(const std::string& s):
+        runtime_error(s)
+    {
+    }
+};
+
 } // namespace Antares::Solver::LoadFiles

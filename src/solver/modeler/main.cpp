@@ -49,7 +49,7 @@ int main(int argc, const char** argv)
         const auto libraries = LoadFiles::loadLibraries(studyPath);
         const auto system = LoadFiles::loadSystem(studyPath, libraries);
     }
-    catch (...)
+    catch (const LoadFiles::ErrorLoadingYaml&)
     {
         logs.error() << "Error while loading files, exiting";
         return EXIT_FAILURE;
