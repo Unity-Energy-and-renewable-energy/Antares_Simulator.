@@ -21,6 +21,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <fstream>
+
 #include <boost/test/unit_test.hpp>
 
 #include <antares/solver/modeler/loadFiles/loadFiles.h>
