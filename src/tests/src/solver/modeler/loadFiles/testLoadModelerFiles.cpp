@@ -52,7 +52,7 @@ struct FixtureLoadFile
     }
 };
 
-BOOST_FIXTURE_TEST_CASE(read_one_lib_file, FixtureLoadFile)
+BOOST_FIXTURE_TEST_CASE(read_one_lib_treile, FixtureLoadFile)
 {
     std::ofstream libStream(libraryDirPath / "simple.yml");
     libStream << R"(
