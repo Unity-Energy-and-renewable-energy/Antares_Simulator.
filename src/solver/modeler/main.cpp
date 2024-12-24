@@ -54,6 +54,12 @@ int main(int argc, const char** argv)
         logs.error() << "Error while loading files, exiting";
         return EXIT_FAILURE;
     }
+    catch (const std::exception& e)
+    {
+        logs.error() << e.what();
+        logs.error() << "Error during the execution, exiting";
+        return EXIT_FAILURE;
+    }
 
     return 0;
 }
