@@ -64,3 +64,16 @@ BOOST_AUTO_TEST_CASE(read_parameters_out_of_order)
     BOOST_CHECK_EQUAL(params.solverParameters, "PRESOLVE 1");
     BOOST_CHECK_EQUAL(params.noOutput, true);
 }
+
+BOOST_AUTO_TEST_CASE(parameters_missing)
+{
+    auto studyPath = CREATE_TMP_DIR_BASED_ON_TEST_NAME();
+    std::ofstream paramStream(studyPath / "parameters.yml");
+    paramStream << R"(
+        solver-logs: false
+        no-output: true
+    )";
+    paramStream.close();
+
+    BOOST_CHECK_THROW(Antares::Solver::LoadFiles::loadParameters(studyPath), std::runtime_error);
+}
