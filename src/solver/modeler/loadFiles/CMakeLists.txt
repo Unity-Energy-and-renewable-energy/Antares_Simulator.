@@ -24,6 +24,7 @@ target_link_libraries(loadModelerFiles
         Antares::systemParser
         Antares::modelParser
         Antares::modelConverter
+        Antares::modelerParameters
 )
 
 install(DIRECTORY include/antares

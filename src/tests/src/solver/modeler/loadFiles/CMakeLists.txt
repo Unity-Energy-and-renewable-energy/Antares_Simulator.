@@ -5,6 +5,7 @@ target_link_libraries(load-modeler-files
         PRIVATE
         Boost::unit_test_framework
         Antares::loadModelerFiles
+        Antares::modelerParameters
         test_utils_unit
 )
 

@@ -43,7 +43,7 @@ set_target_properties(antares-modeler PROPERTIES OUTPUT_NAME ${exec_name})
 target_link_libraries(modeler-lib
         INTERFACE
         Antares::loadModelerFiles
-        modeler-parameters
+        Antares::modelerParameters
 )
 
 target_link_libraries(antares-modeler

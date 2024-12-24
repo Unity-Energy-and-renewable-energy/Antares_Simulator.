@@ -24,15 +24,18 @@
 #include <filesystem>
 #include <vector>
 
+#include <antares/solver/modeler/parameters/modelerParameters.h>
 #include <antares/study/system-model/library.h>
 #include <antares/study/system-model/system.h>
 
 namespace Antares::Solver::LoadFiles
 {
 
-Study::SystemModel::System loadSystem(const std::filesystem::path& studyPath,
-                                      const std::vector<Study::SystemModel::Library>& libraries);
+ModelerParameters loadParameters(const std::filesystem::path& studyPath);
 
 std::vector<Study::SystemModel::Library> loadLibraries(const std::filesystem::path& studyPath);
+
+Study::SystemModel::System loadSystem(const std::filesystem::path& studyPath,
+                                      const std::vector<Study::SystemModel::Library>& libraries);
 
 } // namespace Antares::Solver::LoadFiles
