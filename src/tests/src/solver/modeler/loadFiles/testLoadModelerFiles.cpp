@@ -42,8 +42,8 @@ struct FixtureLoadFile
     FixtureLoadFile()
     {
         studyPath = CREATE_TMP_DIR_BASED_ON_TEST_NAME();
-        inputPath = createFolder(studyPath, "input");
-        libraryDirPath = createFolder(inputPath, "model-libraries");
+        inputPath = createFolder(studyPath.string(), "input");
+        libraryDirPath = createFolder(inputPath.string(), "model-libraries");
     }
 
     ~FixtureLoadFile()
