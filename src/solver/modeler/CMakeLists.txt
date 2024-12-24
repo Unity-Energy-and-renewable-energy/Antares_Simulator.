@@ -3,28 +3,6 @@ add_subdirectory(ortoolsImpl)
 add_subdirectory(loadFiles)
 add_subdirectory(parameters)
 
-
-#
-# Resource file for Windows
-#
-if (WIN32)
-    file(REMOVE "${CMAKE_CURRENT_SOURCE_DIR}/win32/modeler.o")
-    FILE(COPY "${CMAKE_CURRENT_SOURCE_DIR}/win32/modeler.ico" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/win32/")
-    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/win32/modeler.rc.cmake"
-            "${CMAKE_CURRENT_SOURCE_DIR}/win32/modeler.rc")
-
-    if (MINGW)
-        # resource compilation for mingw
-        add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/win32/modeler.o"
-                COMMAND windres.exe "-I${CMAKE_CURRENT_SOURCE_DIR}"
-                "-i${CMAKE_CURRENT_SOURCE_DIR}/win32/modeler.rc"
-                -o "${CMAKE_CURRENT_BINARY_DIR}/win32/modeler.o")
-        set(SRCS ${SRCS} "${CMAKE_CURRENT_BINARY_DIR}/win32/modeler.o")
-    else ()
-        set(SRCS ${SRCS} "win32/modeler.rc")
-    endif ()
-endif ()
-
 OMESSAGE("  :: modeler")
 
 set(exec_name "antares-modeler")
