@@ -70,7 +70,7 @@ BOOST_FIXTURE_TEST_CASE(read_one_lib_file, FixtureLoadFile)
 
 BOOST_FIXTURE_TEST_CASE(dont_read_bad_extension, FixtureLoadFile)
 {
-    createFile(libraryDirPath, "abc.txt");
+    createFile(libraryDirPath.string(), "abc.txt");
     auto libraries = Antares::Solver::LoadFiles::loadLibraries(studyPath);
     BOOST_CHECK(libraries.empty());
 }
